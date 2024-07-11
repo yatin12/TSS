@@ -9,9 +9,13 @@ import UIKit
 import KVSpinnerView
 
 class LoginVC: UIViewController {
+    //  - Variables - 
+    
     var isRememberMeOn: Bool = false
     private let objLoginViewModel = LoginViewModel()
 
+    //  - Outlets - 
+    @IBOutlet weak var imgPassVisibility: UIImageView!
     @IBOutlet weak var btnRememberOutlt: UIButton!
     @IBOutlet weak var lblLowerDeclaration: TappableLabel!
     @IBOutlet weak var lblRegister: UILabel!
@@ -26,14 +30,12 @@ extension LoginVC
 {
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.loadCredentials()
         self.setUpUIRegisterLabel()
         self.setUpUIForLowerDeclaration()
         self.setUpPlaceholderColor()
+        self.loadCredentials()
         self.passViewControllerObjToViewModel()
     }
-   
-
 }
 //MARK: General Methods
 extension LoginVC
@@ -94,20 +96,14 @@ extension LoginVC
             
             vwPassword.layer.borderColor = isEditing ? clearColor : highlightColor
             vwPassword.layer.borderWidth = isEditing ? 0.0 : 1.0
-            
-//            if isEditing {
-//                txtPassword.text = ""
-//            }
+
         } else if textField == txtPassword {
             vwPassword.layer.borderColor = isEditing ? highlightColor : clearColor
             vwPassword.layer.borderWidth = isEditing ? 1.0 : 0.0
             
             vwEmail.layer.borderColor = isEditing ? clearColor : highlightColor
             vwEmail.layer.borderWidth = isEditing ? 0.0 : 1.0
-            
-//            if isEditing {
-//                txtEmail.text = ""
-//            }
+
         }
     }
     func saveCredentials(username: String, password: String) {
@@ -124,6 +120,7 @@ extension LoginVC
         if isRememberMeOn {
             txtEmail.text = defaults.string(forKey: "SavedUsername")
             txtPassword.text = defaults.string(forKey: "SavedPassword")
+            imgRemember.isHidden = false
         }
     }
     
@@ -151,6 +148,14 @@ extension LoginVC
 //MARK: IBAction
 extension LoginVC
 {
+    @IBAction func btnPasswordVisibilityTapped(_ sender: Any) {
+        txtPassword.isSecureTextEntry.toggle()
+           if txtPassword.isSecureTextEntry {
+               imgPassVisibility.image = UIImage(named: "icn_Eye")
+           } else {
+               imgPassVisibility.image = UIImage(named: "icn_Eye_Slash")
+           }
+    }
     @IBAction func btnRegisterTapped(_ sender: Any) {
 
         NavigationHelper.push(storyboardKey.IntroScreen, viewControllerIdentifier: "RegistrationVC", from: navigationController!, animated: true)
@@ -196,8 +201,11 @@ extension LoginVC
     }
     func apiCallLogin()
     {
-        let deviceId: String = AppUserDefaults.object(forKey: "DEVICETOKEN") as? String ?? "2222"
-
+        var deviceId: String = AppUserDefaults.object(forKey: "DEVICETOKEN") as? String ?? ""
+        if deviceId == ""
+        {
+            deviceId = "2222"
+        }
         self.view.endEditing(true)
         if Reachability.isConnectedToNetwork()
         {
@@ -208,30 +216,34 @@ extension LoginVC
                 case .success(let loginResponse):
                     // Handle successful
                     
-                    if ((loginResponse.settings?.success) != nil) == true
+                    //                    if ((loginResponse.settings?.success) != nil) == true
+                    if loginResponse.settings?.success != "0"
                     {
                         if self.isRememberMeOn {
                             self.saveCredentials(username: self.txtEmail.text ?? "" , password: self.txtPassword.text ?? "")
-                               } else {
-                                   self.clearCredentials()
-                               }
-                       
+                        } else {
+                            self.clearCredentials()
+                        }
+                        
                         UserDefaultUtility.saveValueToUserDefaults(value: "YES", forKey: "isUserLoggedIn")
-
+                        
+                        UserDefaultUtility.saveValueToUserDefaults(value: "\(loginResponse.data?.id ?? 0)", forKey: "USERID")
+                        
+                        
                         UserDefaultUtility.saveValueToUserDefaults(value: "\(loginResponse.settings?.authorization ?? "")", forKey: "AUTHTOKEN")
-
-
+                        
+                        
                         NavigationHelper.push(storyboardKey.InnerScreen, viewControllerIdentifier: "HomeNev", from: self.navigationController!, animated: true)
                     }
                     else
                     {
                         AlertUtility.presentSimpleAlert(in: self, title: "", message: "\(loginResponse.settings?.message ?? "")")
-
+                        
                     }
-                   
-
                     
-                   // self.apiCallAddFCMToken()
+                    
+                    
+                    // self.apiCallAddFCMToken()
                     
                 case .failure(let error):
                     // Handle failure
@@ -239,17 +251,18 @@ extension LoginVC
                         ErrorHandlingUtility.handleAPIError(apiError, in: self)
                     } else {
                         // Handle other types of errors
-                       // print("Unexpected error: \(error)")
+                        // print("Unexpected error: \(error)")
                         AlertUtility.presentSimpleAlert(in: self, title: "", message: "\(error.localizedDescription)")
-
+                        
                     }
                 }
             }
         }
         else
         {
+            KVSpinnerView.dismiss()
             AlertUtility.presentSimpleAlert(in: self, title: "", message: "\(AlertMessages.NoInternetAlertMsg)")
-
+            
         }
     }
 }

@@ -1,5 +1,6 @@
 PODS:
   - Alamofire (5.8.1)
+  - Cosmos (25.0.1)
   - DropDown (2.3.13)
   - KVSpinnerView (1.0.1)
   - SDWebImage (5.18.11):
@@ -8,6 +9,7 @@ PODS:
 
 DEPENDENCIES:
   - Alamofire
+  - Cosmos (~> 25.0)
   - DropDown (~> 2.3.3)
   - KVSpinnerView
   - SDWebImage
@@ -15,16 +17,18 @@ DEPENDENCIES:
 SPEC REPOS:
   trunk:
     - Alamofire
+    - Cosmos
     - DropDown
     - KVSpinnerView
     - SDWebImage
 
 SPEC CHECKSUMS:
   Alamofire: 3ca42e259043ee0dc5c0cdd76c4bc568b8e42af7
+  Cosmos: 02db0a1c953107049bfd2d7af19ceef55ecb7e98
   DropDown: 8a2116376c1981888557f72ec2ffc9a5e0e456ec
   KVSpinnerView: ce89cec80a5776ba4639c312770f01c8a091e80a
   SDWebImage: a3ba0b8faac7228c3c8eadd1a55c9c9fe5e16457
 
-PODFILE CHECKSUM: 1b5c2b898644a09915136626bb9c8fb339c7abe5
+PODFILE CHECKSUM: d578cacf8e618716e35ac8e900d1076aff296d8e
 
 COCOAPODS: 1.15.0

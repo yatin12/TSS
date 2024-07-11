@@ -8,8 +8,10 @@
 import UIKit
 
 class FeedbackVC: UIViewController {
-    
+    //  - Variables - 
     let placeholderText = "Enter Message"
+    
+    //  - Outlets - 
     @IBOutlet weak var txtvwMsg: UITextView!
     @IBOutlet weak var vwMsg: UIView!
     @IBOutlet weak var txtEmail: UITextField!

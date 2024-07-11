@@ -9,6 +9,11 @@ import UIKit
 
 class TalkShowTBC: UITableViewCell {
 
+    @IBOutlet weak var lblAuthorName: UILabel!
+    @IBOutlet weak var lblDate: UILabel!
+    @IBOutlet weak var lblTitle: UILabel!
+    @IBOutlet weak var lblDuration: UILabel!
+    @IBOutlet weak var imgVideo: UIImageView!
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code

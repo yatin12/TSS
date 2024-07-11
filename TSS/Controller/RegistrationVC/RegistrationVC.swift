@@ -9,9 +9,13 @@ import UIKit
 import KVSpinnerView
 
 class RegistrationVC: UIViewController {
+    //  - Variables - 
     private let objRegistrationViewModel = RegistrationViewModel()
     var strSelectedGender: String = ""
     
+    //  - Outlets - 
+    @IBOutlet weak var imgEyeConfPass: UIImageView!
+    @IBOutlet weak var imgEyePass: UIImageView!
     @IBOutlet weak var txtCountry: UITextField!
     @IBOutlet weak var lblLowerDeclaration: TappableLabel!
     @IBOutlet weak var lblLogin: UILabel!
@@ -44,6 +48,7 @@ extension RegistrationVC
         self.setUpPlaceholderColor()
         self.setUpUIRegisterLabel()
         self.setUpUIForLowerDeclaration()
+       
     }
 }
 //MARK: General Methods
@@ -164,19 +169,7 @@ extension RegistrationVC
             
             vwCountry.layer.borderColor = isEditing ? clearColor : highlightColor
             vwCountry.layer.borderWidth = isEditing ? 0.0 : 1.0
-            
-            /*
-            if isEditing {
-                txtLastNm.text = ""
-                txtUserNm.text = ""
-                txtEmail.text = ""
-                txtPassword.text = ""
-                txtConfPassword.text = ""
-                txtBirthday.text = ""
-                txtGendar.text = ""
-                txtCountry.text = ""
-            }
-            */
+
         }
         else if textField == txtLastNm {
             vwLastNm.layer.borderColor = isEditing ? highlightColor : clearColor
@@ -205,18 +198,7 @@ extension RegistrationVC
             
             vwCountry.layer.borderColor = isEditing ? clearColor : highlightColor
             vwCountry.layer.borderWidth = isEditing ? 0.0 : 1.0
-            /*
-            if isEditing {
-                txtFristNm.text = ""
-                txtUserNm.text = ""
-                txtEmail.text = ""
-                txtPassword.text = ""
-                txtConfPassword.text = ""
-                txtBirthday.text = ""
-                txtGendar.text = ""
-                txtCountry.text = ""
-            }
-            */
+
         }
         else if textField == txtUserNm {
             vwUserNm.layer.borderColor = isEditing ? highlightColor : clearColor
@@ -246,18 +228,6 @@ extension RegistrationVC
             vwCountry.layer.borderColor = isEditing ? clearColor : highlightColor
             vwCountry.layer.borderWidth = isEditing ? 0.0 : 1.0
             
-            /*
-            if isEditing {
-                txtFristNm.text = ""
-                txtLastNm.text = ""
-                txtEmail.text = ""
-                txtPassword.text = ""
-                txtConfPassword.text = ""
-                txtBirthday.text = ""
-                txtGendar.text = ""
-                txtCountry.text = ""
-            }
-            */
         }
         else if textField == txtEmail {
             vwEmail.layer.borderColor = isEditing ? highlightColor : clearColor
@@ -286,19 +256,6 @@ extension RegistrationVC
             
             vwCountry.layer.borderColor = isEditing ? clearColor : highlightColor
             vwCountry.layer.borderWidth = isEditing ? 0.0 : 1.0
-            
-            /*
-            if isEditing {
-                txtFristNm.text = ""
-                txtLastNm.text = ""
-                txtUserNm.text = ""
-                txtPassword.text = ""
-                txtConfPassword.text = ""
-                txtBirthday.text = ""
-                txtGendar.text = ""
-                txtCountry.text = ""
-            }
-            */
         }
         else if textField == txtPassword {
             vwPassword.layer.borderColor = isEditing ? highlightColor : clearColor
@@ -327,18 +284,7 @@ extension RegistrationVC
             
             vwCountry.layer.borderColor = isEditing ? clearColor : highlightColor
             vwCountry.layer.borderWidth = isEditing ? 0.0 : 1.0
-            /*
-            if isEditing {
-                txtFristNm.text = ""
-                txtLastNm.text = ""
-                txtUserNm.text = ""
-                txtEmail.text = ""
-                txtConfPassword.text = ""
-                txtBirthday.text = ""
-                txtGendar.text = ""
-                txtCountry.text = ""
-            }
-             */
+            
         }
         else if textField == txtConfPassword {
             vwConfPassword.layer.borderColor = isEditing ? highlightColor : clearColor
@@ -367,19 +313,7 @@ extension RegistrationVC
             
             vwCountry.layer.borderColor = isEditing ? clearColor : highlightColor
             vwCountry.layer.borderWidth = isEditing ? 0.0 : 1.0
-            
-            /*
-            if isEditing {
-                txtFristNm.text = ""
-                txtLastNm.text = ""
-                txtUserNm.text = ""
-                txtEmail.text = ""
-                txtPassword.text = ""
-                txtBirthday.text = ""
-                txtGendar.text = ""
-                txtCountry.text = ""
-            }
-            */
+           
         }
         else if textField == txtBirthday
         {
@@ -411,18 +345,7 @@ extension RegistrationVC
             vwCountry.layer.borderColor = isEditing ? clearColor : highlightColor
             vwCountry.layer.borderWidth = isEditing ? 0.0 : 1.0
             
-            /*
-            if isEditing {
-                txtFristNm.text = ""
-                txtLastNm.text = ""
-                txtUserNm.text = ""
-                txtEmail.text = ""
-                txtPassword.text = ""
-                txtConfPassword.text = ""
-                txtGendar.text = ""
-                txtCountry.text = ""
-            }
-            */
+            
         }
         else if textField == txtGendar
         {
@@ -452,18 +375,7 @@ extension RegistrationVC
             
             vwCountry.layer.borderColor = isEditing ? clearColor : highlightColor
             vwCountry.layer.borderWidth = isEditing ? 0.0 : 1.0
-            /*
-            if isEditing {
-                txtFristNm.text = ""
-                txtLastNm.text = ""
-                txtUserNm.text = ""
-                txtEmail.text = ""
-                txtPassword.text = ""
-                txtConfPassword.text = ""
-                txtBirthday.text = ""
-                txtCountry.text = ""
-            }
-            */
+            
         }
         else if textField == txtCountry
         {
@@ -493,25 +405,29 @@ extension RegistrationVC
             
             vwGendar.layer.borderColor = isEditing ? clearColor : highlightColor
             vwGendar.layer.borderWidth = isEditing ? 0.0 : 1.0
-            /*
-            if isEditing {
-                txtFristNm.text = ""
-                txtLastNm.text = ""
-                txtUserNm.text = ""
-                txtEmail.text = ""
-                txtPassword.text = ""
-                txtConfPassword.text = ""
-                txtBirthday.text = ""
-                txtGendar.text = ""
-            }
-             */
+            
         }
     }
 }
 //MARK: IBAction
 extension RegistrationVC
 {
-    
+    @IBAction func btnPasswordVisibilityTapped(_ sender: Any) {
+        txtPassword.isSecureTextEntry.toggle()
+           if txtPassword.isSecureTextEntry {
+               imgEyePass.image = UIImage(named: "icn_Eye")
+           } else {
+               imgEyePass.image = UIImage(named: "icn_Eye_Slash")
+           }
+    }
+    @IBAction func btnConfPassVisibilityTapped(_ sender: Any) {
+        txtConfPassword.isSecureTextEntry.toggle()
+           if txtConfPassword.isSecureTextEntry {
+               imgEyeConfPass.image = UIImage(named: "icn_Eye")
+           } else {
+               imgEyeConfPass.image = UIImage(named: "icn_Eye_Slash")
+           }
+    }
     @IBAction func btnLoginTapped(_ sender: Any) {
         self.navigationController?.popViewController(animated: true)
     }
@@ -521,6 +437,12 @@ extension RegistrationVC
     @IBAction func btnCountryTapped(_ sender: Any)
     {
         updateBorder(for: txtCountry, isEditing: true)
+        
+        let storyboard = UIStoryboard(name: storyboardKey.InnerScreen, bundle: nil)
+        let vc = storyboard.instantiateViewController(withIdentifier: "CountryListVC") as! CountryListVC
+        vc.delegate = self
+        self.navigationController?.pushViewController(vc, animated: true)
+
     }
     @IBAction func btnGendarTapped(_ sender: Any)
     {
@@ -558,6 +480,7 @@ extension RegistrationVC: dataPassProtocol
         txtBirthday.text = strSelectDate
     }
 }
+
 //MARK: API Call
 extension RegistrationVC
 {
@@ -588,6 +511,9 @@ extension RegistrationVC
                     if loginResponse.settings?.success == true
                     {
                         UserDefaultUtility.saveValueToUserDefaults(value: "YES", forKey: "isUserLoggedIn")
+                        
+                        UserDefaultUtility.saveValueToUserDefaults(value: "\(loginResponse.data?.userID ?? 0)", forKey: "USERID")
+
 
                         UserDefaultUtility.saveValueToUserDefaults(value: "\(loginResponse.settings?.authorization ?? "")", forKey: "AUTHTOKEN")
 
@@ -620,8 +546,18 @@ extension RegistrationVC
         }
         else
         {
+            KVSpinnerView.dismiss()
             AlertUtility.presentSimpleAlert(in: self, title: "", message: "\(AlertMessages.NoInternetAlertMsg)")
 
         }
     }
+    
+}
+extension RegistrationVC: countryDataPassProtocol
+{
+    func countryNamePass(strSelectCountry: String) {
+        txtCountry.text = strSelectCountry
+    }
+    
+    
 }

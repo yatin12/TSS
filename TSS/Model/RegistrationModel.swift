@@ -28,12 +28,15 @@ struct RegData: Codable {
     let userID: Int?
     let firstName, lastName, username, email: String?
     let birthday, gender, country: String?
-
+    let membershipLevel: MembershipLevel?
+    
     enum CodingKeys: String, CodingKey {
         case userID = "user_id"
         case firstName = "first_name"
         case lastName = "last_name"
         case username, email, birthday, gender, country
+        case membershipLevel = "membership_level"
+
     }
 }
 // MARK: - Settings

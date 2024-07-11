@@ -1,0 +1,35 @@
+//
+//  membershipModel.swift
+//  TSS
+//
+//  Created by apple on 11/07/24.
+//
+
+import Foundation
+struct membershipRequest: Encodable {
+    let userId: String
+    let planType: String
+}
+
+struct membershipPlanElement: Codable {
+    let id, name, description, initialPayment: String?
+    let billingAmount, cycleNumber, cyclePeriod, billingLimit: String?
+    let trialAmount, trialLimit, expirationNumber, expirationPeriod: String?
+    let isActive: Bool?
+
+    enum CodingKeys: String, CodingKey {
+        case id, name, description
+        case initialPayment = "initial_payment"
+        case billingAmount = "billing_amount"
+        case cycleNumber = "cycle_number"
+        case cyclePeriod = "cycle_period"
+        case billingLimit = "billing_limit"
+        case trialAmount = "trial_amount"
+        case trialLimit = "trial_limit"
+        case expirationNumber = "expiration_number"
+        case expirationPeriod = "expiration_period"
+        case isActive
+    }
+}
+
+typealias membershipPlan = [membershipPlanElement]

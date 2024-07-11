@@ -11,8 +11,10 @@ import KVSpinnerView
 
 class AboutUsVC: UIViewController {
     
+    //  - Variables - 
     @IBOutlet weak var objWebView: WKWebView!
-    
+
+    //  - Outlets - 
     @IBOutlet weak var constHeightHeader: NSLayoutConstraint!
 }
 extension AboutUsVC

@@ -41,6 +41,7 @@ struct ValidationConstants {
     static func isNotEmptyName(_ name: String) -> Bool {
         return !name.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
     }
+    
     static func isNotEmptyPhoneNo(_ phoneNo: String) -> Bool {
         return !phoneNo.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
     }

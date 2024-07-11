@@ -9,7 +9,9 @@ import UIKit
 
 class SearchVC: UIViewController {
     
+    //  - Variables - 
     
+    //  - Outlets - 
     @IBOutlet weak var constHeightHeader: NSLayoutConstraint!
     
 }

@@ -6,9 +6,15 @@
 //
 
 import UIKit
+import KVSpinnerView
 
 class ContactUSVC: UIViewController {
+    //  - Variables - 
     let placeholderText = "Enter Message"
+    var userId: String = ""
+    private let objSendContactViewModel = sendContactViewModel()
+    
+    //  - Outlets - 
     @IBOutlet weak var constHeightHeader: NSLayoutConstraint!
     @IBOutlet weak var txtvwMsg: UITextView!
     @IBOutlet weak var vwMsg: UIView!
@@ -22,6 +28,7 @@ extension ContactUSVC
 {
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.passViewControllerObjToViewModel()
         self.setUpPlaceholderColor()
         self.setUpHeaderView()
         self.setupTextView()
@@ -30,6 +37,14 @@ extension ContactUSVC
 //MARK: General Methods
 extension ContactUSVC
 {
+    func passViewControllerObjToViewModel()
+    {
+        objSendContactViewModel.vc = self
+    }
+    func getUserId()
+    {
+        userId = AppUserDefaults.object(forKey: "USERID") as? String ?? ""
+    }
     func setupTextView()
     {
         txtvwMsg.text = placeholderText
@@ -123,6 +138,7 @@ extension ContactUSVC
         
     }
     @IBAction func btnSubmitTapped(_ sender: Any) {
+        self.validationForSendContact()
     }
 }
 //MARK: UITextFieldDelegate
@@ -188,6 +204,54 @@ extension ContactUSVC: UITextViewDelegate {
         if textView.text.isEmpty && textView.text != placeholderText {
             textView.text = placeholderText
             textView.textColor = UIColor.lightGray
+        }
+    }
+}
+extension ContactUSVC
+{
+    func validationForSendContact()
+    {
+        var isValidate: Bool = false
+        isValidate =  objSendContactViewModel.validationForContact(email: txtEmail.text ?? "", your_name: txtName.text ?? "", message: txtvwMsg.text ?? "")
+        if isValidate {
+            self.apiCallSendContactList()
+        }
+
+    }
+    func apiCallSendContactList()
+    {
+        KVSpinnerView.show()
+        if Reachability.isConnectedToNetwork()
+        {
+            objSendContactViewModel.sendContactDetails(user_id: userId, your_name: txtName.text ?? "", email: txtEmail.text ?? "", message: txtvwMsg.text ?? "", type: "contactUs") { result in
+                switch result {
+                case .success(let response):
+                    print(response)
+                    KVSpinnerView.dismiss()
+                   
+                    AlertUtility.presentSimpleAlert(in: self, title: "", message: "\(response.message ?? "")")
+
+                    
+                case .failure(let error):
+                    // Handle failure
+                    KVSpinnerView.dismiss()
+                    
+                    if let apiError = error as? APIError {
+                        ErrorHandlingUtility.handleAPIError(apiError, in: self)
+                    } else {
+                        // Handle other types of errors
+                        //print("Unexpected error: \(error)")
+                        AlertUtility.presentSimpleAlert(in: self, title: "", message: "\(error.localizedDescription)")
+                        
+                    }
+                }
+            }
+        }
+        else
+        {
+            KVSpinnerView.dismiss()
+             AlertUtility.presentSimpleAlert(in: self, title: "", message: "\(AlertMessages.NoInternetAlertMsg)")
+
         }
     }
 }

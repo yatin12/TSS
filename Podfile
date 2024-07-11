@@ -8,6 +8,7 @@ pod 'Alamofire'
 pod 'KVSpinnerView'
 pod 'DropDown', '~> 2.3.3'
 pod 'SDWebImage'
+pod 'Cosmos', '~> 25.0'
   # Pods for TSS
 
 end

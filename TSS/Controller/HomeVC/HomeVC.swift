@@ -8,9 +8,10 @@
 import UIKit
 
 class HomeVC: UIViewController {
-    
+    //  - Variables - 
     var arrSection = ["","Tops News", "Season 1", "Season 1 BTS (Behind the Scenes)", "E.Videos", "Recommended Episodes","Meet The Sisters"]
-    
+    //  - Outlets - 
+
     @IBOutlet weak var tblHome: UITableView!
     @IBOutlet weak var constHeightHeader: NSLayoutConstraint!
 }

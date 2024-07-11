@@ -18,28 +18,6 @@ class RoundShadowView: UIView {
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-/*
-    func layoutView() {
-
-        // set the shadow of the view's layer
-        layer.backgroundColor = UIColor.clear.cgColor
-        layer.shadowColor = UIColor.black.cgColor
-        layer.shadowOffset = CGSize(width: 0, height: -8.0)
-        layer.shadowOpacity = 0.12
-        layer.shadowRadius = 10.0
-        containerView.layer.cornerRadius = cornerRadius
-        containerView.layer.masksToBounds = true
-
-        addSubview(containerView)
-        containerView.translatesAutoresizingMaskIntoConstraints = false
-
-        // pin the containerView to the edges to the view
-        containerView.leadingAnchor.constraint(equalTo: leadingAnchor).isActive = true
-        containerView.trailingAnchor.constraint(equalTo: trailingAnchor).isActive = true
-        containerView.topAnchor.constraint(equalTo: topAnchor).isActive = true
-        containerView.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
-    }
-    */
 }
 extension UIImage {
     static func from(color: UIColor) -> UIImage {
@@ -87,19 +65,20 @@ class CustomeTabbarVC: UITabBarController {
             //News
            // print("Code for item 1")
             isFromViewAll = false
-           // NotificationCenter.default.post(name: Notification.Name("APIcallforSiteInspectionTab"), object: nil, userInfo: nil)
+            NotificationCenter.default.post(name: Notification.Name("APICall_News"), object: nil, userInfo: nil)
         }
         if(item.tag == 2) {
             //Talk Show
             isFromViewAll = false
             
-           // NotificationCenter.default.post(name: Notification.Name("APIcallforProfileTab"), object: nil, userInfo: nil)
+            NotificationCenter.default.post(name: Notification.Name("APICall_TalkShow"), object: nil, userInfo: nil)
         }
         if(item.tag == 3) {
             //E video
             isFromViewAll = false
             
-           // NotificationCenter.default.post(name: Notification.Name("APIcallforProfileTab"), object: nil, userInfo: nil)
+            NotificationCenter.default.post(name: Notification.Name("APICall_Evideo"), object: nil, userInfo: nil)
+
         }
         if(item.tag == 4) {
             //PodCast

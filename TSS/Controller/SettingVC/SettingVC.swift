@@ -8,12 +8,12 @@
 import UIKit
 
 class SettingVC: UIViewController {
+    //  - Variables - 
+    let arr = ["Notifications", "Subscriber", "Account Setting", "App Preferences", "Favourites", "Upcoming Events", "Help & Feedback", "About Us", "Privacy Policy", "Term & Condition", "Contact Us", "Logout"]
     
-   
-    
+    //  - Outlets - 
     @IBOutlet weak var tblSetting: UITableView!
     @IBOutlet weak var constHeightHeader: NSLayoutConstraint!
-    let arr = ["Notifications", "Subscriber", "Account Setting", "App Preferences", "Favourites", "Upcoming Events", "Help & Feedback", "About Us", "Privacy Policy", "Term & Condition", "Contact Us"]
 }
 //MARK: UIViewLife Cycle Methods
 extension SettingVC
@@ -156,9 +156,24 @@ extension SettingVC: UITableViewDelegate, UITableViewDataSource
            // Contact Us
             NavigationHelper.push(storyboardKey.InnerScreen, viewControllerIdentifier: "ContactUSVC", from: navigationController!, animated: true)
             break
+            
+        case 11:
+           // Logout
+            self.clearParamInLocal()
+            NavigationHelper.push(storyboardKey.IntroScreen, viewControllerIdentifier: "SplashScreenVC", from: self.navigationController!, animated: false)
+            break
         
+
         default:
             break
         }
+    }
+    func clearParamInLocal()
+    {
+        UserDefaults.standard.set("", forKey: "AUTHTOKEN")
+        UserDefaults.standard.set("NO", forKey: "isUserLoggedIn")
+        UserDefaults.standard.set("", forKey: "DEVICETOKEN")
+        UserDefaults.standard.set("", forKey: "FCMTOKEN")
+        UserDefaults.standard.synchronize()
     }
 }

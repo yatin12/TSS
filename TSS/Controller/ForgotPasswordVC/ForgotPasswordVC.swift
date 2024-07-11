@@ -8,11 +8,13 @@
 import UIKit
 
 class ForgotPasswordVC: UIViewController {
+    
+    //  - Variables - 
+    
+    //  - Outlets - 
+    
     @IBOutlet weak var txtEmail: UITextField!
-    
-    
     @IBOutlet weak var lblLogin: UILabel!
-   
     @IBOutlet weak var vwEmail: UIView!
     
 }

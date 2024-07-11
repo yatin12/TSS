@@ -6,9 +6,19 @@
 //
 
 import UIKit
+import KVSpinnerView
 
 class ProfileVC: UIViewController {
+    //  - Variables - 
+    var userId: String = ""
+   
+    @IBOutlet weak var imgEyeConfPass: UIImageView!
+    @IBOutlet weak var imgEyePassword: UIImageView!
+    private let objGetProfileViewModel = GetProfileViewModel()
+    private let objUpdateProfileViewModel = updateProfileViewModel()
     var imagePickerManager: ImagePickerManager?
+    
+    //  - Outlets - 
     @IBOutlet weak var lblHeaderNm: UILabel!
     @IBOutlet weak var txtConfPassword: UITextField!
     @IBOutlet weak var vwConfPassword: UIView!
@@ -28,13 +38,19 @@ extension ProfileVC
 {
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.getUserId()
         self.setUpHeaderView()
         self.setUpPlaceholderColor()
+        self.apiCallGetProfile()
     }
 }
 //MARK: General Methods
 extension ProfileVC
 {
+    func getUserId()
+    {
+        userId = AppUserDefaults.object(forKey: "USERID") as? String ?? ""
+    }
     func setUpPlaceholderColor()
     {
         GenericFunction.setPlaceholderColor(for: txtDisplayNm)
@@ -73,13 +89,7 @@ extension ProfileVC
             vwConfPassword.layer.borderColor = isEditing ? clearColor : highlightColor
             vwConfPassword.layer.borderWidth = isEditing ? 0.0 : 1.0
             
-            if isEditing {
-                txtEmail.text = ""
-                txtPhone.text = ""
-                txtPassword.text = ""
-                txtConfPassword.text = ""
-            }
-        } 
+        }
         else if textField == txtEmail
         {
             vwEmail.layer.borderColor = isEditing ? highlightColor : clearColor
@@ -97,12 +107,6 @@ extension ProfileVC
             vwConfPassword.layer.borderColor = isEditing ? clearColor : highlightColor
             vwConfPassword.layer.borderWidth = isEditing ? 0.0 : 1.0
             
-            if isEditing {
-                txtDisplayNm.text = ""
-                txtPhone.text = ""
-                txtPassword.text = ""
-                txtConfPassword.text = ""
-            }
         }
         else if textField == txtPhone
         {
@@ -121,12 +125,6 @@ extension ProfileVC
             vwConfPassword.layer.borderColor = isEditing ? clearColor : highlightColor
             vwConfPassword.layer.borderWidth = isEditing ? 0.0 : 1.0
             
-            if isEditing {
-                txtDisplayNm.text = ""
-                txtEmail.text = ""
-                txtPassword.text = ""
-                txtConfPassword.text = ""
-            }
         }
         else if textField == txtPassword
         {
@@ -144,13 +142,7 @@ extension ProfileVC
             
             vwConfPassword.layer.borderColor = isEditing ? clearColor : highlightColor
             vwConfPassword.layer.borderWidth = isEditing ? 0.0 : 1.0
-            
-            if isEditing {
-                txtDisplayNm.text = ""
-                txtEmail.text = ""
-                txtPhone.text = ""
-                txtConfPassword.text = ""
-            }
+           
         }
         else if textField == txtConfPassword
         {
@@ -169,18 +161,29 @@ extension ProfileVC
             vwPassword.layer.borderColor = isEditing ? clearColor : highlightColor
             vwPassword.layer.borderWidth = isEditing ? 0.0 : 1.0
             
-            if isEditing {
-                txtDisplayNm.text = ""
-                txtEmail.text = ""
-                txtPhone.text = ""
-                txtPassword.text = ""
-            }
         }
     }
 }
 //MARK: IBAction
 extension ProfileVC
 {
+    @IBAction func btnPassVisibilityTapped(_ sender: Any) {
+        txtPassword.isSecureTextEntry.toggle()
+           if txtPassword.isSecureTextEntry {
+               imgEyePassword.image = UIImage(named: "icn_Eye")
+           } else {
+               imgEyePassword.image = UIImage(named: "icn_Eye_Slash")
+           }
+    }
+    
+    @IBAction func btnConfPassVisibilityTapped(_ sender: Any) {
+        txtConfPassword.isSecureTextEntry.toggle()
+           if txtConfPassword.isSecureTextEntry {
+               imgEyeConfPass.image = UIImage(named: "icn_Eye")
+           } else {
+               imgEyeConfPass.image = UIImage(named: "icn_Eye_Slash")
+           }
+    }
     @IBAction func btnBackTapped(_ sender: Any) {
         self.navigationController?.popViewController(animated: true)
     }
@@ -196,6 +199,7 @@ extension ProfileVC
         self.openImagePicker()
     }
     @IBAction func btnSubmitTapped(_ sender: Any) {
+        self.apiCallUpdateProfile()
     }
     @IBAction func btnSettingTapped(_ sender: Any) {
     NavigationHelper.push(storyboardKey.InnerScreen, viewControllerIdentifier: "SettingVC", from: navigationController!, animated: true)
@@ -219,5 +223,113 @@ extension ProfileVC: ImagePickerDelegate
 {
     func didSelectImage(_ image: UIImage) {
         imgProfilePic.image = image
+    }
+}
+//MARK: API Call
+extension ProfileVC
+{
+    func setUpUIAfterGettingResponse(response: GetProfileResponse?)
+    {
+        txtEmail.text = "\(response?.data?.email ?? "")"
+        txtPhone.text = "\(response?.data?.phone ?? "")"
+        txtPassword.text = "\(response?.data?.password ?? "")"
+        txtConfPassword.text = "\(response?.data?.password ?? "")"
+        txtDisplayNm.text = "\(response?.data?.userName ?? "")"
+        
+        let strBlogUrl = "\(response?.data?.imageURL ?? "")"
+        imgProfilePic.sd_setImage(with: URL(string: strBlogUrl), placeholderImage: UIImage(named: "icn_Placehoder"), options: [.progressiveLoad], context: nil)
+
+    }
+    func apiCallGetProfile()
+    {
+        if Reachability.isConnectedToNetwork()
+        {
+            KVSpinnerView.show()
+            objGetProfileViewModel.getProfile(userId: userId) { result in
+                switch result {
+                case .success(let response):
+                    print(response)
+                    KVSpinnerView.dismiss()
+                    if response.settings?.success == true
+                    {
+                        self.setUpUIAfterGettingResponse(response: response)
+
+                    }
+                    else
+                    {
+                        AlertUtility.presentSimpleAlert(in: self, title: "", message: "\(response.settings?.message ?? "")")
+
+                    }
+                    
+                case .failure(let error):
+                    // Handle failure
+                    KVSpinnerView.dismiss()
+                    
+                    if let apiError = error as? APIError {
+                        ErrorHandlingUtility.handleAPIError(apiError, in: self)
+                    } else {
+                        // Handle other types of errors
+                        //print("Unexpected error: \(error)")
+                        AlertUtility.presentSimpleAlert(in: self, title: "", message: "\(error.localizedDescription)")
+                        
+                    }
+                }
+            }
+        }
+        else
+        {
+            KVSpinnerView.dismiss()
+             AlertUtility.presentSimpleAlert(in: self, title: "", message: "\(AlertMessages.NoInternetAlertMsg)")
+        }
+    }
+    func apiCallUpdateProfile()
+    {
+        if Reachability.isConnectedToNetwork()
+        {
+            objUpdateProfileViewModel.updateProfile(profileImgData: imgProfilePic.image?.jpeg(.lowest), userId: userId, userName: txtDisplayNm.text ?? "", email: txtEmail.text ?? "", phone: txtPhone.text ?? "", password: txtPassword.text ?? "") { result in
+                switch result {
+                case .success(let response):
+                    print(response)
+                    KVSpinnerView.dismiss()
+                    if response.settings?.success == true
+                    {
+                        AlertUtility.presentAlert(in: self, title: "", message: "\(response.settings?.message ?? "")", options: "Ok") { option in
+                            switch(option) {
+                            case 0:
+                                self.navigationController?.popViewController(animated: true)
+                                break
+                            
+                            default:
+                                break
+                            }
+                        }
+
+                    }
+                    else
+                    {
+                        AlertUtility.presentSimpleAlert(in: self, title: "", message: "\(response.settings?.message ?? "")")
+
+                    }
+                    
+                case .failure(let error):
+                    // Handle failure
+                    KVSpinnerView.dismiss()
+                    
+                    if let apiError = error as? APIError {
+                        ErrorHandlingUtility.handleAPIError(apiError, in: self)
+                    } else {
+                        // Handle other types of errors
+                        //print("Unexpected error: \(error)")
+                        AlertUtility.presentSimpleAlert(in: self, title: "", message: "\(error.localizedDescription)")
+                        
+                    }
+                }
+            }
+        }
+        else
+        {
+            KVSpinnerView.dismiss()
+             AlertUtility.presentSimpleAlert(in: self, title: "", message: "\(AlertMessages.NoInternetAlertMsg)")
+        }
     }
 }

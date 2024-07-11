@@ -16,6 +16,7 @@ enum AppEnvironment {
 
 let currentEnvironment: AppEnvironment = .beta
 let AppUserDefaults = UserDefaults.standard
+var strSelectedBlog: String = ""
 var isFromViewAll: Bool = false
 let highlightColor = UIColor(named: "ThemeHighlightBorderColor")?.cgColor ?? UIColor.clear.cgColor
 let clearColor = UIColor.clear.cgColor
@@ -35,12 +36,42 @@ let mediumAttributes: [NSAttributedString.Key: Any] = [
 //EndPoint
 let loginEndpoint = "login"
 let registerEndpoint = "register"
+let blog_categoriesEndpoint = "blog_categories"
+let get_blogs_by_categoryEndpoint = "get_blogs_by_category"
+let blog_details_by_pageidEndpoint = "blog_details_by_pageid"
+let get_favourite_listEndpoint = "get_favourite_list"
+let get_watchlistEndpoint = "get_watchlist"
+let e_videoDetailEndpoint = "e_video"
+let getProfileEndpoint = "user-profile"
+let updateProfileEndpoint = "update-user-profile"
+let countryListEndpoint = "country_list"
+let videoRateEndpoint = "video_submit_rating"
+let getVideoListEndpoint = "e_videos_by_category_id"
+let getTalkShowListEndpoint = "talk_shows_by_category_id"
+let addWatchlistEndpoint = "add_watchlist"
+let deleteWatchlistEndpoint = "delete_watchlist"
+let sendContactDetailsEndpoint = "contact-form-submit"
+let membershipPlanEndpoint = "membership-plans"
 
 let forgotPasswordEndpoint = "installer/forgot-password"
+
+
 let ServerDateFormat = "dd/MM/yyyy"
 let PrivacyPolicyURL: String = ""
 let termsConditionURL: String = ""
 let aboutUSURL: String = ""
+
+struct subscriptionPlanTime {
+    static let Year:String = "Year"
+    static let Month:String = "Month"
+}
+
+struct blogCategories {
+    
+    static let Evideo:String = "Evideo"
+    static let TalkShow:String = "TalkShow"
+    static let News:String = "News"
+}
 
 extension DateFormatter
 {
@@ -73,6 +104,8 @@ struct AlertMessages {
     static let BlankConfirmPassword:String = "Confirm password cannot be blank."
     static let ConfirmPasswordLength:String = "Confirm password must minimum 8 characters."
     static let MatchPasswordReg:String = "Confirm password must match with password."
+    static let BlankName:String = "Name is mandatory."
+    static let BlankMessage:String = "Message is mandatory."
 
 }
 
@@ -261,6 +294,32 @@ struct NavigationHelper {
     }
     
     static func pushWithPassData(_ storyboardName: String, viewControllerIdentifier: String, from navigationController: UINavigationController, data: Any? = nil) {
+        let storyboard = UIStoryboard(name: storyboardName, bundle: nil)
+        
+        if let viewController = storyboard.instantiateViewController(withIdentifier: viewControllerIdentifier) as? NewsDeatilsVC {
+            
+            if let selectedPostId = data as? String {
+                viewController.postId = selectedPostId
+            } else {
+                fatalError("Invalid data type passed to EditProfileVC. Expected GetProfileResponse, received \(String(describing: data))")
+            }
+            
+            navigationController.pushViewController(viewController, animated: true)
+        }
+        else if let viewController = storyboard.instantiateViewController(withIdentifier: viewControllerIdentifier) as? VideoDetailsVC {
+            
+            if let selectedPostId = data as? String {
+               // viewController.postId = selectedPostId
+            } else {
+                fatalError("Invalid data type passed to EditProfileVC. Expected GetProfileResponse, received \(String(describing: data))")
+            }
+            
+            navigationController.pushViewController(viewController, animated: true)
+        }
+       
+        else {
+            fatalError("ViewController with identifier \(viewControllerIdentifier) not found or does not conform to EditProfileVC.")
+        }
         
     }
     
@@ -356,3 +415,19 @@ extension UIView {
         }
     }
 }
+extension String {
+    func htmlToAttributedString() -> NSAttributedString? {
+        guard let data = data(using: .utf8) else { return nil }
+        do {
+            return try NSAttributedString(data: data, options: [.documentType: NSAttributedString.DocumentType.html], documentAttributes: nil)
+        } catch {
+            print("Error converting HTML string: \(error.localizedDescription)")
+            return nil
+        }
+    }
+    
+    func htmlToString() -> String {
+        return htmlToAttributedString()?.string ?? ""
+    }
+}
+

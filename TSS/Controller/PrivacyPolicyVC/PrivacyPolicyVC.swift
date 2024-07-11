@@ -10,9 +10,11 @@ import WebKit
 import KVSpinnerView
 
 class PrivacyPolicyVC: UIViewController {
-    
-    @IBOutlet weak var constHeightHeader: NSLayoutConstraint!
+    //  - Variables - 
     @IBOutlet weak var objWebView: WKWebView!
+
+    //  - Outlets - 
+    @IBOutlet weak var constHeightHeader: NSLayoutConstraint!
     
 }
 extension PrivacyPolicyVC

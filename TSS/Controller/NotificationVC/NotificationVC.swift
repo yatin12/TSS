@@ -8,9 +8,10 @@
 import UIKit
 
 class NotificationVC: UIViewController {
+    //  - Variables - 
     
+    //  - Outlets - 
     @IBOutlet weak var lblNoDataFound: UILabel!
-    
     @IBOutlet weak var tblNotification: UITableView!
     @IBOutlet weak var constHeightHeader: NSLayoutConstraint!
 }

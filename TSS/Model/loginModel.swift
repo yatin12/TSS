@@ -22,8 +22,8 @@ struct DataClass: Codable {
     let id: Int?
     let userLogin, userNicename, userEmail, userURL: String?
     let userRegistered, displayName: String?
-//    let membershipLevel: MembershipLevel?
-    let membershipLevel: Bool?
+    let membershipLevel: MembershipLevel?
+   // let membershipLevel: Bool?
 
     let roles: [String]?
     let allcaps: Allcaps?

@@ -57,7 +57,7 @@ class CustomeTabbarVC: UITabBarController {
             //Home
         
            // print("Code for item 0")
-          //  NotificationCenter.default.post(name: Notification.Name("APIcallforMyJobsTab"), object: nil, userInfo: nil)
+            NotificationCenter.default.post(name: Notification.Name("APIcallforHome"), object: nil, userInfo: nil)
 
             
         }
@@ -70,13 +70,13 @@ class CustomeTabbarVC: UITabBarController {
         if(item.tag == 2) {
             //Talk Show
             isFromViewAll = false
-            
+            strSelectedPostName = "talk_shows"
             NotificationCenter.default.post(name: Notification.Name("APICall_TalkShow"), object: nil, userInfo: nil)
         }
         if(item.tag == 3) {
             //E video
             isFromViewAll = false
-            
+            strSelectedPostName = "evideos"
             NotificationCenter.default.post(name: Notification.Name("APICall_Evideo"), object: nil, userInfo: nil)
 
         }

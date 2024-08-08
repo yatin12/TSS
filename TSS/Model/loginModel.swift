@@ -19,7 +19,7 @@ struct loginResponse: Codable {
 }
 // MARK: - DataClass
 struct DataClass: Codable {
-    let id: Int?
+    let id: String?
     let userLogin, userNicename, userEmail, userURL: String?
     let userRegistered, displayName: String?
     let membershipLevel: MembershipLevel?
@@ -82,8 +82,9 @@ struct MembershipLevel: Codable {
 }
 // MARK: - Settings
 struct Settings: Codable {
-    let success, message, count, nextPage: String?
-    let userID: Int?
+    let success: Bool?
+    let message, count, nextPage: String?
+    let userID: String?
     let diviceToken, authorization: String?
 
     enum CodingKeys: String, CodingKey {

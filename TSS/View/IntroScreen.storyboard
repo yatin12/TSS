@@ -94,10 +94,10 @@
                                                 <rect key="frame" x="0.0" y="0.0" width="345" height="562"/>
                                                 <subviews>
                                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="dBy-ln-FSd">
-                                                        <rect key="frame" x="0.0" y="0.0" width="345" height="624"/>
+                                                        <rect key="frame" x="0.0" y="0.0" width="345" height="688"/>
                                                         <subviews>
                                                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="gIC-KB-RXN">
-                                                                <rect key="frame" x="0.0" y="10" width="345" height="614"/>
+                                                                <rect key="frame" x="0.0" y="10" width="345" height="678"/>
                                                                 <subviews>
                                                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="gfG-DT-VaN">
                                                                         <rect key="frame" x="0.0" y="0.0" width="345" height="178"/>
@@ -503,8 +503,32 @@
                                                                             <constraint firstItem="UXz-f8-8iQ" firstAttribute="centerY" secondItem="Yk3-k6-zub" secondAttribute="centerY" id="QeL-f7-7LZ"/>
                                                                         </constraints>
                                                                     </view>
-                                                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="NNo-01-NPE">
+                                                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="OT8-43-Tzb">
                                                                         <rect key="frame" x="0.0" y="550" width="345" height="64"/>
+                                                                        <subviews>
+                                                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Fxb-cu-V8z" customClass="GenericButton" customModule="TSS" customModuleProvider="target">
+                                                                                <rect key="frame" x="26" y="8" width="293" height="48"/>
+                                                                                <constraints>
+                                                                                    <constraint firstAttribute="height" constant="48" id="G8c-2B-jgg"/>
+                                                                                </constraints>
+                                                                                <fontDescription key="fontDescription" name="AlNile" family="Al Nile" pointSize="14"/>
+                                                                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                                                                <state key="normal" title="Sign in as Guest User"/>
+                                                                                <connections>
+                                                                                    <action selector="btnSigninAsGuestUserTapped:" destination="Wcf-5e-4p7" eventType="touchUpInside" id="ZXo-sd-qd2"/>
+                                                                                </connections>
+                                                                            </button>
+                                                                        </subviews>
+                                                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                        <constraints>
+                                                                            <constraint firstItem="Fxb-cu-V8z" firstAttribute="leading" secondItem="OT8-43-Tzb" secondAttribute="leading" constant="26" id="3vd-82-JdA"/>
+                                                                            <constraint firstAttribute="trailing" secondItem="Fxb-cu-V8z" secondAttribute="trailing" constant="26" id="87y-P5-Iup"/>
+                                                                            <constraint firstAttribute="height" constant="64" id="Ca5-ap-hsT"/>
+                                                                            <constraint firstItem="Fxb-cu-V8z" firstAttribute="centerY" secondItem="OT8-43-Tzb" secondAttribute="centerY" id="Zly-M0-JL7"/>
+                                                                        </constraints>
+                                                                    </view>
+                                                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="NNo-01-NPE">
+                                                                        <rect key="frame" x="0.0" y="614" width="345" height="64"/>
                                                                         <subviews>
                                                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="By registering, you agree to Streamvid's Terms of Use and  Privacy Policy" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="K7A-Lh-tYK" customClass="TappableLabel" customModule="TSS" customModuleProvider="target">
                                                                                 <rect key="frame" x="26" y="0.0" width="293" height="64"/>
@@ -1979,7 +2003,7 @@
     </scenes>
     <resources>
         <image name="Logo" width="268" height="270.66665649414062"/>
-        <image name="icn_Eye" width="23" height="23"/>
+        <image name="icn_Eye" width="92" height="92"/>
         <image name="icn_tick" width="66.666664123535156" height="66.666664123535156"/>
         <namedColor name="ThemeFontColor">
             <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

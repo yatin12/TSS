@@ -8,7 +8,7 @@
 import Foundation
 // MARK: - Welcome
 struct getProfileRequest: Encodable {
-    let userId: String
+    let userID: String
 }
 
 struct GetProfileResponse: Codable {

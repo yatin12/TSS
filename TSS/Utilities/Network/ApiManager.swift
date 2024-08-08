@@ -587,6 +587,161 @@ class APIManager {
                 }
             }
     }
+    func VideoFavUnFav<T: Decodable>(request: LikeVideoRequest, responseModelType: T.Type, completion: @escaping (Result<T, APIError>) -> Void) {
+        
+        let authToken: String = AppUserDefaults.object(forKey: "AUTHTOKEN") as? String ?? ""
+        
+        let customHeaders: HTTPHeaders = [
+            "Authorization": authToken
+        ]
+
+        
+        let URLstr: String = "\(APIConfig.baseURL+favVideoEndpoint)"
+        
+        Logger.logRequest(url: URLstr, method: "Post", headers: customHeaders, body: nil)
+        AF.request(URLstr, method: .post, parameters: request, encoder: JSONParameterEncoder.default, headers: customHeaders)
+            .validate()
+            .responseDecodable(of: T.self) { response in
+                Logger.logResponse(url: URLstr, response: response)
+                
+                if let data = response.data {
+                    print(String(data: data, encoding: .utf8) ?? "Unable to print data")
+                }
+                
+                do {
+                    let result = try response.result.get() // This line will throw an error if the decoding fails
+                    completion(.success(result))
+                } catch {
+                    // Handle decoding error here
+                    print("Error decoding data: \(error)")
+                    self.handleFailureResponse(response, completion: completion)
+                }
+            }
+    }
+    func searchList<T: Decodable>(request: searchRequest, responseModelType: T.Type, completion: @escaping (Result<T, APIError>) -> Void) {
+        
+        let authToken: String = AppUserDefaults.object(forKey: "AUTHTOKEN") as? String ?? ""
+        
+        let customHeaders: HTTPHeaders = [
+            "Authorization": authToken
+        ]
+
+        
+        let URLstr: String = "\(APIConfig.baseURL+searchEndpoint)"
+        
+        Logger.logRequest(url: URLstr, method: "Post", headers: customHeaders, body: nil)
+        AF.request(URLstr, method: .post, parameters: request, encoder: JSONParameterEncoder.default, headers: customHeaders)
+            .validate()
+            .responseDecodable(of: T.self) { response in
+                Logger.logResponse(url: URLstr, response: response)
+                
+                if let data = response.data {
+                    print(String(data: data, encoding: .utf8) ?? "Unable to print data")
+                }
+                
+                do {
+                    let result = try response.result.get() // This line will throw an error if the decoding fails
+                    completion(.success(result))
+                } catch {
+                    // Handle decoding error here
+                    print("Error decoding data: \(error)")
+                    self.handleFailureResponse(response, completion: completion)
+                }
+            }
+    }
+    func forgotPasswordApi<T: Decodable>(request: ForgotPasswordRequest, responseModelType: T.Type, completion: @escaping (Result<T, APIError>) -> Void) {
+        
+        let authToken: String = AppUserDefaults.object(forKey: "AUTHTOKEN") as? String ?? ""
+        
+        let customHeaders: HTTPHeaders = [
+            "Authorization": authToken
+        ]
+
+        
+        let URLstr: String = "\(APIConfig.baseURL+forgotPasswordEndpoint)"
+        
+        Logger.logRequest(url: URLstr, method: "Post", headers: customHeaders, body: nil)
+        AF.request(URLstr, method: .post, parameters: request, encoder: JSONParameterEncoder.default, headers: customHeaders)
+            .validate()
+            .responseDecodable(of: T.self) { response in
+                Logger.logResponse(url: URLstr, response: response)
+                
+                if let data = response.data {
+                    print(String(data: data, encoding: .utf8) ?? "Unable to print data")
+                }
+                
+                do {
+                    let result = try response.result.get() // This line will throw an error if the decoding fails
+                    completion(.success(result))
+                } catch {
+                    // Handle decoding error here
+                    print("Error decoding data: \(error)")
+                    self.handleFailureResponse(response, completion: completion)
+                }
+            }
+    }
+    func deleteAccountApi<T: Decodable>(request: deleteAccountRequest, responseModelType: T.Type, completion: @escaping (Result<T, APIError>) -> Void) {
+        
+        let authToken: String = AppUserDefaults.object(forKey: "AUTHTOKEN") as? String ?? ""
+        
+        let customHeaders: HTTPHeaders = [
+            "Authorization": authToken
+        ]
+
+        
+        let URLstr: String = "\(APIConfig.baseURL+deleteAccountEndpoint)"
+        
+        Logger.logRequest(url: URLstr, method: "Post", headers: customHeaders, body: nil)
+        AF.request(URLstr, method: .post, parameters: request, encoder: JSONParameterEncoder.default, headers: customHeaders)
+            .validate()
+            .responseDecodable(of: T.self) { response in
+                Logger.logResponse(url: URLstr, response: response)
+                
+                if let data = response.data {
+                    print(String(data: data, encoding: .utf8) ?? "Unable to print data")
+                }
+                
+                do {
+                    let result = try response.result.get() // This line will throw an error if the decoding fails
+                    completion(.success(result))
+                } catch {
+                    // Handle decoding error here
+                    print("Error decoding data: \(error)")
+                    self.handleFailureResponse(response, completion: completion)
+                }
+            }
+    }
+    func getHomeList<T: Decodable>(request: HomeRequest, responseModelType: T.Type, completion: @escaping (Result<T, APIError>) -> Void) {
+        
+        let authToken: String = AppUserDefaults.object(forKey: "AUTHTOKEN") as? String ?? ""
+        
+        let customHeaders: HTTPHeaders = [
+            "Authorization": authToken
+        ]
+
+        
+        let URLstr: String = "\(APIConfig.baseURL+HomeEndpoint)"
+        
+        Logger.logRequest(url: URLstr, method: "Post", headers: customHeaders, body: nil)
+        AF.request(URLstr, method: .post, parameters: request, encoder: JSONParameterEncoder.default, headers: customHeaders)
+            .validate()
+            .responseDecodable(of: T.self) { response in
+                Logger.logResponse(url: URLstr, response: response)
+                
+                if let data = response.data {
+                    print(String(data: data, encoding: .utf8) ?? "Unable to print data")
+                }
+                
+                do {
+                    let result = try response.result.get() // This line will throw an error if the decoding fails
+                    completion(.success(result))
+                } catch {
+                    // Handle decoding error here
+                    print("Error decoding data: \(error)")
+                    self.handleFailureResponse(response, completion: completion)
+                }
+            }
+    }
     //MARK: Error Handler
     func handleFailureResponse<T: Decodable>(_ response: DataResponse<T, AFError>, completion: @escaping (Result<T, APIError>) -> Void) {
         if let statusCode = response.response?.statusCode {

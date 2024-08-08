@@ -10,7 +10,7 @@ class videoDetailViewModel
 {
     func videoDetail(userId: String, videoId: String, completion: @escaping (Result<videoDetailResponse, Error>) -> Void)
     {
-        let request = videoDetailRequest(userId: userId, videoId: videoId)
+        let request = videoDetailRequest(userId: userId, videoId: videoId, postType: strSelectedPostName)
         
         APIManager.shared.VideoDetail(request: request, responseModelType: videoDetailResponse.self) { result in
             switch result {

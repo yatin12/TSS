@@ -9,11 +9,11 @@ import Foundation
 
 class membershipViewModel
 {
-    func getMembershipPlan(userId: String, planType: String, completion: @escaping (Result<membershipPlanElement, Error>) -> Void)
+    func getMembershipPlan(userId: String, planType: String, completion: @escaping (Result<membershipPlanResponse, Error>) -> Void)
     {
         let request = membershipRequest(userId: userId, planType: planType)
         
-        APIManager.shared.membershipPlanList(request: request, responseModelType: membershipPlanElement.self) { result in
+        APIManager.shared.membershipPlanList(request: request, responseModelType: membershipPlanResponse.self) { result in
             switch result {
             case .success(let response):
                 completion(.success(response))

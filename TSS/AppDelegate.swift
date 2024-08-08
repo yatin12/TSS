@@ -32,6 +32,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         self.setUpSpinnerView()
         self.setUpUITabBar()
         self.registerForPushNotifications()
+        self.fetchURLsFromPlist()
         
         FirebaseConfiguration.shared.setLoggerLevel(.min)
         FirebaseApp.configure()
@@ -80,6 +81,38 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         
         UITabBarItem.appearance().setTitleTextAttributes([NSAttributedString.Key.font: UIFont(name: AppFontName.Poppins_SemiBold.rawValue, size: 11)!], for: .normal)
         UITabBarItem.appearance().setTitleTextAttributes([NSAttributedString.Key.font: UIFont(name: AppFontName.Poppins_SemiBold.rawValue, size: 11)!], for: .selected)
+        
+    }
+    func fetchURLsFromPlist()
+    {
+       
+        
+        if let filePath = Bundle.main.path(forResource: "Info", ofType: "plist"),
+           let plist = NSDictionary(contentsOfFile: filePath),
+           let url = plist["PrivacyPolicyURL"] as? String {
+            // Use the apiKey variable here
+            PrivacyPolicyURL = url
+        }
+        if let filePath = Bundle.main.path(forResource: "Info", ofType: "plist"),
+           let plist = NSDictionary(contentsOfFile: filePath),
+           let url = plist["TermsConditionURL"] as? String {
+            // Use the apiKey variable here
+            termsConditionURL = url
+        }
+        if let filePath = Bundle.main.path(forResource: "Info", ofType: "plist"),
+           let plist = NSDictionary(contentsOfFile: filePath),
+           let url = plist["aboutUSURL"] as? String {
+            // Use the apiKey variable here
+            aboutUSURL = url
+        }
+        if let filePath = Bundle.main.path(forResource: "Info", ofType: "plist"),
+           let plist = NSDictionary(contentsOfFile: filePath),
+           let url = plist["PodCastURL"] as? String {
+            // Use the apiKey variable here
+            PodCastURL = url
+        }
+        
+        
         
     }
     func registerForPushNotifications() {

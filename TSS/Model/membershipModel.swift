@@ -10,8 +10,14 @@ struct membershipRequest: Encodable {
     let userId: String
     let planType: String
 }
+// MARK: - Welcome
+struct membershipPlanResponse: Codable {
+    let settings: SettingsMememberShip?
+    let data: [DataMemberShip]?
+}
 
-struct membershipPlanElement: Codable {
+// MARK: - Datum
+struct DataMemberShip: Codable {
     let id, name, description, initialPayment: String?
     let billingAmount, cycleNumber, cyclePeriod, billingLimit: String?
     let trialAmount, trialLimit, expirationNumber, expirationPeriod: String?
@@ -32,4 +38,16 @@ struct membershipPlanElement: Codable {
     }
 }
 
-typealias membershipPlan = [membershipPlanElement]
+// MARK: - Settings
+struct SettingsMememberShip: Codable {
+    let success: Bool?
+    let message: String?
+    let count: Int?
+    let nextPage, userID: String?
+
+    enum CodingKeys: String, CodingKey {
+        case success, message, count, nextPage
+        case userID = "userId"
+    }
+}
+

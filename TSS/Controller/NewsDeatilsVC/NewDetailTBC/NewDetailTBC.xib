@@ -204,7 +204,7 @@
                                                                 <rect key="frame" x="0.0" y="0.0" width="40" height="50"/>
                                                                 <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                                                                 <connections>
-                                                                    <action selector="btnFacebookTapped:" destination="KGk-i7-Jjw" eventType="touchUpInside" id="mHH-NV-isC"/>
+                                                                    <action selector="btnFacebookTapped:" destination="KGk-i7-Jjw" eventType="touchUpInside" id="Jif-nB-qng"/>
                                                                 </connections>
                                                             </button>
                                                         </subviews>
@@ -233,7 +233,7 @@
                                                                 <rect key="frame" x="0.0" y="0.0" width="40" height="50"/>
                                                                 <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                                                                 <connections>
-                                                                    <action selector="btnInstaTapped:" destination="KGk-i7-Jjw" eventType="touchUpInside" id="tpW-t6-cCX"/>
+                                                                    <action selector="btnInstaTapped:" destination="KGk-i7-Jjw" eventType="touchUpInside" id="8rP-rE-htR"/>
                                                                 </connections>
                                                             </button>
                                                         </subviews>
@@ -262,7 +262,7 @@
                                                                 <rect key="frame" x="0.0" y="0.0" width="40" height="50"/>
                                                                 <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                                                                 <connections>
-                                                                    <action selector="btnTikTokTapped:" destination="KGk-i7-Jjw" eventType="touchUpInside" id="d3X-8O-bSQ"/>
+                                                                    <action selector="btnTikTokTapped:" destination="KGk-i7-Jjw" eventType="touchUpInside" id="KAs-pb-vTQ"/>
                                                                 </connections>
                                                             </button>
                                                         </subviews>

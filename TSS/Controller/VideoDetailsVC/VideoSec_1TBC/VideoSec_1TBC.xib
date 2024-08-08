@@ -38,22 +38,32 @@
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="56z-LC-BPG">
                                         <rect key="frame" x="0.0" y="0.0" width="329" height="227"/>
                                         <subviews>
-                                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="imgTemp" translatesAutoresizingMaskIntoConstraints="NO" id="6VE-A5-J2L">
+                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="pql-Qd-J2L">
                                                 <rect key="frame" x="0.0" y="0.0" width="329" height="227"/>
-                                                <userDefinedRuntimeAttributes>
-                                                    <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
-                                                        <real key="value" value="3"/>
-                                                    </userDefinedRuntimeAttribute>
-                                                </userDefinedRuntimeAttributes>
-                                            </imageView>
+                                                <subviews>
+                                                    <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="large" translatesAutoresizingMaskIntoConstraints="NO" id="yHC-pw-Kxb">
+                                                        <rect key="frame" x="144.66666666666666" y="93.666666666666671" width="40" height="40.000000000000014"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="height" constant="40" id="1G2-kJ-hSi"/>
+                                                            <constraint firstAttribute="width" constant="40" id="Uxf-RZ-mGI"/>
+                                                        </constraints>
+                                                        <color key="color" red="0.1764705882" green="0.1764705882" blue="0.1764705882" alpha="1" colorSpace="calibratedRGB"/>
+                                                    </activityIndicatorView>
+                                                </subviews>
+                                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                <constraints>
+                                                    <constraint firstItem="yHC-pw-Kxb" firstAttribute="centerY" secondItem="pql-Qd-J2L" secondAttribute="centerY" id="nXS-i0-vNq"/>
+                                                    <constraint firstItem="yHC-pw-Kxb" firstAttribute="centerX" secondItem="pql-Qd-J2L" secondAttribute="centerX" id="p6J-jn-JND"/>
+                                                </constraints>
+                                            </view>
                                         </subviews>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <constraints>
-                                            <constraint firstItem="6VE-A5-J2L" firstAttribute="leading" secondItem="56z-LC-BPG" secondAttribute="leading" id="4vq-9Q-BoV"/>
-                                            <constraint firstItem="6VE-A5-J2L" firstAttribute="top" secondItem="56z-LC-BPG" secondAttribute="top" id="Jiq-N7-zKw"/>
+                                            <constraint firstAttribute="bottom" secondItem="pql-Qd-J2L" secondAttribute="bottom" id="ERT-j7-nAt"/>
+                                            <constraint firstAttribute="trailing" secondItem="pql-Qd-J2L" secondAttribute="trailing" id="Ebl-gm-aqR"/>
                                             <constraint firstAttribute="height" constant="227" id="QRE-pj-JtW"/>
-                                            <constraint firstAttribute="trailing" secondItem="6VE-A5-J2L" secondAttribute="trailing" id="ZlM-O9-qbC"/>
-                                            <constraint firstAttribute="bottom" secondItem="6VE-A5-J2L" secondAttribute="bottom" id="zYl-Zb-vl0"/>
+                                            <constraint firstItem="pql-Qd-J2L" firstAttribute="top" secondItem="56z-LC-BPG" secondAttribute="top" id="VLX-el-rrw"/>
+                                            <constraint firstItem="pql-Qd-J2L" firstAttribute="leading" secondItem="56z-LC-BPG" secondAttribute="leading" id="i5l-XM-uqb"/>
                                         </constraints>
                                     </view>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="bgx-AA-3Ni">
@@ -207,6 +217,9 @@
                                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="l3D-6O-JZQ">
                                                                 <rect key="frame" x="0.0" y="0.0" width="81" height="27"/>
                                                                 <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                                                <connections>
+                                                                    <action selector="btnLikeTapped:" destination="KGk-i7-Jjw" eventType="touchUpInside" id="5Tj-vu-4p2"/>
+                                                                </connections>
                                                             </button>
                                                         </subviews>
                                                         <color key="backgroundColor" name="ThemeTextfiledFillColor"/>
@@ -397,21 +410,22 @@
                 <outlet property="btnLikeOutlet" destination="l3D-6O-JZQ" id="9oF-g7-DJH"/>
                 <outlet property="btnShareOutlt" destination="GB3-y6-yvt" id="uM4-wp-VRp"/>
                 <outlet property="btnWachlistOutlt" destination="ePm-Ic-pSi" id="0CX-sT-qQs"/>
-                <outlet property="imgBlog" destination="6VE-A5-J2L" id="xWe-Po-9XU"/>
+                <outlet property="imgLike" destination="YMr-mf-pfr" id="hTz-zI-vFI"/>
                 <outlet property="lblDesc" destination="aS3-j7-TiH" id="XdA-O9-eTz"/>
                 <outlet property="lblLikeCnt" destination="TX9-yu-Fba" id="sou-A8-lX3"/>
                 <outlet property="lblPublish" destination="G6b-7t-dX8" id="c14-B4-RGi"/>
                 <outlet property="lblTitle" destination="FNw-mr-39l" id="adq-Pn-9YY"/>
                 <outlet property="lblViews" destination="Kxf-25-97B" id="iPp-qm-unO"/>
+                <outlet property="objLoader" destination="yHC-pw-Kxb" id="kWd-Dc-qq8"/>
+                <outlet property="vwVideo" destination="pql-Qd-J2L" id="fLU-nG-lNq"/>
             </connections>
             <point key="canvasLocation" x="89" y="-14"/>
         </tableViewCell>
     </objects>
     <resources>
-        <image name="icn_Like" width="15" height="15"/>
+        <image name="icn_Like" width="288" height="288"/>
         <image name="icn_Share" width="14" height="14"/>
         <image name="icn_WatchList" width="10" height="10"/>
-        <image name="imgTemp" width="246" height="128"/>
         <namedColor name="ThemeFontColor">
             <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>

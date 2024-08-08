@@ -9,24 +9,17 @@ import Foundation
 struct watchListRequest: Encodable {
     let userId: String
 }
+// MARK: - Welcome
 struct watchListResponse: Codable {
     let settings: SettingsWatchList?
-    let data: DataWatchList?
+    let data: [DataWatchList]?
 }
 
-// MARK: - DataClass
+// MARK: - Datum
 struct DataWatchList: Codable {
-    let postWatchlist: [PostWatchlist]?
-
-    enum CodingKeys: String, CodingKey {
-        case postWatchlist = "post_watchlist"
-    }
-}
-
-// MARK: - PostWatchlist
-struct PostWatchlist: Codable {
-    let title, description, tag, date: String?
-    let author: [String]?
+    let id, title, description, tag: String
+    let date: String?
+    let author: [Int]?
     let thumbnail: String?
 }
 
@@ -36,7 +29,7 @@ struct SettingsWatchList: Codable {
     let message: String?
     let count: Int?
     let nextPage: Int?
-    let userID: Int?
+    let userID: String?
 
     enum CodingKeys: String, CodingKey {
         case success, message, count, nextPage

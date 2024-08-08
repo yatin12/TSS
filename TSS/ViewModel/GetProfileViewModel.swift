@@ -10,7 +10,7 @@ class GetProfileViewModel
 {
     func getProfile(userId: String, completion: @escaping (Result<GetProfileResponse, Error>) -> Void)
     {
-        let request = getProfileRequest(userId: userId)
+        let request = getProfileRequest(userID: userId)
         APIManager.shared.getProfileDetails(request: request, responseModelType: GetProfileResponse.self) { result in
             switch result {
             case .success(let response):

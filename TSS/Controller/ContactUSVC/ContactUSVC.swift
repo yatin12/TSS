@@ -28,6 +28,7 @@ extension ContactUSVC
 {
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.getUserId()
         self.passViewControllerObjToViewModel()
         self.setUpPlaceholderColor()
         self.setUpHeaderView()
@@ -73,10 +74,7 @@ extension ContactUSVC
             vwMsg.layer.borderColor = isEditing ? clearColor : highlightColor
             vwMsg.layer.borderWidth = isEditing ? 0.0 : 1.0
             
-            if isEditing {
-                txtEmail.text = ""
-                txtvwMsg.text = placeholderText
-            }
+           
         } else if textField == txtEmail {
             vwEmail.layer.borderColor = isEditing ? highlightColor : clearColor
             vwEmail.layer.borderWidth = isEditing ? 1.0 : 0.0
@@ -87,10 +85,7 @@ extension ContactUSVC
             vwMsg.layer.borderColor = isEditing ? clearColor : highlightColor
             vwMsg.layer.borderWidth = isEditing ? 0.0 : 1.0
             
-            if isEditing {
-                txtName.text = ""
-                txtvwMsg.text = placeholderText
-            }
+           
         }
     }
     private func updateBorderTextView(for textview: UITextView, isEditing: Bool) {
@@ -106,10 +101,7 @@ extension ContactUSVC
             vwName.layer.borderColor = isEditing ? clearColor : highlightColor
             vwName.layer.borderWidth = isEditing ? 0.0 : 1.0
             
-            if isEditing {
-                txtEmail.text = ""
-                txtName.text = ""
-            }
+            
         }
     }
 }
@@ -229,7 +221,17 @@ extension ContactUSVC
                     print(response)
                     KVSpinnerView.dismiss()
                    
-                    AlertUtility.presentSimpleAlert(in: self, title: "", message: "\(response.message ?? "")")
+    
+                    AlertUtility.presentAlert(in: self, title: "", message: "\(response.settings?.message ?? "")", options: "Ok") { option in
+                        switch(option) {
+                        case 0:
+                            self.navigationController?.popViewController(animated: true)
+                            break
+                       
+                        default:
+                            break
+                        }
+                    }
 
                     
                 case .failure(let error):

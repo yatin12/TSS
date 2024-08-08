@@ -37,7 +37,8 @@ struct DataBlogDetail: Codable {
 }
 // MARK: - RelatedBlog
 struct RelatedBlog: Codable {
-    let title, description, tag, date: String?
+    let title, description, date: String?
+    let tag: [String]?
     let author: String?
     let thumbnail: String?
 }

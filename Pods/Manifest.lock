@@ -6,6 +6,7 @@ PODS:
   - SDWebImage (5.18.11):
     - SDWebImage/Core (= 5.18.11)
   - SDWebImage/Core (5.18.11)
+  - TikTokOpenSDK (5.0.15)
 
 DEPENDENCIES:
   - Alamofire
@@ -13,6 +14,7 @@ DEPENDENCIES:
   - DropDown (~> 2.3.3)
   - KVSpinnerView
   - SDWebImage
+  - TikTokOpenSDK
 
 SPEC REPOS:
   trunk:
@@ -21,6 +23,7 @@ SPEC REPOS:
     - DropDown
     - KVSpinnerView
     - SDWebImage
+    - TikTokOpenSDK
 
 SPEC CHECKSUMS:
   Alamofire: 3ca42e259043ee0dc5c0cdd76c4bc568b8e42af7
@@ -28,7 +31,8 @@ SPEC CHECKSUMS:
   DropDown: 8a2116376c1981888557f72ec2ffc9a5e0e456ec
   KVSpinnerView: ce89cec80a5776ba4639c312770f01c8a091e80a
   SDWebImage: a3ba0b8faac7228c3c8eadd1a55c9c9fe5e16457
+  TikTokOpenSDK: dc1199ba9c6d7815aee0eaca6ec80ad13f7d9c1f
 
-PODFILE CHECKSUM: d578cacf8e618716e35ac8e900d1076aff296d8e
+PODFILE CHECKSUM: 27764bc50393e80fefe626bf462e149aea104a92
 
 COCOAPODS: 1.15.0

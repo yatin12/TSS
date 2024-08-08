@@ -9,6 +9,8 @@ pod 'KVSpinnerView'
 pod 'DropDown', '~> 2.3.3'
 pod 'SDWebImage'
 pod 'Cosmos', '~> 25.0'
+pod 'TikTokOpenSDK'
+
   # Pods for TSS
 
 end

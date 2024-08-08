@@ -18,6 +18,7 @@ struct videoListResponse: Codable {
 
 // MARK: - Datum
 struct DataVideoList: Codable {
+    let id: String?
     let thumbnail: String?
     let duration: String?
     let title, authorName, date: String?

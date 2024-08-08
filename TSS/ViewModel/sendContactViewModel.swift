@@ -10,10 +10,57 @@ import UIKit
 class sendContactViewModel
 {
     weak var vc: ContactUSVC?
+    weak var vc_Feedback: FeedbackVC?
+
+    func validationForFeedback(email: String, your_name: String, message: String) -> Bool
+    {
+        var isValidate: Bool = false
+        if !ValidationConstants.isNotEmptyName(your_name)
+        {
+            //Password is empty or contains only whitespace characters
+            self.showSimpleAlert(message: "\(AlertMessages.BlankName)", in: vc_Feedback!)
+            isValidate = false
+        }
+        else if !ValidationConstants.isNotEmptyEmail(email)
+        {
+            //Email is empty or contains only whitespace characters
+            self.showSimpleAlert(message: "\(AlertMessages.BlankEmail)", in: vc_Feedback!)
+            isValidate = false
+        }
+        else if !ValidationConstants.isValidEmail(email)
+        {
+            //Not Valid Email
+            self.showSimpleAlert(message: "\(AlertMessages.InvalidEmail)", in: vc_Feedback!)
+            isValidate = false
+        }
+        else if !ValidationConstants.isNotEmptyName(message)
+        {
+            //Password is empty or contains only whitespace characters
+            self.showSimpleAlert(message: "\(AlertMessages.BlankMessage)", in: vc_Feedback!)
+            isValidate = false
+        }
+        else if message == "Enter Message"
+        {
+            //Password is empty or contains only whitespace characters
+            self.showSimpleAlert(message: "\(AlertMessages.BlankMessage)", in: vc_Feedback!)
+            isValidate = false
+        }
+        else
+        {
+            isValidate = true
+        }
+        return isValidate
+    }
     func validationForContact(email: String, your_name: String, message: String) -> Bool
     {
         var isValidate: Bool = false
-        if !ValidationConstants.isNotEmptyEmail(email)
+        if !ValidationConstants.isNotEmptyName(your_name)
+        {
+            //Password is empty or contains only whitespace characters
+            self.showSimpleAlert(message: "\(AlertMessages.BlankName)", in: vc!)
+            isValidate = false
+        }
+        else if !ValidationConstants.isNotEmptyEmail(email)
         {
             //Email is empty or contains only whitespace characters
             self.showSimpleAlert(message: "\(AlertMessages.BlankEmail)", in: vc!)
@@ -25,13 +72,13 @@ class sendContactViewModel
             self.showSimpleAlert(message: "\(AlertMessages.InvalidEmail)", in: vc!)
             isValidate = false
         }
-        else if !ValidationConstants.isNotEmptyName(your_name)
+        else if !ValidationConstants.isNotEmptyName(message)
         {
             //Password is empty or contains only whitespace characters
-            self.showSimpleAlert(message: "\(AlertMessages.BlankName)", in: vc!)
+            self.showSimpleAlert(message: "\(AlertMessages.BlankMessage)", in: vc!)
             isValidate = false
         }
-        else if !ValidationConstants.isNotEmptyName(message)
+        else if message == "Enter Message"
         {
             //Password is empty or contains only whitespace characters
             self.showSimpleAlert(message: "\(AlertMessages.BlankMessage)", in: vc!)

@@ -15,6 +15,7 @@ class LoginVC: UIViewController {
     private let objLoginViewModel = LoginViewModel()
 
     //  - Outlets - 
+    
     @IBOutlet weak var imgPassVisibility: UIImageView!
     @IBOutlet weak var btnRememberOutlt: UIButton!
     @IBOutlet weak var lblLowerDeclaration: TappableLabel!
@@ -148,6 +149,14 @@ extension LoginVC
 //MARK: IBAction
 extension LoginVC
 {
+    @IBAction func btnSigninAsGuestUserTapped(_ sender: Any) {
+        UserDefaultUtility.saveValueToUserDefaults(value: "YES", forKey: "isUserLoggedIn")
+        UserDefaultUtility.saveValueToUserDefaults(value: "GuestUser", forKey: "USERROLE")
+        UserDefaultUtility.saveValueToUserDefaults(value: "", forKey: "USERID")
+        UserDefaultUtility.saveValueToUserDefaults(value: "Basic YWRtaW46SmNteHoyMTY0OTAj", forKey: "AUTHTOKEN")
+        
+        NavigationHelper.push(storyboardKey.InnerScreen, viewControllerIdentifier: "HomeNev", from: self.navigationController!, animated: true)
+    }
     @IBAction func btnPasswordVisibilityTapped(_ sender: Any) {
         txtPassword.isSecureTextEntry.toggle()
            if txtPassword.isSecureTextEntry {
@@ -217,7 +226,7 @@ extension LoginVC
                     // Handle successful
                     
                     //                    if ((loginResponse.settings?.success) != nil) == true
-                    if loginResponse.settings?.success != "0"
+                    if loginResponse.settings?.success == true
                     {
                         if self.isRememberMeOn {
                             self.saveCredentials(username: self.txtEmail.text ?? "" , password: self.txtPassword.text ?? "")
@@ -227,7 +236,10 @@ extension LoginVC
                         
                         UserDefaultUtility.saveValueToUserDefaults(value: "YES", forKey: "isUserLoggedIn")
                         
-                        UserDefaultUtility.saveValueToUserDefaults(value: "\(loginResponse.data?.id ?? 0)", forKey: "USERID")
+                        UserDefaultUtility.saveValueToUserDefaults(value: "SignInUser", forKey: "USERROLE")
+
+                        
+                        UserDefaultUtility.saveValueToUserDefaults(value: "\(loginResponse.data?.id ?? "0")", forKey: "USERID")
                         
                         
                         UserDefaultUtility.saveValueToUserDefaults(value: "\(loginResponse.settings?.authorization ?? "")", forKey: "AUTHTOKEN")
@@ -240,8 +252,6 @@ extension LoginVC
                         AlertUtility.presentSimpleAlert(in: self, title: "", message: "\(loginResponse.settings?.message ?? "")")
                         
                     }
-                    
-                    
                     
                     // self.apiCallAddFCMToken()
                     

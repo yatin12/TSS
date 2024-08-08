@@ -11,8 +11,12 @@ import KVSpinnerView
 class NewsVC: UIViewController {
     //  - Variables - 
     var userId: String = ""
+    var userRole: String = ""
     var selectedIndex: Int = 0
     var categoryId: String = ""
+    var pageNo: Int = 1
+    var isLoadingList : Bool = false
+    
     var objBlogCategoryResponse: blogCategoryResponse?
     var objBlogByCategoryResponse: blogByCategoryResponse?
     
@@ -58,6 +62,8 @@ extension NewsVC
     func getUserId()
     {
         userId = AppUserDefaults.object(forKey: "USERID") as? String ?? ""
+        userRole = AppUserDefaults.object(forKey: "USERROLE") as? String ?? ""
+
     }
     func setUpBackButtonView()
     {
@@ -100,12 +106,24 @@ extension NewsVC
         
     }
     @IBAction func btnSearchTapped(_ sender: Any) {
-        NavigationHelper.push(storyboardKey.InnerScreen, viewControllerIdentifier: "SearchVC", from: navigationController!, animated: true)
-        
+        if userRole == USERROLE.SignInUser
+        {
+            NavigationHelper.push(storyboardKey.InnerScreen, viewControllerIdentifier: "SearchVC", from: navigationController!, animated: true)
+        }
+        else
+        {
+            AlertUtility.presentSimpleAlert(in: self, title: "", message: AlertMessages.ForceFullyRegister)
+        }
     }
     @IBAction func btnNotificationTapped(_ sender: Any) {
-        NavigationHelper.push(storyboardKey.InnerScreen, viewControllerIdentifier: "NotificationVC", from: navigationController!, animated: true)
-        
+        if userRole == USERROLE.SignInUser
+        {
+            NavigationHelper.push(storyboardKey.InnerScreen, viewControllerIdentifier: "NotificationVC", from: navigationController!, animated: true)
+        }
+        else
+        {
+            AlertUtility.presentSimpleAlert(in: self, title: "", message: AlertMessages.ForceFullyRegister)
+        }
     }
 }
 //MARK: UITableViewDelegate, UITableViewDataSource
@@ -126,8 +144,15 @@ extension NewsVC: UITableViewDelegate, UITableViewDataSource
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let postId: String = "\(objBlogByCategoryResponse?.data?[indexPath.row].postID ?? 0)"
-        NavigationHelper.pushWithPassData(storyboardKey.InnerScreen, viewControllerIdentifier: "NewsDeatilsVC", from: navigationController!, data: postId)
+        if userRole == USERROLE.SignInUser
+        {
+            let postId: String = "\(objBlogByCategoryResponse?.data?[indexPath.row].postID ?? "0")"
+            NavigationHelper.pushWithPassData(storyboardKey.InnerScreen, viewControllerIdentifier: "NewsDeatilsVC", from: navigationController!, data: postId)
+        }
+        else
+        {
+            AlertUtility.presentSimpleAlert(in: self, title: "", message: AlertMessages.ForceFullyRegister)
+        }
 
     }
 }
@@ -155,7 +180,8 @@ extension NewsVC: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout
                 categoryId = "\(objBlogCategoryResponse?.data?[0].categoryID ?? 0)"
                 strSelectedBlog = "\(objBlogCategoryResponse?.data?[0].categoryName ?? "")"
                 objCollectionCategory.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)
-
+                self.pageNo = 1
+                self.isLoadingList = false
                 self.apiCallGetBlogByCategoryList()
             }
         }
@@ -180,13 +206,20 @@ extension NewsVC: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout
         selectedIndex = indexPath.item
         categoryId = "\(objBlogCategoryResponse?.data?[indexPath.item].categoryID ?? 0)"
         strSelectedBlog = "\(objBlogCategoryResponse?.data?[indexPath.item].categoryName ?? "")"
+        self.pageNo = 1
         self.apiCallGetBlogByCategoryList()
         
         objCollectionCategory.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)
 
         objCollectionCategory.reloadData()
     }
-    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        
+        if (((scrollView.contentOffset.y + scrollView.frame.size.height) > scrollView.contentSize.height ) && !isLoadingList){
+            self.isLoadingList = true
+            self.loadData()
+        }
+    }
 }
 extension NewsVC
 {
@@ -243,12 +276,127 @@ extension NewsVC
              AlertUtility.presentSimpleAlert(in: self, title: "", message: "\(AlertMessages.NoInternetAlertMsg)")
         }
     }
+    @objc func loadData() {
+        pageNo += 1
+        self.apiCallGetBlogByCategoryList()
+    }
+    func apiCallGetBlogByCategoryList() {
+        if Reachability.isConnectedToNetwork() {
+            KVSpinnerView.show()
+            
+            objblogByCategoryViewModel.blogByCategoryList(category_id: categoryId, userId: userId, pagination_number: "\(pageNo)") { result in
+                switch result {
+                case .success(let response):
+                    KVSpinnerView.dismiss()
+                    print(response)
+
+                    // Check if the response is successful
+                    if response.settings?.success == true {
+                        let newData = response.data ?? []
+                        
+                        if newData.count > 0 {
+                            // If it's the first page, initialize or reset the data
+                            if self.pageNo == 1 {
+                                self.objBlogByCategoryResponse = response
+                            } else {
+                                // If it's not the first page, append data
+                                self.objBlogByCategoryResponse?.data?.append(contentsOf: newData)
+                            }
+
+                            self.isLoadingList = false
+                            self.tblNews.isHidden = false
+                            self.lblNoDataFound.isHidden = true
+                        } else {
+                            // Handle case where data is empty for pages other than the first
+                            if self.pageNo == 1 {
+                                self.objBlogByCategoryResponse = response
+                            }
+                            self.tblNews.isHidden = self.pageNo == 1
+                            self.lblNoDataFound.isHidden = self.pageNo != 1
+                        }
+
+                        self.tblNews.dataSource = self
+                        self.tblNews.delegate = self
+                        self.tblNews.reloadData()
+                        
+                    } else {
+                        AlertUtility.presentSimpleAlert(in: self, title: "", message: "\(response.settings?.message ?? "")")
+                    }
+
+                case .failure(let error):
+                    KVSpinnerView.dismiss()
+                    
+                    if let apiError = error as? APIError {
+                        ErrorHandlingUtility.handleAPIError(apiError, in: self)
+                    } else {
+                        AlertUtility.presentSimpleAlert(in: self, title: "", message: "\(error.localizedDescription)")
+                    }
+                }
+            }
+        } else {
+            KVSpinnerView.dismiss()
+            AlertUtility.presentSimpleAlert(in: self, title: "", message: "\(AlertMessages.NoInternetAlertMsg)")
+        }
+    }
+
+    func apiCallGetBlogByCategoryList11() {
+        if Reachability.isConnectedToNetwork() {
+            KVSpinnerView.show()
+            objblogByCategoryViewModel.blogByCategoryList(category_id: categoryId, userId: userId, pagination_number: "\(pageNo)") { result in
+                switch result {
+                case .success(let response):
+                    KVSpinnerView.dismiss()
+                    print(response)
+
+                    if response.settings?.success == true {
+                        if let newData = response.data, newData.count > 0 {
+                            self.isLoadingList = false
+                            self.tblNews.isHidden = false
+                            self.lblNoDataFound.isHidden = true
+
+                            // Initialize objBlogByCategoryResponse if it is nil
+                            if self.objBlogByCategoryResponse == nil {
+                                self.objBlogByCategoryResponse = response
+                            } else {
+                                // Append new data to the existing data
+                                self.objBlogByCategoryResponse?.data?.append(contentsOf: newData)
+                            }
+
+                            self.tblNews.dataSource = self
+                            self.tblNews.delegate = self
+                            self.tblNews.reloadData()
+                        } else {
+                            self.objBlogByCategoryResponse = response
+                            self.tblNews.isHidden = true
+                            self.lblNoDataFound.isHidden = false
+                        }
+                    } else {
+                        AlertUtility.presentSimpleAlert(in: self, title: "", message: "\(response.settings?.message ?? "")")
+                    }
+
+                case .failure(let error):
+                    KVSpinnerView.dismiss()
+                    
+                    if let apiError = error as? APIError {
+                        ErrorHandlingUtility.handleAPIError(apiError, in: self)
+                    } else {
+                        AlertUtility.presentSimpleAlert(in: self, title: "", message: "\(error.localizedDescription)")
+                    }
+                }
+            }
+        } else {
+            KVSpinnerView.dismiss()
+            AlertUtility.presentSimpleAlert(in: self, title: "", message: "\(AlertMessages.NoInternetAlertMsg)")
+        }
+    }
+
+    /*
     func apiCallGetBlogByCategoryList()
     {
         if Reachability.isConnectedToNetwork()
         {
             KVSpinnerView.show()
-            objblogByCategoryViewModel.blogByCategoryList(category_id: categoryId, userId: userId) { result in
+            objblogByCategoryViewModel.blogByCategoryList(category_id: categoryId, userId: userId, pagination_number: "\(pageNo)") { result in
                 switch result {
                 case .success(let response):
                     KVSpinnerView.dismiss()
@@ -258,16 +406,19 @@ extension NewsVC
                     {
                         if response.data?.count ?? 0 > 0
                         {
+                            self.isLoadingList = false
                             self.tblNews.isHidden = false
                             self.lblNoDataFound.isHidden = true
                             
-                            self.objBlogByCategoryResponse = response
+                           // self.objBlogByCategoryResponse = response
+                            self.objBlogByCategoryResponse?.data?.append(response.data)
                             self.tblNews.dataSource = self
                             self.tblNews.delegate = self
                             self.tblNews.reloadData()
                         }
                         else
                         {
+                            self.objBlogByCategoryResponse = response
                             self.tblNews.isHidden = true
                             self.lblNoDataFound.isHidden = false
                         }
@@ -302,4 +453,5 @@ extension NewsVC
         }
         
     }
+    */
 }

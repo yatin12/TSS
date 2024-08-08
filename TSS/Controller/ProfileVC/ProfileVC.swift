@@ -39,6 +39,7 @@ extension ProfileVC
     override func viewDidLoad() {
         super.viewDidLoad()
         self.getUserId()
+        self.passViewControllerObjToViewModel()
         self.setUpHeaderView()
         self.setUpPlaceholderColor()
         self.apiCallGetProfile()
@@ -47,6 +48,10 @@ extension ProfileVC
 //MARK: General Methods
 extension ProfileVC
 {
+    func passViewControllerObjToViewModel()
+    {
+        objUpdateProfileViewModel.vc = self
+    }
     func getUserId()
     {
         userId = AppUserDefaults.object(forKey: "USERID") as? String ?? ""
@@ -199,7 +204,19 @@ extension ProfileVC
         self.openImagePicker()
     }
     @IBAction func btnSubmitTapped(_ sender: Any) {
-        self.apiCallUpdateProfile()
+        if txtPassword.text?.count != 0
+        {
+            var isValidate: Bool = false
+            isValidate = objUpdateProfileViewModel.validationForProfile(password: txtPassword.text ?? "", confirmPassword: txtConfPassword.text ?? "")
+            if isValidate {
+                self.apiCallUpdateProfile()
+            }
+        }
+        else
+        {
+            self.apiCallUpdateProfile()
+        }
+       
     }
     @IBAction func btnSettingTapped(_ sender: Any) {
     NavigationHelper.push(storyboardKey.InnerScreen, viewControllerIdentifier: "SettingVC", from: navigationController!, animated: true)
@@ -235,7 +252,7 @@ extension ProfileVC
         txtPassword.text = "\(response?.data?.password ?? "")"
         txtConfPassword.text = "\(response?.data?.password ?? "")"
         txtDisplayNm.text = "\(response?.data?.userName ?? "")"
-        
+        lblHeaderNm.text = "\(response?.data?.userName ?? "")"
         let strBlogUrl = "\(response?.data?.imageURL ?? "")"
         imgProfilePic.sd_setImage(with: URL(string: strBlogUrl), placeholderImage: UIImage(named: "icn_Placehoder"), options: [.progressiveLoad], context: nil)
 
@@ -284,6 +301,7 @@ extension ProfileVC
     }
     func apiCallUpdateProfile()
     {
+        KVSpinnerView.show()
         if Reachability.isConnectedToNetwork()
         {
             objUpdateProfileViewModel.updateProfile(profileImgData: imgProfilePic.image?.jpeg(.lowest), userId: userId, userName: txtDisplayNm.text ?? "", email: txtEmail.text ?? "", phone: txtPhone.text ?? "", password: txtPassword.text ?? "") { result in

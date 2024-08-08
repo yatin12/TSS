@@ -6,11 +6,14 @@
 //
 
 import UIKit
+import KVSpinnerView
 
 class FeedbackVC: UIViewController {
     //  - Variables - 
     let placeholderText = "Enter Message"
-    
+    var userId: String = ""
+    private let objSendContactViewModel = sendContactViewModel()
+
     //  - Outlets - 
     @IBOutlet weak var txtvwMsg: UITextView!
     @IBOutlet weak var vwMsg: UIView!
@@ -26,6 +29,8 @@ extension FeedbackVC
 {
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.getUserId()
+        self.passViewControllerObjToViewModel()
         self.setUpPlaceholderColor()
         self.setUpHeaderView()
         self.setupTextView()
@@ -34,6 +39,14 @@ extension FeedbackVC
 //MARK: General Methods
 extension FeedbackVC
 {
+    func passViewControllerObjToViewModel()
+    {
+        objSendContactViewModel.vc_Feedback = self
+    }
+    func getUserId()
+    {
+        userId = AppUserDefaults.object(forKey: "USERID") as? String ?? ""
+    }
     func setupTextView()
     {
         txtvwMsg.text = placeholderText
@@ -62,10 +75,7 @@ extension FeedbackVC
             vwMsg.layer.borderColor = isEditing ? clearColor : highlightColor
             vwMsg.layer.borderWidth = isEditing ? 0.0 : 1.0
             
-            if isEditing {
-                txtEmail.text = ""
-                txtvwMsg.text = placeholderText
-            }
+            
         } else if textField == txtEmail {
             vwEmail.layer.borderColor = isEditing ? highlightColor : clearColor
             vwEmail.layer.borderWidth = isEditing ? 1.0 : 0.0
@@ -76,10 +86,7 @@ extension FeedbackVC
             vwMsg.layer.borderColor = isEditing ? clearColor : highlightColor
             vwMsg.layer.borderWidth = isEditing ? 0.0 : 1.0
             
-            if isEditing {
-                txtName.text = ""
-                txtvwMsg.text = placeholderText
-            }
+          
         }
     }
     private func updateBorderTextView(for textview: UITextView, isEditing: Bool) {
@@ -94,11 +101,7 @@ extension FeedbackVC
             
             vwName.layer.borderColor = isEditing ? clearColor : highlightColor
             vwName.layer.borderWidth = isEditing ? 0.0 : 1.0
-            
-            if isEditing {
-                txtEmail.text = ""
-                txtName.text = ""
-            }
+          
         }
     }
 }
@@ -109,19 +112,16 @@ extension FeedbackVC
         self.navigationController?.popViewController(animated: true)
     }
     @IBAction func btnSubmitTapped(_ sender: Any) {
-        
+        self.validationForFeedback()
     }
     @IBAction func btnNotificationTapped(_ sender: Any) {
         NavigationHelper.push(storyboardKey.InnerScreen, viewControllerIdentifier: "NotificationVC", from: navigationController!, animated: true)
-        
     }
     @IBAction func btnSearchTapped(_ sender: Any) {
         NavigationHelper.push(storyboardKey.InnerScreen, viewControllerIdentifier: "SearchVC", from: navigationController!, animated: true)
-        
     }
     @IBAction func btnSettingTapped(_ sender: Any) {
         NavigationHelper.push(storyboardKey.InnerScreen, viewControllerIdentifier: "SettingVC", from: navigationController!, animated: true)
-        
     }
 }
 //MARK: UITextFieldDelegate
@@ -187,6 +187,63 @@ extension FeedbackVC: UITextViewDelegate {
         if textView.text.isEmpty && textView.text != placeholderText {
             textView.text = placeholderText
             textView.textColor = UIColor.lightGray
+        }
+    }
+}
+extension FeedbackVC
+{
+    func validationForFeedback()
+    {
+        var isValidate: Bool = false
+        isValidate =  objSendContactViewModel.validationForFeedback(email: txtEmail.text ?? "", your_name: txtName.text ?? "", message: txtvwMsg.text ?? "")
+        if isValidate {
+            self.apiCallSendContactList()
+        }
+
+    }
+    func apiCallSendContactList()
+    {
+        KVSpinnerView.show()
+        if Reachability.isConnectedToNetwork()
+        {
+            objSendContactViewModel.sendContactDetails(user_id: userId, your_name: txtName.text ?? "", email: txtEmail.text ?? "", message: txtvwMsg.text ?? "", type: "help") { result in
+                switch result {
+                case .success(let response):
+                    print(response)
+                    KVSpinnerView.dismiss()
+                   
+                    AlertUtility.presentAlert(in: self, title: "", message: "\(response.settings?.message ?? "")", options: "Ok") { option in
+                        switch(option) {
+                        case 0:
+                            self.navigationController?.popViewController(animated: true)
+                            break
+                       
+                        default:
+                            break
+                        }
+                    }
+
+                    
+                case .failure(let error):
+                    // Handle failure
+                    KVSpinnerView.dismiss()
+                    
+                    if let apiError = error as? APIError {
+                        ErrorHandlingUtility.handleAPIError(apiError, in: self)
+                    } else {
+                        // Handle other types of errors
+                        //print("Unexpected error: \(error)")
+                        AlertUtility.presentSimpleAlert(in: self, title: "", message: "\(error.localizedDescription)")
+                        
+                    }
+                }
+            }
+        }
+        else
+        {
+            KVSpinnerView.dismiss()
+             AlertUtility.presentSimpleAlert(in: self, title: "", message: "\(AlertMessages.NoInternetAlertMsg)")
+
         }
     }
 }

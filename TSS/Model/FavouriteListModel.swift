@@ -27,6 +27,7 @@ struct DataFavourite: Codable {
 
 // MARK: - Liked
 struct Favliked: Codable {
+    let id: String?
     let title, description, tag, date: String?
     let author: [String]?
     let thumbnail: String?
@@ -38,7 +39,7 @@ struct SettingsFav: Codable {
     let message: String?
     let count: Int?
     let nextPage: Int?
-    let userID: Int?
+    let userID: String?
 
     enum CodingKeys: String, CodingKey {
         case success, message, count, nextPage

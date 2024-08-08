@@ -7,19 +7,22 @@
 
 import UIKit
 import KVSpinnerView
+import AVFoundation
 
 class VideoDetailsVC: UIViewController {
     //  - Variables - 
     private let objVideoDetailViewModel = videoDetailViewModel()
     private let objVideoRateViewModel = videoRateViewModel()
     private let objAddWatchListViewModel = AddWatchListViewModel()
+    private let objLikeVideoViewModel = LikeVideoViewModel()
 
     var arrSection = ["","Up Next", "More Videos like this"]
     var objVideoDetailResponse: videoDetailResponse?
     var userId: String = ""
-    var videoId: String = "11480"
+    var videoId: String = ""
     var strRateVal: String = "0"
     var strComment: String = ""
+    var strAction: String = "0"
     
     //  - Outlets - 
     @IBOutlet weak var tblVideoDetail: UITableView!
@@ -65,6 +68,18 @@ extension VideoDetailsVC
 extension VideoDetailsVC
 {
     @IBAction func btnBackTapped(_ sender: Any) {
+        // Attempt to find the visible cell of VideoSec_1TBC and pause its video
+        guard let videoListVC = navigationController?.viewControllers.first(where: { $0 is VideoDetailsVC }) as? VideoDetailsVC else {
+            self.navigationController?.popViewController(animated: true)
+            return
+        }
+        
+        
+        let indexPath = IndexPath(row: 0, section: 0) // Adjust this based on your actual cell structure
+        if let cell = videoListVC.tblVideoDetail.cellForRow(at: indexPath) as? VideoSec_1TBC {
+            cell.pauseVideo()
+        }
+        
         self.navigationController?.popViewController(animated: true)
     }
     @IBAction func btnSettingTapped(_ sender: Any) {        NavigationHelper.push(storyboardKey.InnerScreen, viewControllerIdentifier: "SettingVC", from: navigationController!, animated: true)
@@ -129,6 +144,7 @@ extension VideoDetailsVC: UITableViewDataSource, UITableViewDelegate
         {
             let cellToReturn = tableView.dequeueReusableCell(withIdentifier: "VideoSec_1TBC", for: indexPath) as! VideoSec_1TBC
             cellToReturn.selectionStyle = .none
+            //cellToReturn.playerLayer = AVPlayerLayer()
             cellToReturn.delegate = self
             cellToReturn.configure(withResponse: objVideoDetailResponse, withIndex: indexPath.row)
             cell = cellToReturn
@@ -145,6 +161,7 @@ extension VideoDetailsVC: UITableViewDataSource, UITableViewDelegate
         {
             let cellToReturn = tableView.dequeueReusableCell(withIdentifier: "VideoSec_3TBC", for: indexPath) as! VideoSec_3TBC
             cellToReturn.delegate = self
+           
             cellToReturn.selectionStyle = .none
             cellToReturn.configure(withResponse: objVideoDetailResponse, withIndex: indexPath.row)
 
@@ -176,18 +193,32 @@ extension VideoDetailsVC: VideoSec_3TBCDelegate
 {
     func cell(_ cell: VideoSec_3TBC, comment: String, isSubmitBtnTapped: Bool) {
         strComment = comment
-        self.apiCallsubmitVideoRate()
+        if strRateVal == "0"
+        {
+            AlertUtility.presentSimpleAlert(in: self, title: "", message: AlertMessages.RateMsg)
+        }
+        else
+        {
+            self.apiCallsubmitVideoRate()
+        }
+       
     }
     func cell(_ cell: VideoSec_3TBC, rateValue: String) {
         print("rateValue->\(rateValue)")
         strRateVal = rateValue
+        
     }
-    
-    
 }
 //MARK: VideoSec_1TBCDelegate
 extension VideoDetailsVC: VideoSec_1TBCDelegate
 {
+    func cell(_ cell: VideoSec_1TBC, isLikeTapped: Bool, likeAction: String) {
+        print("likeAction->\(likeAction)")
+        strAction = likeAction
+        self.apiCallAddFavouriteList()
+    }
+    
+    
     func cell(_ cell: VideoSec_1TBC, isWatchListTapped: Bool) {
         self.apiCallAddWatchList()
     }
@@ -197,8 +228,44 @@ extension VideoDetailsVC: VideoSec_1TBCDelegate
 //MARK: API Call
 extension VideoDetailsVC
 {
+    func apiCallAddFavouriteList()
+    {
+        KVSpinnerView.show()
+        if Reachability.isConnectedToNetwork()
+        {
+            objLikeVideoViewModel.videoFavUnFav(user_id: userId, video_id: videoId, action: strAction, Type: "evideos") { result in
+                switch result {
+                case .success(let response):
+                    print(response)
+                    KVSpinnerView.dismiss()
+                    
+                    AlertUtility.presentSimpleAlert(in: self, title: "", message: "\(response.settings?.message ?? "")")
+                    
+                    
+                case .failure(let error):
+                    // Handle failure
+                    KVSpinnerView.dismiss()
+                    
+                    if let apiError = error as? APIError {
+                        ErrorHandlingUtility.handleAPIError(apiError, in: self)
+                    } else {
+                        // Handle other types of errors
+                        //print("Unexpected error: \(error)")
+                        AlertUtility.presentSimpleAlert(in: self, title: "", message: "\(error.localizedDescription)")
+                        
+                    }
+                }
+            }
+        }
+        else
+        {
+            KVSpinnerView.dismiss()
+             AlertUtility.presentSimpleAlert(in: self, title: "", message: "\(AlertMessages.NoInternetAlertMsg)")
+        }
+    }
     func apiCallAddWatchList()
     {
+        KVSpinnerView.show()
         if Reachability.isConnectedToNetwork()
         {
             objAddWatchListViewModel.addWatchList(user_id: userId, video_id: videoId) { result in
@@ -236,7 +303,7 @@ extension VideoDetailsVC
     {
         if Reachability.isConnectedToNetwork()
         {
-            
+            KVSpinnerView.show()
             objVideoDetailViewModel.videoDetail(userId: userId, videoId: videoId) { result in
                 switch result {
                 case .success(let response):
@@ -245,6 +312,14 @@ extension VideoDetailsVC
                    
                     if response.settings?.success == true
                     {
+                        self.tblVideoDetail.isHidden = false
+                        
+                        self.objVideoDetailResponse = response
+                        self.tblVideoDetail.dataSource = self
+                        self.tblVideoDetail.delegate = self
+                        self.tblVideoDetail.reloadData()
+                        
+                        /*
                         if response.data?.eVideo?.count ?? 0 > 0
                         {
                             self.tblVideoDetail.isHidden = false
@@ -260,6 +335,7 @@ extension VideoDetailsVC
                            // self.tblEvideo.isHidden = true
                            // self.lblNoData.isHidden = false
                         }
+                        */
                     }
                     else
                     {
@@ -290,6 +366,7 @@ extension VideoDetailsVC
     }
     func apiCallsubmitVideoRate()
     {
+        KVSpinnerView.show()
         if Reachability.isConnectedToNetwork()
         {
             objVideoRateViewModel.submitVideoRate(user_id: userId, video_id: videoId, rating: strRateVal, comment: strComment) { result in
@@ -298,7 +375,7 @@ extension VideoDetailsVC
                     print(response)
                     KVSpinnerView.dismiss()
                    
-                    AlertUtility.presentSimpleAlert(in: self, title: "", message: "\(response.Settings?.message ?? "")")
+                    AlertUtility.presentSimpleAlert(in: self, title: "", message: "\(response.settings?.message ?? "")")
                     
                 case .failure(let error):
                     // Handle failure

@@ -67,9 +67,10 @@ class VideoSec_3TBC: UITableViewCell {
         return String(format: "%.2f", value)
     }
     func configure(withResponse response: videoDetailResponse?, withIndex index: Int) {
-        let strBlogUrl = "\(response?.data?.eVideo?[0].moreVideos?.thumbnail ?? "")"
+        txtvwComment.delegate = self
+        let strBlogUrl = "\(response?.data?.eVideo?[0].moreVideos?[0].thumbnail ?? "")"
         imgBlogMoreRelated.sd_setImage(with: URL(string: strBlogUrl), placeholderImage: UIImage(named: "icn_Placehoder"), options: [.progressiveLoad], context: nil)
-        lblTitleMoreRelated.text = "\(response?.data?.eVideo?[0].moreVideos?.title ?? "")"
+        lblTitleMoreRelated.text = "\(response?.data?.eVideo?[0].moreVideos?[0].title ?? "")"
     }
     @IBAction func btnSubmitTapped(_ sender: Any) {
         delegate?.cell(self, comment: txtvwComment.text ?? "", isSubmitBtnTapped: true)

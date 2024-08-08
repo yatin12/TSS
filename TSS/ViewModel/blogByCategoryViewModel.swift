@@ -8,9 +8,9 @@
 import Foundation
 class blogByCategoryViewModel
 {
-    func blogByCategoryList(category_id: String, userId: String, completion: @escaping (Result<blogByCategoryResponse, Error>) -> Void) {
+    func blogByCategoryList(category_id: String, userId: String, pagination_number: String, completion: @escaping (Result<blogByCategoryResponse, Error>) -> Void) {
 
-        let request = blogByCategoryRequest(category_id: category_id, userId: userId)
+        let request = blogByCategoryRequest(category_id: category_id, userId: userId, pagination_number: pagination_number)
         
         APIManager.shared.blogByCategoryList(request: request, responseModelType: blogByCategoryResponse.self) { result in
             switch result {

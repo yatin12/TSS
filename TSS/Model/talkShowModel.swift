@@ -17,6 +17,7 @@ struct talkShowListResponse: Codable {
 
 // MARK: - Datum
 struct DataTalkShow: Codable {
+    let id: String?
     let thumbnail: String?
     let duration, title, authorName, date: String?
 }

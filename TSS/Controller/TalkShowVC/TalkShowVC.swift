@@ -17,6 +17,7 @@ class TalkShowVC: UIViewController {
     private let objTalkShowViewModel = talkShowViewModel()
     
     var userId: String = ""
+    var userRole: String = ""
     var selectedIndex: Int = 0
     var categoryId: String = ""
     var videoId: String = "11480"
@@ -61,6 +62,7 @@ extension TalkShowVC
     func getUserId()
     {
         userId = AppUserDefaults.object(forKey: "USERID") as? String ?? ""
+        userRole = AppUserDefaults.object(forKey: "USERROLE") as? String ?? ""
     }
     func setUpBackButtonView()
     {
@@ -110,12 +112,24 @@ extension TalkShowVC
 
     }
     @IBAction func btnSearchTapped(_ sender: Any) {
-        NavigationHelper.push(storyboardKey.InnerScreen, viewControllerIdentifier: "SearchVC", from: navigationController!, animated: true)
-
+        if userRole == USERROLE.SignInUser
+        {
+            NavigationHelper.push(storyboardKey.InnerScreen, viewControllerIdentifier: "SearchVC", from: navigationController!, animated: true)
+        }
+        else
+        {
+            AlertUtility.presentSimpleAlert(in: self, title: "", message: AlertMessages.ForceFullyRegister)
+        }
     }
     @IBAction func btnNotificationTapped(_ sender: Any) {
-        NavigationHelper.push(storyboardKey.InnerScreen, viewControllerIdentifier: "NotificationVC", from: navigationController!, animated: true)
-
+        if userRole == USERROLE.SignInUser
+        {
+            NavigationHelper.push(storyboardKey.InnerScreen, viewControllerIdentifier: "NotificationVC", from: navigationController!, animated: true)
+        }
+        else
+        {
+            AlertUtility.presentSimpleAlert(in: self, title: "", message: AlertMessages.ForceFullyRegister)
+        }
     }
 }
 //MARK: UITableViewDelegate, UITableViewDataSource
@@ -132,7 +146,8 @@ extension TalkShowVC: UITableViewDelegate, UITableViewDataSource
         cell.imgVideo.sd_setImage(with: URL(string: strBlogUrl), placeholderImage: UIImage(named: "icn_Placehoder"), options: [.progressiveLoad], context: nil)
         cell.lblTitle.text = "\(objTalkShowListResponse?.data?[indexPath.row].title ?? "")"
         cell.lblDate.text = "\(objTalkShowListResponse?.data?[indexPath.row].date ?? "")"
-        cell.lblDuration.text = "\(objTalkShowListResponse?.data?[indexPath.row].duration ?? "")"
+        let strDuration = "\(objTalkShowListResponse?.data?[indexPath.row].duration ?? "")"
+        cell.lblDuration.text = strDuration == "" ? "0 min" : "\(strDuration) min"
         
         return cell
     }
@@ -141,10 +156,15 @@ extension TalkShowVC: UITableViewDelegate, UITableViewDataSource
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        NavigationHelper.pushWithPassData(storyboardKey.InnerScreen, viewControllerIdentifier: "VideoDetailsVC", from: navigationController!, data: "")
-        
-
-        
+        if userRole == USERROLE.SignInUser
+        {
+            let videoId = "\(objTalkShowListResponse?.data?[indexPath.row].id ?? "0")"
+            NavigationHelper.pushWithPassData(storyboardKey.InnerScreen, viewControllerIdentifier: "VideoDetailsVC", from: navigationController!, data: "\(videoId)")
+        }
+        else
+        {
+            AlertUtility.presentSimpleAlert(in: self, title: "", message: AlertMessages.ForceFullyRegister)
+        }
     }
 }
 //MARK: UICollectionViewDataSource, UICollectionViewDelegate
@@ -172,7 +192,7 @@ extension TalkShowVC: UICollectionViewDataSource, UICollectionViewDelegateFlowLa
                 categoryId = "\(objBlogCategoryResponse?.data?[0].categoryID ?? 0)"
                 strSelectedBlog = "\(objBlogCategoryResponse?.data?[0].categoryName ?? "")"
                 objCollectionViewCategory.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)
-                self.apiCallGetTalkShowList()
+                self.apiCallGetTalkShowList(isFromUserClick: false)
             }
         }
         else
@@ -201,7 +221,7 @@ extension TalkShowVC: UICollectionViewDataSource, UICollectionViewDelegateFlowLa
         objCollectionViewCategory.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)
 
         
-        self.apiCallGetTalkShowList()
+        self.apiCallGetTalkShowList(isFromUserClick: true)
         objCollectionViewCategory.reloadData()
     }
     
@@ -230,7 +250,7 @@ extension TalkShowVC
                 switch result {
                 case .success(let response):
                     print(response)
-                    KVSpinnerView.dismiss()
+//                    KVSpinnerView.dismiss()
                     if response.settings?.success == true
                     {
                         self.setUpUIAfterGettingResponse(response: response)
@@ -238,6 +258,7 @@ extension TalkShowVC
                     }
                     else
                     {
+                        KVSpinnerView.dismiss()
                         AlertUtility.presentSimpleAlert(in: self, title: "", message: "\(response.settings?.message ?? "")")
 
                     }
@@ -263,9 +284,12 @@ extension TalkShowVC
              AlertUtility.presentSimpleAlert(in: self, title: "", message: "\(AlertMessages.NoInternetAlertMsg)")
         }
     }
-    func apiCallGetTalkShowList()
+    func apiCallGetTalkShowList(isFromUserClick: Bool)
     {
-        
+        if isFromUserClick == true
+        {
+            KVSpinnerView.show()
+        }
         if Reachability.isConnectedToNetwork()
         {
             objTalkShowViewModel.takShowList(userId: userId, category_id: categoryId) { result in

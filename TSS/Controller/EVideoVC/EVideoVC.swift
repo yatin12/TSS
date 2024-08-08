@@ -16,9 +16,10 @@ class EVideoVC: UIViewController {
     private let objVideoListViewModel = videoListViewModel()
     private let objblogCategoryViewModel = blogCategoryViewModel()
     var userId: String = ""
+    var userRole: String = ""
     var selectedIndex: Int = 0
     var categoryId: String = ""
-    var videoId: String = "11480"
+    //var videoId: String = ""
     
     //  - Outlets - 
     @IBOutlet weak var lblNoData: UILabel!
@@ -60,6 +61,7 @@ extension EVideoVC
     func getUserId()
     {
         userId = AppUserDefaults.object(forKey: "USERID") as? String ?? ""
+        userRole = AppUserDefaults.object(forKey: "USERROLE") as? String ?? ""
     }
     func setUpBackButtonView()
     {
@@ -103,11 +105,24 @@ extension EVideoVC
         NavigationHelper.push(storyboardKey.InnerScreen, viewControllerIdentifier: "SettingVC", from: navigationController!, animated: true)
     }
     @IBAction func btnSearchTapped(_ sender: Any) {
-        NavigationHelper.push(storyboardKey.InnerScreen, viewControllerIdentifier: "SearchVC", from: navigationController!, animated: true)
+        if userRole == USERROLE.SignInUser
+        {
+            NavigationHelper.push(storyboardKey.InnerScreen, viewControllerIdentifier: "SearchVC", from: navigationController!, animated: true)
+        }
+        else
+        {
+            AlertUtility.presentSimpleAlert(in: self, title: "", message: AlertMessages.ForceFullyRegister)
+        }
     }
     @IBAction func btnNotificationTapped(_ sender: Any) {
-        NavigationHelper.push(storyboardKey.InnerScreen, viewControllerIdentifier: "NotificationVC", from: navigationController!, animated: true)
-
+        if userRole == USERROLE.SignInUser
+        {
+            NavigationHelper.push(storyboardKey.InnerScreen, viewControllerIdentifier: "NotificationVC", from: navigationController!, animated: true)
+        }
+        else
+        {
+            AlertUtility.presentSimpleAlert(in: self, title: "", message: AlertMessages.ForceFullyRegister)
+        }
     }
 }
 //MARK: UITableViewDelegate, UITableViewDataSource
@@ -123,7 +138,11 @@ extension EVideoVC: UITableViewDelegate, UITableViewDataSource
         cell.imgVideo.sd_setImage(with: URL(string: strBlogUrl), placeholderImage: UIImage(named: "icn_Placehoder"), options: [.progressiveLoad], context: nil)
         cell.lblTitle.text = "\(objVideoListResponse?.data?[indexPath.row].title ?? "")"
         cell.lblDate.text = "\(objVideoListResponse?.data?[indexPath.row].date ?? "")"
-        cell.lblDuration.text = "\(objVideoListResponse?.data?[indexPath.row].duration ?? "")"
+       // cell.lblDuration.text = "\(objVideoListResponse?.data?[indexPath.row].duration ?? "")"
+        
+        let strDuration = "\(objVideoListResponse?.data?[indexPath.row].duration ?? "")"
+        cell.lblDuration.text = strDuration == "" ? "0 min" : "\(strDuration) min"
+
         cell.selectionStyle = .none
         
         return cell
@@ -133,7 +152,15 @@ extension EVideoVC: UITableViewDelegate, UITableViewDataSource
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        NavigationHelper.pushWithPassData(storyboardKey.InnerScreen, viewControllerIdentifier: "VideoDetailsVC", from: navigationController!, data: "")
+        if userRole == USERROLE.SignInUser
+        {
+            let videoId = "\(objVideoListResponse?.data?[indexPath.row].id ?? "0")"
+            NavigationHelper.pushWithPassData(storyboardKey.InnerScreen, viewControllerIdentifier: "VideoDetailsVC", from: navigationController!, data: "\(videoId)")
+        }
+        else
+        {
+            AlertUtility.presentSimpleAlert(in: self, title: "", message: AlertMessages.ForceFullyRegister)
+        }
     }
 }
 //MARK: UICollectionViewDataSource, UICollectionViewDelegate
@@ -161,8 +188,8 @@ extension EVideoVC: UICollectionViewDataSource, UICollectionViewDelegateFlowLayo
                 categoryId = "\(objBlogCategoryResponse?.data?[0].categoryID ?? 0)"
                 strSelectedBlog = "\(objBlogCategoryResponse?.data?[0].categoryName ?? "")"
                 objCollectionViewCategory.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)
-
-                self.apiCallGetEvideoList()
+ 
+                self.apiCallGetEvideoList(isFromUserClick: false)
             }
         }
         else
@@ -190,7 +217,7 @@ extension EVideoVC: UICollectionViewDataSource, UICollectionViewDelegateFlowLayo
 
         objCollectionViewCategory.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)
 
-        self.apiCallGetEvideoList()
+        self.apiCallGetEvideoList(isFromUserClick: true)
         objCollectionViewCategory.reloadData()
     }
     
@@ -219,7 +246,7 @@ extension EVideoVC
                 switch result {
                 case .success(let response):
                     print(response)
-                    KVSpinnerView.dismiss()
+                   // KVSpinnerView.dismiss()
                     if response.settings?.success == true
                     {
                         self.setUpUIAfterGettingResponse(response: response)
@@ -227,6 +254,7 @@ extension EVideoVC
                     }
                     else
                     {
+                        KVSpinnerView.dismiss()
                         AlertUtility.presentSimpleAlert(in: self, title: "", message: "\(response.settings?.message ?? "")")
 
                     }
@@ -252,12 +280,16 @@ extension EVideoVC
              AlertUtility.presentSimpleAlert(in: self, title: "", message: "\(AlertMessages.NoInternetAlertMsg)")
         }
     }
-    func apiCallGetEvideoList()
+    func apiCallGetEvideoList(isFromUserClick: Bool)
     {
-        
+        if isFromUserClick == true
+        {
+            KVSpinnerView.show()
+        }
+       
         if Reachability.isConnectedToNetwork()
         {
-            objVideoListViewModel.videoList(userId: userId, category_id: "26") { result in
+            objVideoListViewModel.videoList(userId: userId, category_id: categoryId) { result in
                 switch result {
                 case .success(let response):
                     print(response)

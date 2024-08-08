@@ -9,6 +9,8 @@ import UIKit
 
 class MeetSisterCTC: UICollectionViewCell {
 
+    @IBOutlet weak var imgSister: UIImageView!
+    @IBOutlet weak var lblSisterNm: UILabel!
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code

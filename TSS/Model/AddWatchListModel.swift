@@ -14,7 +14,7 @@ struct addWatchListRequest: Encodable {
 
 struct AddWatchListResponse: Codable {
     let settings: SettingsAddwatchList?
-    let data: DataAddwatchList?
+   // let data: DataAddwatchList?
 }
 
 // MARK: - DataClass
@@ -30,7 +30,7 @@ struct DataAddwatchList: Codable {
 struct SettingsAddwatchList: Codable {
     let success: Bool?
     let message: String?
-    let userID: Int?
+    let userID: String?
 
     enum CodingKeys: String, CodingKey {
         case success, message

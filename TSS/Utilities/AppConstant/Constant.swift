@@ -13,16 +13,18 @@ enum AppEnvironment {
     case beta
 }
 
-
+let dateFormate = "yyyy-MM-dd"
 let currentEnvironment: AppEnvironment = .beta
 let AppUserDefaults = UserDefaults.standard
 var strSelectedBlog: String = ""
 var isFromViewAll: Bool = false
 let highlightColor = UIColor(named: "ThemeHighlightBorderColor")?.cgColor ?? UIColor.clear.cgColor
 let clearColor = UIColor.clear.cgColor
+var strSelectedPostName: String = ""
 
 let lightFont = UIFont(name: "Poppins-Light", size: 12) ?? UIFont.boldSystemFont(ofSize: 17)
 let mediumFont = UIFont(name: "Poppins-Medium", size: 12) ?? UIFont.systemFont(ofSize: 17)
+let boldFont = UIFont(name: "Poppins-Bold", size: 26) ?? UIFont.systemFont(ofSize: 26)
 
 let lightAttributes: [NSAttributedString.Key: Any] = [
     .font: lightFont
@@ -30,9 +32,20 @@ let lightAttributes: [NSAttributedString.Key: Any] = [
 let mediumAttributes: [NSAttributedString.Key: Any] = [
     .font: mediumFont
 ]
+let boldAttributes: [NSAttributedString.Key: Any] = [
+    .font: boldFont
+]
 
+let semiBoldFont = UIFont(name: "Poppins-SemiBold", size: 14) ?? UIFont.systemFont(ofSize: 14)
+//let boldFontSubscriber = UIFont(name: "Poppins-Bold", size: 14) ?? UIFont.systemFont(ofSize: 14)
 
-
+let boldSubscribeAttributes: [NSAttributedString.Key: Any] = [
+    .font: semiBoldFont,
+    .foregroundColor: UIColor(named: "ThemePinkColor")!
+]
+let semiBoldAttributes: [NSAttributedString.Key: Any] = [
+    .font: semiBoldFont
+]
 //EndPoint
 let loginEndpoint = "login"
 let registerEndpoint = "register"
@@ -41,7 +54,7 @@ let get_blogs_by_categoryEndpoint = "get_blogs_by_category"
 let blog_details_by_pageidEndpoint = "blog_details_by_pageid"
 let get_favourite_listEndpoint = "get_favourite_list"
 let get_watchlistEndpoint = "get_watchlist"
-let e_videoDetailEndpoint = "e_video"
+let e_videoDetailEndpoint = "e_video_detail"
 let getProfileEndpoint = "user-profile"
 let updateProfileEndpoint = "update-user-profile"
 let countryListEndpoint = "country_list"
@@ -52,20 +65,29 @@ let addWatchlistEndpoint = "add_watchlist"
 let deleteWatchlistEndpoint = "delete_watchlist"
 let sendContactDetailsEndpoint = "contact-form-submit"
 let membershipPlanEndpoint = "membership-plans"
-
-let forgotPasswordEndpoint = "installer/forgot-password"
+let favVideoEndpoint = "like_unlike"
+let searchEndpoint = "search"
+let HomeEndpoint = "homepage"
+let forgotPasswordEndpoint = "reset-password"
+let deleteAccountEndpoint = "delete-account"
 
 
 let ServerDateFormat = "dd/MM/yyyy"
-let PrivacyPolicyURL: String = ""
-let termsConditionURL: String = ""
-let aboutUSURL: String = ""
+var PrivacyPolicyURL: String = ""
+var termsConditionURL: String = ""
+var PodCastURL: String = ""
+var aboutUSURL: String = ""
+var Season1TBSURL: String = ""
 
 struct subscriptionPlanTime {
     static let Year:String = "Year"
     static let Month:String = "Month"
 }
-
+struct USERROLE {
+    
+    static let GuestUser:String = "GuestUser"
+    static let SignInUser:String = "SignInUser"
+}
 struct blogCategories {
     
     static let Evideo:String = "Evideo"
@@ -106,6 +128,12 @@ struct AlertMessages {
     static let MatchPasswordReg:String = "Confirm password must match with password."
     static let BlankName:String = "Name is mandatory."
     static let BlankMessage:String = "Message is mandatory."
+    static let LogoutMsg:String = "Do you want to logout?"
+    static let deleteAccountMsg:String = "Do you want to delete account?"
+
+    static let RateMsg:String = "Please give some rate by pressing a star. Thank you!"
+    static let ForceFullyRegister:String = "To access all content, please register."
+
 
 }
 
@@ -139,7 +167,28 @@ struct locationUtility
         return distance
     }
 }
-
+struct TimeAgoUtility
+{
+   static func timeAgoSinceDate(date: Date) -> String {
+            let calendar = Calendar.current
+            let now = Date()
+            let components = calendar.dateComponents([.year, .month, .day], from: date, to: now)
+            
+            if let years = components.year, years > 0 {
+                return "\(years) year\(years > 1 ? "s" : "") ago"
+            }
+            
+            if let months = components.month, months > 0 {
+                return "\(months) month\(months > 1 ? "s" : "") ago"
+            }
+            
+            if let days = components.day, days > 0 {
+                return "\(days) day\(days > 1 ? "s" : "") ago"
+            }
+            
+            return "Today"
+        }
+}
 struct NotificationCountUtility {
     
     static func setNotificationCount() -> (count: String, hasUnread: Bool) {
@@ -309,7 +358,7 @@ struct NavigationHelper {
         else if let viewController = storyboard.instantiateViewController(withIdentifier: viewControllerIdentifier) as? VideoDetailsVC {
             
             if let selectedPostId = data as? String {
-               // viewController.postId = selectedPostId
+                viewController.videoId = selectedPostId
             } else {
                 fatalError("Invalid data type passed to EditProfileVC. Expected GetProfileResponse, received \(String(describing: data))")
             }

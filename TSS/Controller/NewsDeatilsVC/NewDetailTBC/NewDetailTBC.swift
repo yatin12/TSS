@@ -8,7 +8,7 @@
 import UIKit
 
 protocol NewDetailTBCDelegate: AnyObject {
-    func cell(_ cell: NewDetailTBC, faceBookUrl: String)
+    func cell(_ cell: NewDetailTBC, faceBookUrl: String, sender: Any)
     func cell(_ cell: NewDetailTBC, instagramUrl: String)
     func cell(_ cell: NewDetailTBC, tikTokUrl: String)
     func cell(_ cell: NewDetailTBC, nextPostId: String)
@@ -74,18 +74,20 @@ class NewDetailTBC: UITableViewCell {
         self.objCollectionTags.reloadData()
         
     }
-    @IBAction func btnTikTokTapped(_ sender: Any) {
+    @IBAction func btnTikTokTapped(_ sender: UIButton) {
         let tiktokUrl: String = "\(objBlogDetailsResponse?.data?.tiktokURL ?? "")"
         delegate?.cell(self, tikTokUrl: tiktokUrl)
     }
-    @IBAction func btnInstaTapped(_ sender: Any) {
+    @IBAction func btnInstaTapped(_ sender: UIButton) {
         let instaURL: String = "\(objBlogDetailsResponse?.data?.instaURL ?? "")"
         delegate?.cell(self, instagramUrl: instaURL)
     }
-    @IBAction func btnFacebookTapped(_ sender: Any) {
+    
+    @IBAction func btnFacebookTapped(_ sender: UIButton) {
         let faceBookURL: String = "\(objBlogDetailsResponse?.data?.facebookURL ?? "")"
-        delegate?.cell(self, faceBookUrl: faceBookURL)
+        delegate?.cell(self, faceBookUrl: faceBookURL, sender: sender)
     }
+    
     @IBAction func btnNextTapped(_ sender: Any) {
         let nextPostId: String = "\(objBlogDetailsResponse?.data?.nextPostID ?? "")"
         delegate?.cell(self, nextPostId: nextPostId)

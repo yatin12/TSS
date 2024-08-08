@@ -8,7 +8,7 @@
 import UIKit
 
 class VideoSec_2TBC: UITableViewCell {
-
+    
     @IBOutlet weak var lblTimeAgo: UILabel!
     @IBOutlet weak var lblViewsCnt: UILabel!
     @IBOutlet weak var lblUpNextTitle: UILabel!
@@ -17,10 +17,10 @@ class VideoSec_2TBC: UITableViewCell {
         super.awakeFromNib()
         // Initialization code
     }
-
+    
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
-
+        
         // Configure the view for the selected state
     }
     func configure(withResponse response: videoDetailResponse?, withIndex index: Int) {
@@ -29,19 +29,15 @@ class VideoSec_2TBC: UITableViewCell {
         
         lblUpNextTitle.text = "\(response?.data?.eVideo?[0].upNext?[index].title ?? "")"
         let strViewCnt = "\(response?.data?.eVideo?[0].upNext?[index].totalViews ?? "")"
-        if strViewCnt == ""
-        {
-            lblViewsCnt.text = "0 Views"
-        }
-        else
-        {
-            lblViewsCnt.text = "\(strViewCnt) Views"
-        }
+        lblViewsCnt.text = strViewCnt == "" ? "0 View" : "\(strViewCnt) Views"
         
-        //lblTimeAgo.text = "\(response?.data?.eVideo?[0].upNext?[index].title ?? "")"
-
-
-
+        let strDate = "\(response?.data?.eVideo?[0].upNext?[index].date ?? "")"
+        
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = dateFormate
+        if let pastDate = dateFormatter.date(from: strDate) {
+            let strTimeAgo = TimeAgoUtility.timeAgoSinceDate(date: pastDate)
+            lblTimeAgo.text = "\(strTimeAgo)"
+        }
     }
-    
 }

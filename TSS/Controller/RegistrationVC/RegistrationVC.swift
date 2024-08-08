@@ -511,11 +511,9 @@ extension RegistrationVC
                     if loginResponse.settings?.success == true
                     {
                         UserDefaultUtility.saveValueToUserDefaults(value: "YES", forKey: "isUserLoggedIn")
-                        
                         UserDefaultUtility.saveValueToUserDefaults(value: "\(loginResponse.data?.userID ?? 0)", forKey: "USERID")
-
-
                         UserDefaultUtility.saveValueToUserDefaults(value: "\(loginResponse.settings?.authorization ?? "")", forKey: "AUTHTOKEN")
+                        UserDefaultUtility.saveValueToUserDefaults(value: "SignInUser", forKey: "USERROLE")
 
 
                         NavigationHelper.push(storyboardKey.InnerScreen, viewControllerIdentifier: "HomeNev", from: self.navigationController!, animated: true)

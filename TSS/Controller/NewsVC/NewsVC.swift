@@ -36,6 +36,7 @@ extension NewsVC
 {
     override func viewDidLoad() {
         super.viewDidLoad()
+        lblNoDataFound.isHidden = true
         self.getUserId()
         self.setUpBackButtonView()
         self.setUpHeaderView()
@@ -147,6 +148,7 @@ extension NewsVC: UITableViewDelegate, UITableViewDataSource
         if userRole == USERROLE.SignInUser
         {
             let postId: String = "\(objBlogByCategoryResponse?.data?[indexPath.row].postID ?? "0")"
+            strSlectedBlogCatNews = ""
             NavigationHelper.pushWithPassData(storyboardKey.InnerScreen, viewControllerIdentifier: "NewsDeatilsVC", from: navigationController!, data: postId)
         }
         else
@@ -182,7 +184,7 @@ extension NewsVC: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout
                 objCollectionCategory.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)
                 self.pageNo = 1
                 self.isLoadingList = false
-                self.apiCallGetBlogByCategoryList()
+                self.apiCallGetNewsListByCategory()
             }
         }
         else
@@ -207,7 +209,7 @@ extension NewsVC: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout
         categoryId = "\(objBlogCategoryResponse?.data?[indexPath.item].categoryID ?? 0)"
         strSelectedBlog = "\(objBlogCategoryResponse?.data?[indexPath.item].categoryName ?? "")"
         self.pageNo = 1
-        self.apiCallGetBlogByCategoryList()
+        self.apiCallGetNewsListByCategory()
         
         objCollectionCategory.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)
 
@@ -278,16 +280,16 @@ extension NewsVC
     }
     @objc func loadData() {
         pageNo += 1
-        self.apiCallGetBlogByCategoryList()
+        self.apiCallGetNewsListByCategory()
     }
-    func apiCallGetBlogByCategoryList() {
+    func apiCallGetNewsListByCategory() {
         if Reachability.isConnectedToNetwork() {
             KVSpinnerView.show()
             
-            objblogByCategoryViewModel.blogByCategoryList(category_id: categoryId, userId: userId, pagination_number: "\(pageNo)") { result in
+            objblogByCategoryViewModel.getNewsListByCategory(category_id: categoryId, userId: userId, pagination_number: "\(pageNo)") { result in
                 switch result {
                 case .success(let response):
-                    KVSpinnerView.dismiss()
+                  
                     print(response)
 
                     // Check if the response is successful
@@ -314,12 +316,13 @@ extension NewsVC
                             self.tblNews.isHidden = self.pageNo == 1
                             self.lblNoDataFound.isHidden = self.pageNo != 1
                         }
-
+                        KVSpinnerView.dismiss()
                         self.tblNews.dataSource = self
                         self.tblNews.delegate = self
                         self.tblNews.reloadData()
                         
                     } else {
+                        KVSpinnerView.dismiss()
                         AlertUtility.presentSimpleAlert(in: self, title: "", message: "\(response.settings?.message ?? "")")
                     }
 
@@ -339,64 +342,14 @@ extension NewsVC
         }
     }
 
-    func apiCallGetBlogByCategoryList11() {
-        if Reachability.isConnectedToNetwork() {
-            KVSpinnerView.show()
-            objblogByCategoryViewModel.blogByCategoryList(category_id: categoryId, userId: userId, pagination_number: "\(pageNo)") { result in
-                switch result {
-                case .success(let response):
-                    KVSpinnerView.dismiss()
-                    print(response)
-
-                    if response.settings?.success == true {
-                        if let newData = response.data, newData.count > 0 {
-                            self.isLoadingList = false
-                            self.tblNews.isHidden = false
-                            self.lblNoDataFound.isHidden = true
-
-                            // Initialize objBlogByCategoryResponse if it is nil
-                            if self.objBlogByCategoryResponse == nil {
-                                self.objBlogByCategoryResponse = response
-                            } else {
-                                // Append new data to the existing data
-                                self.objBlogByCategoryResponse?.data?.append(contentsOf: newData)
-                            }
-
-                            self.tblNews.dataSource = self
-                            self.tblNews.delegate = self
-                            self.tblNews.reloadData()
-                        } else {
-                            self.objBlogByCategoryResponse = response
-                            self.tblNews.isHidden = true
-                            self.lblNoDataFound.isHidden = false
-                        }
-                    } else {
-                        AlertUtility.presentSimpleAlert(in: self, title: "", message: "\(response.settings?.message ?? "")")
-                    }
-
-                case .failure(let error):
-                    KVSpinnerView.dismiss()
-                    
-                    if let apiError = error as? APIError {
-                        ErrorHandlingUtility.handleAPIError(apiError, in: self)
-                    } else {
-                        AlertUtility.presentSimpleAlert(in: self, title: "", message: "\(error.localizedDescription)")
-                    }
-                }
-            }
-        } else {
-            KVSpinnerView.dismiss()
-            AlertUtility.presentSimpleAlert(in: self, title: "", message: "\(AlertMessages.NoInternetAlertMsg)")
-        }
-    }
 
     /*
-    func apiCallGetBlogByCategoryList()
+    func apiCallGetNewsListByCategory()
     {
         if Reachability.isConnectedToNetwork()
         {
             KVSpinnerView.show()
-            objblogByCategoryViewModel.blogByCategoryList(category_id: categoryId, userId: userId, pagination_number: "\(pageNo)") { result in
+            objblogByCategoryViewModel.getNewsListByCategory(category_id: categoryId, userId: userId, pagination_number: "\(pageNo)") { result in
                 switch result {
                 case .success(let response):
                     KVSpinnerView.dismiss()

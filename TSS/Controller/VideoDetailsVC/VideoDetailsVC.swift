@@ -67,7 +67,11 @@ extension VideoDetailsVC
 //MARK: IBAction
 extension VideoDetailsVC
 {
+   
     @IBAction func btnBackTapped(_ sender: Any) {
+        pauseVideoBackBtn()
+        navigationController?.popViewController(animated: true)
+        /*
         // Attempt to find the visible cell of VideoSec_1TBC and pause its video
         guard let videoListVC = navigationController?.viewControllers.first(where: { $0 is VideoDetailsVC }) as? VideoDetailsVC else {
             self.navigationController?.popViewController(animated: true)
@@ -81,6 +85,7 @@ extension VideoDetailsVC
         }
         
         self.navigationController?.popViewController(animated: true)
+        */
     }
     @IBAction func btnSettingTapped(_ sender: Any) {        NavigationHelper.push(storyboardKey.InnerScreen, viewControllerIdentifier: "SettingVC", from: navigationController!, animated: true)
 
@@ -144,6 +149,7 @@ extension VideoDetailsVC: UITableViewDataSource, UITableViewDelegate
         {
             let cellToReturn = tableView.dequeueReusableCell(withIdentifier: "VideoSec_1TBC", for: indexPath) as! VideoSec_1TBC
             cellToReturn.selectionStyle = .none
+            cellToReturn.vc = self
             //cellToReturn.playerLayer = AVPlayerLayer()
             cellToReturn.delegate = self
             cellToReturn.configure(withResponse: objVideoDetailResponse, withIndex: indexPath.row)
@@ -212,6 +218,12 @@ extension VideoDetailsVC: VideoSec_3TBCDelegate
 //MARK: VideoSec_1TBCDelegate
 extension VideoDetailsVC: VideoSec_1TBCDelegate
 {
+    func pauseVideoBackBtn() {
+        for case let cell as VideoSec_1TBC in tblVideoDetail.visibleCells {
+            cell.pauseVideoBackBtn()
+        }
+    }
+    
     func cell(_ cell: VideoSec_1TBC, isLikeTapped: Bool, likeAction: String) {
         print("likeAction->\(likeAction)")
         strAction = likeAction
@@ -233,13 +245,21 @@ extension VideoDetailsVC
         KVSpinnerView.show()
         if Reachability.isConnectedToNetwork()
         {
-            objLikeVideoViewModel.videoFavUnFav(user_id: userId, video_id: videoId, action: strAction, Type: "evideos") { result in
+            objLikeVideoViewModel.videoFavUnFav(user_id: userId, video_id: videoId, action: strAction, Type: strSelectedPostName) { result in
                 switch result {
                 case .success(let response):
                     print(response)
                     KVSpinnerView.dismiss()
                     
-                    AlertUtility.presentSimpleAlert(in: self, title: "", message: "\(response.settings?.message ?? "")")
+                    if response.settings?.success == true
+                    {
+                        self.apiCallGetEvideoDetails()
+                    }
+                    else
+                    {
+                        AlertUtility.presentSimpleAlert(in: self, title: "", message: "\(response.settings?.message ?? "")")
+                    }
+                   
                     
                     
                 case .failure(let error):

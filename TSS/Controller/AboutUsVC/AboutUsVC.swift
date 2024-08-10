@@ -48,6 +48,7 @@ extension AboutUsVC
 extension AboutUsVC
 {
     @IBAction func btnBackTapped(_ sender: Any) {
+        KVSpinnerView.dismiss()
         self.navigationController?.popViewController(animated: true)
 
     }

@@ -12,6 +12,7 @@ import AVKit
 protocol VideoSec_1TBCDelegate: AnyObject {
     func cell(_ cell: VideoSec_1TBC, isWatchListTapped: Bool)
     func cell(_ cell: VideoSec_1TBC, isLikeTapped: Bool, likeAction: String)
+    func pauseVideoBackBtn()
 
 }
 class VideoSec_1TBC: UITableViewCell {
@@ -20,8 +21,11 @@ class VideoSec_1TBC: UITableViewCell {
     var delegate: VideoSec_1TBCDelegate?
     var isLiked = false
     var strLikeAction: String = "0"
+    @IBOutlet weak var vwEvideoContainer: UIView!
+    weak var vc: VideoDetailsVC?
+    var isSubscribedUser: String = ""
     
-   
+    @IBOutlet weak var imgEvideos: UIImageView!
     @IBOutlet weak var imgLike: UIImageView!
     @IBOutlet weak var lblDesc: UILabel!
     @IBOutlet weak var objLoader: UIActivityIndicatorView!
@@ -42,18 +46,19 @@ class VideoSec_1TBC: UITableViewCell {
     
         
     }
-
+    func pauseVideoBackBtn() {
+            player?.pause()
+            playerLayer?.removeFromSuperlayer()
+            playerLayer = nil
+//            objLoader.isHidden = false
+//            objLoader.startAnimating()
+        }
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
 
         // Configure the view for the selected state
     }
     func configure(withResponse response: videoDetailResponse?, withIndex index: Int) {
-        
-        
-        
-       // let strBlogUrl = "\(response?.data?.eVideo?[0].thumbnail ?? "")"
-        //imgBlog.sd_setImage(with: URL(string: strBlogUrl), placeholderImage: UIImage(named: "icn_Placehoder"), options: [.progressiveLoad], context: nil)
         
         lblTitle.text = "\(response?.data?.eVideo?[0].title ?? "")"
         lblDesc.text = "\(response?.data?.eVideo?[0].description ?? "")"
@@ -73,18 +78,52 @@ class VideoSec_1TBC: UITableViewCell {
         lblLikeCnt.text = strLikeCnt == "" ? "0 Like" : "\(strLikeCnt) Likes"
         isLiked = response?.data?.eVideo?[0].isLike ?? false
         
+        isSubscribedUser = AppUserDefaults.object(forKey: "SubscribedUserType") as? String ?? "\(SubscibeUserType.free)"
+            
         if strSelectedPostName == "talk_shows"
         {
-            self.playVideo(strVideo: response?.data?.eVideo?[0].Trailer_Video_URL ?? "")
+            vwEvideoContainer.isHidden = true
+            vwVideo.isHidden = false
+            
+            if isSubscribedUser == "\(SubscibeUserType.premium)"
+            {
+                self.playVideo(strVideo: response?.data?.eVideo?[0].Full_Video_URL ?? "")
+
+            }
+            else
+            {
+                self.playVideo(strVideo: response?.data?.eVideo?[0].Trailer_Video_URL ?? "")
+
+            }
 
         }
         else
         {
-            self.playVideo(strVideo: response?.data?.eVideo?[0].Full_Video_URL ?? "")
+           
+            if isSubscribedUser == "\(SubscibeUserType.premium)"
+            {
+                vwEvideoContainer.isHidden = true
+                vwVideo.isHidden = false
+                
+                self.playVideo(strVideo: response?.data?.eVideo?[0].Full_Video_URL ?? "")
+            }
+            else
+            {
+                vwEvideoContainer.isHidden = false
+                vwVideo.isHidden = true
+                
+                 let strBlogUrl = "\(response?.data?.eVideo?[0].thumbnail ?? "")"
+                 imgEvideos.sd_setImage(with: URL(string: strBlogUrl), placeholderImage: UIImage(named: "icn_Placehoder"), options: [.progressiveLoad], context: nil)
+            }
+
 
         }
         imgLike.image = isLiked == true ? UIImage(named: "icn_Like") : UIImage(named: "icn_UnLike")
        
+    }
+    @IBAction func btnVideoPlayTapped_Evideo(_ sender: Any) {
+        AlertUtility.presentSimpleAlert(in: self.vc!, title: "", message: "\(AlertMessages.subscribeMsg)")
+
     }
     @IBAction func btnLikeTapped(_ sender: Any) {
         isLiked.toggle()
@@ -141,9 +180,6 @@ class VideoSec_1TBC: UITableViewCell {
     {
       
         let sess = AVAudioSession.sharedInstance()
-        
-        //let strvid = "https://www.youtube.com/watch?v=9xwazD5SyVg"
-      //  let strvid = "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
         guard let formattedUrl = strVideo.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) else { return }
         
         if let videoURL = URL(string: formattedUrl) {
@@ -204,9 +240,22 @@ class VideoSec_1TBC: UITableViewCell {
 extension VideoSec_1TBC: AVAudioPlayerDelegate
 {
     @objc func playerItemDidReachEnd(_ notification: Notification) {
-        //play Video Again
-        let player = notification.object as? AVPlayerItem
-        player?.seek(to: CMTime.zero)
+        if isSubscribedUser == "YES"
+        {
+            let playerItem = notification.object as? AVPlayerItem
+            playerItem?.seek(to: CMTime.zero)
+        }
+        else
+        {
+            let playerItem = notification.object as? AVPlayerItem
+               playerItem?.seek(to: CMTime.zero, completionHandler: { _ in
+                  
+                   self.pauseVideo()
+                   AlertUtility.presentSimpleAlert(in: self.vc!, title: "", message: "\(AlertMessages.subscribeMsg)")
+               })
+        }
+      
+        
     }
     @objc fileprivate func playerItemReachedEnd(){
         // this works like a rewind button. It starts the player over from the beginning
@@ -216,12 +265,23 @@ extension VideoSec_1TBC: AVAudioPlayerDelegate
     // background event
     @objc fileprivate func setPlayerLayerToNil(){
         // first pause the player before setting the playerLayer to nil. The pause works similar to a stop button
+        pauseVideoBackBtn()
         player?.pause()
         playerLayer = nil
     }
     
     // foreground event
-    @objc fileprivate func reinitializePlayerLayer(){
+    @objc fileprivate func reinitializePlayerLayer()
+    {
+        if let player = player {
+                   playerLayer = AVPlayerLayer(player: player)
+                   playerLayer?.frame = vwVideo.bounds
+                   playerLayer?.videoGravity = .resizeAspect
+                   vwVideo.layer.addSublayer(playerLayer!)
+               }
+    }
+    
+    /*{
         
         if let player1 = player{
             
@@ -249,4 +309,5 @@ extension VideoSec_1TBC: AVAudioPlayerDelegate
             }
         }
     }
+    */
 }

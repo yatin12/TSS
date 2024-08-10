@@ -21,10 +21,12 @@ struct blogCategoryResponse: Codable {
 struct DataBlog: Codable {
     let categoryID: Int?
     let categoryName: String?
+    let url: String?
 
     enum CodingKeys: String, CodingKey {
         case categoryID = "categoryId"
         case categoryName
+        case url
     }
 }
 

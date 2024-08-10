@@ -25,7 +25,7 @@ struct registrationResponse: Codable {
     let data: RegData?
 }
 struct RegData: Codable {
-    let userID: Int?
+    let userID: String?
     let firstName, lastName, username, email: String?
     let birthday, gender, country: String?
     let membershipLevel: MembershipLevel?
@@ -43,9 +43,9 @@ struct RegData: Codable {
 struct RegSettings: Codable {
     let success: Bool?
     let message: String?
-    let count: Int?
+    let count: String?
     let nextPage: String?
-    let userID: Int?
+    let userID: String?
     let diviceToken, authorization: String?
 
     enum CodingKeys: String, CodingKey {

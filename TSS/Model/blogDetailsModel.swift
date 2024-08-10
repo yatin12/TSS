@@ -22,11 +22,15 @@ struct DataBlogDetail: Codable {
     let date, author: String?
     let thumbnail: String?
     let facebookURL, instaURL, tiktokURL, previusPostID: String?
+    let twitter_url: String?
+    let linkedin_url: String?
     let nextPostID: String?
     let relatedBlogs: [RelatedBlog]?
 
     enum CodingKeys: String, CodingKey {
         case title, description, tag, date, author, thumbnail
+        case twitter_url
+        case linkedin_url
         case facebookURL = "facebookUrl"
         case instaURL = "instaUrl"
         case tiktokURL = "tiktokUrl"
@@ -46,8 +50,8 @@ struct RelatedBlog: Codable {
 struct SettingsBlogDetail: Codable {
     let success: Bool?
     let message: String?
-    let count: Int?
-    let nextPage: Int?
+    let count: String?
+    let nextPage: String?
     let userID: String?
 
     enum CodingKeys: String, CodingKey {

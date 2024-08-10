@@ -14,7 +14,9 @@ class PrivacyPolicyVC: UIViewController {
     @IBOutlet weak var objWebView: WKWebView!
 
     //  - Outlets - 
+    @IBOutlet weak var vwSearch: UIView!
     @IBOutlet weak var constHeightHeader: NSLayoutConstraint!
+    @IBOutlet weak var vwNotification: UIView!
     
 }
 extension PrivacyPolicyVC
@@ -23,11 +25,25 @@ extension PrivacyPolicyVC
         super.viewDidLoad()
         self.setUpHeaderView()
         self.loadPrivacyPolicyURL()
+        self.setUpHeadreViewHideShow()
     }
 }
 //MARK: General Methods
 extension PrivacyPolicyVC
 {
+    func setUpHeadreViewHideShow()
+    {
+        if isFromPrivacyViewSetting == true
+        {
+            vwSearch.isHidden = false
+            vwNotification.isHidden = false
+        }
+        else
+        {
+            vwSearch.isHidden = true
+            vwNotification.isHidden = true
+        }
+    }
     func setUpHeaderView()
     {
         DeviceUtility.setHeaderViewHeight(constHeightHeader)
@@ -48,6 +64,7 @@ extension PrivacyPolicyVC
 extension PrivacyPolicyVC
 {
     @IBAction func btnBackTapped(_ sender: Any) {
+        KVSpinnerView.dismiss()
         self.navigationController?.popViewController(animated: true)
     }
     @IBAction func btnNotificationTapped(_ sender: Any) {

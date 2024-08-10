@@ -101,7 +101,7 @@ class APIManager {
                 }
             }
     }
-    func blogByCategoryList<T: Decodable>(request: blogByCategoryRequest, responseModelType: T.Type, completion: @escaping (Result<T, APIError>) -> Void) {
+    func getNewsListByCategory<T: Decodable>(request: blogByCategoryRequest, responseModelType: T.Type, completion: @escaping (Result<T, APIError>) -> Void) {
         
         let authToken: String = AppUserDefaults.object(forKey: "AUTHTOKEN") as? String ?? ""
         

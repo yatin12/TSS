@@ -13,6 +13,7 @@ class HomeTBC: UITableViewCell
     @IBOutlet weak var imgSectionZero: UIImageView!
     @IBOutlet weak var objCollectionHome: UICollectionView!
     
+    @IBOutlet weak var objCollection1TBS: UICollectionView!
     var objHomeResposne: HomeResposne?
     var strCurrSectionNm: String = ""
     
@@ -30,23 +31,29 @@ class HomeTBC: UITableViewCell
     {
         self.objCollectionHome.register(UINib.init(nibName: "HomeCollectionCell", bundle: .main), forCellWithReuseIdentifier: "HomeCollectionCell")
         
-        /*
+        self.objCollectionHome.dataSource = self
+        self.objCollectionHome.delegate = self
+        self.objCollectionHome.reloadData()
+        
+        
+        self.objCollection1TBS.register(UINib.init(nibName: "Season1TBSCTC", bundle: .main), forCellWithReuseIdentifier: "Season1TBSCTC")
         let layout1: UICollectionViewFlowLayout = UICollectionViewFlowLayout()
-        layout1.itemSize = CGSize(width: UIScreen.main.bounds.width - 100.0, height: 225.0)
+        let itemWidth1 = UIScreen.main.bounds.width - 48.0
+        layout1.itemSize = CGSize(width: itemWidth1, height: 80.0)
         
         // Configure layout properties
         layout1.sectionInset = UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5)
         layout1.minimumInteritemSpacing = 5
         layout1.minimumLineSpacing = 5
         layout1.scrollDirection = .horizontal
-        objCollectionHome.collectionViewLayout = layout1
-        */
-
         
-        self.objCollectionHome.dataSource = self
-        self.objCollectionHome.delegate = self
-        self.objCollectionHome.reloadData()
+        // Initialize the collection view
+        objCollection1TBS.collectionViewLayout = layout1
         
+        self.objCollection1TBS.dataSource = self
+        self.objCollection1TBS.delegate = self
+        self.objCollection1TBS.reloadData()
+       
         self.objCollectionMeetSister.register(UINib.init(nibName: "MeetSisterCTC", bundle: .main), forCellWithReuseIdentifier: "MeetSisterCTC")
         
         let layout: UICollectionViewFlowLayout = UICollectionViewFlowLayout()
@@ -65,9 +72,6 @@ class HomeTBC: UITableViewCell
         // Initialize the collection view
         objCollectionMeetSister.collectionViewLayout = layout
         
-        
-        
-        
         self.objCollectionMeetSister.dataSource = self
         self.objCollectionMeetSister.delegate = self
         self.objCollectionMeetSister.reloadData()
@@ -80,50 +84,9 @@ class HomeTBC: UITableViewCell
         strCurrSectionNm = strSectionNm
         print("strCurrSectionNm -->\(strCurrSectionNm)")
         
-        /*
-        if strCurrSectionNm == ""
-        {
-            imgSectionZero.isHidden = false
-            objCollectionHome.isHidden = true
-            objCollectionMeetSister.isHidden = true
-        }
-        else if strCurrSectionNm == "Tops News"
-        {
-            imgSectionZero.isHidden = true
-            objCollectionHome.isHidden = false
-            objCollectionMeetSister.isHidden = true
-        }
-        else if strCurrSectionNm == "Season 1"
-        {
-            imgSectionZero.isHidden = true
-            objCollectionHome.isHidden = false
-            objCollectionMeetSister.isHidden = true
-        }
-        else if strCurrSectionNm == "Season 1 BTS (Behind the Scenes)"
-        {
-            imgSectionZero.isHidden = true
-            objCollectionHome.isHidden = false
-            objCollectionMeetSister.isHidden = true
-        }
-        else if strCurrSectionNm == "E.Videos"
-        {
-            imgSectionZero.isHidden = true
-            objCollectionHome.isHidden = false
-            objCollectionMeetSister.isHidden = true
-        }
-        else if strCurrSectionNm == "Recommended Episodes"
-        {
-            imgSectionZero.isHidden = true
-            objCollectionHome.isHidden = false
-            objCollectionMeetSister.isHidden = true
-        }
-        else if strCurrSectionNm == "Meet The Sisters"
-        {
-            imgSectionZero.isHidden = true
-            objCollectionHome.isHidden = true
-            objCollectionMeetSister.isHidden = false
-        }
-        */
+        objCollectionHome.reloadData()
+           objCollectionMeetSister.reloadData()
+        self.objCollection1TBS.reloadData()
     }
 }
 //MARK: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout Methods
@@ -143,8 +106,8 @@ extension HomeTBC: UICollectionViewDataSource, UICollectionViewDelegateFlowLayou
         }
         else if strCurrSectionNm == "Season 1 BTS (Behind the Scenes)"
         {
-            //rowCount = objHomeResposne?.data?.season1BTS?.count ?? 0
-            rowCount = 2
+            rowCount = objHomeResposne?.data?.season1BTS?.count ?? 0
+            print("rowCount-->\(rowCount)")
         }
         else if strCurrSectionNm == "E.Videos"
         {
@@ -161,7 +124,8 @@ extension HomeTBC: UICollectionViewDataSource, UICollectionViewDelegateFlowLayou
         return rowCount
     }
     
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell 
+    {
         var cell = UICollectionViewCell()
         if collectionView == objCollectionMeetSister
         {
@@ -174,15 +138,24 @@ extension HomeTBC: UICollectionViewDataSource, UICollectionViewDelegateFlowLayou
            
             cell = cellToReturn
         }
+        else if collectionView == objCollection1TBS
+        {
+            let cellToReturn = collectionView.dequeueReusableCell(withReuseIdentifier: "Season1TBSCTC",for: indexPath) as! Season1TBSCTC
+
+            
+            Season1TBSURL = "\(objHomeResposne?.data?.season1BTS?[0].url ?? "")"
+            
+            cellToReturn.btnWatchNowOutlt.addTarget(self, action: #selector(btnWatchNowTapped(sender:)), for: .touchUpInside)
+            
+            cell = cellToReturn
+        }
         else
         {
             let cellToReturn = collectionView.dequeueReusableCell(withReuseIdentifier: "HomeCollectionCell",for: indexPath) as! HomeCollectionCell
             
             if strCurrSectionNm == "Tops News"
             {
-                cellToReturn.vwRestHeader.isHidden = false
-                cellToReturn.vwSeason1TBS.isHidden = true
-                
+
                 let strTitle = "\(objHomeResposne?.data?.recentNews?[indexPath.row].title ?? "")"
                 let strDesc = "\(objHomeResposne?.data?.recentNews?[indexPath.row].description ?? "")"
                 cellToReturn.lblTitle.text = strTitle.htmlToString()
@@ -194,8 +167,7 @@ extension HomeTBC: UICollectionViewDataSource, UICollectionViewDelegateFlowLayou
             }
             else if strCurrSectionNm == "Season 1"
             {
-                cellToReturn.vwRestHeader.isHidden = false
-                cellToReturn.vwSeason1TBS.isHidden = true
+
                 
                 let strTitle = "\(objHomeResposne?.data?.season?[indexPath.row].title ?? "")"
                 let strDesc = "\(objHomeResposne?.data?.season?[indexPath.row].description ?? "")"
@@ -207,20 +179,10 @@ extension HomeTBC: UICollectionViewDataSource, UICollectionViewDelegateFlowLayou
 
                 
             }
-            else if strCurrSectionNm == "Season 1 BTS (Behind the Scenes)"
-            {
-                cellToReturn.vwRestHeader.isHidden = true
-                cellToReturn.vwSeason1TBS.isHidden = false
-                
-                Season1TBSURL = "\(objHomeResposne?.data?.season1BTS?[0].url ?? "")"
-                
-                cellToReturn.btnWatchNowOutlt.addTarget(self, action: #selector(btnWatchNowTapped(sender:)), for: .touchUpInside)
-
-            }
+            
             else if strCurrSectionNm == "E.Videos"
             {
-                cellToReturn.vwRestHeader.isHidden = false
-                cellToReturn.vwSeason1TBS.isHidden = true
+
                 
                 let strTitle = "\(objHomeResposne?.data?.empowermentVideo?[indexPath.row].title ?? "")"
                 let strDesc = "\(objHomeResposne?.data?.empowermentVideo?[indexPath.row].description ?? "")"
@@ -233,8 +195,7 @@ extension HomeTBC: UICollectionViewDataSource, UICollectionViewDelegateFlowLayou
             }
             else if strCurrSectionNm == "Recommended Episodes"
             {
-                cellToReturn.vwRestHeader.isHidden = false
-                cellToReturn.vwSeason1TBS.isHidden = true
+
                 
                 if let recommendedEpisodes = objHomeResposne?.data?.recommendedEpisodes {
                     if indexPath.row < recommendedEpisodes.count {
@@ -261,17 +222,12 @@ extension HomeTBC: UICollectionViewDataSource, UICollectionViewDelegateFlowLayou
         }
        return cell
     }
-    
+   
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         var width = UIScreen.main.bounds.width
         var height = 225.0
         if collectionView == objCollectionMeetSister
         {
-            /*
-            width = (UIScreen.main.bounds.width - 250.0)
-            height = 230.0
-            */
-            
             let itemsPerRow: CGFloat = 3
             let padding: CGFloat = 5
             let totalPadding = padding * (itemsPerRow + 1)
@@ -279,19 +235,16 @@ extension HomeTBC: UICollectionViewDataSource, UICollectionViewDelegateFlowLayou
             return CGSize(width: itemWidth, height: 230.0)
             
         }
-        else
+        else if collectionView == objCollection1TBS
         {
-             if strCurrSectionNm == "Season 1 BTS (Behind the Scenes)"
-            {
-                 width = (UIScreen.main.bounds.width)
-                  height = 100.0
-            }
-            else
-            {
-                width = (UIScreen.main.bounds.width - 250.0)
-                 height = 225.0
-            }
-          
+            width = (UIScreen.main.bounds.width - 48.0)
+            return CGSize(width: width, height: 80.0)
+            
+        }
+        else
+        { 
+            width = (UIScreen.main.bounds.width - 250.0)
+            height = 225.0
         }
          
         return CGSize(width: width, height: height)

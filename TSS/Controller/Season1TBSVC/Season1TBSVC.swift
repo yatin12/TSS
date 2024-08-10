@@ -13,6 +13,7 @@ class Season1TBSVC: UIViewController {
 
     @IBOutlet weak var objWebView: WKWebView!
     @IBAction func btnBackTapped(_ sender: Any) {
+        KVSpinnerView.dismiss()
         self.navigationController?.popViewController(animated: true)
     }
     @IBOutlet weak var constHeightHeader: NSLayoutConstraint!

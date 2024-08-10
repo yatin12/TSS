@@ -258,7 +258,7 @@
                                                                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Ziv-Nj-Hwa">
                                                                                         <rect key="frame" x="0.0" y="26.666666666666689" width="293" height="48.333333333333343"/>
                                                                                         <subviews>
-                                                                                            <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Enter Password" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Jh4-NN-JF7">
+                                                                                            <textField opaque="NO" tag="1" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Enter Password" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Jh4-NN-JF7">
                                                                                                 <rect key="frame" x="8" y="2" width="235" height="44.333333333333336"/>
                                                                                                 <color key="textColor" name="ThemeFontColor"/>
                                                                                                 <fontDescription key="fontDescription" name="Poppins-Regular" family="Poppins" pointSize="14"/>
@@ -401,6 +401,7 @@
                                                                                             </label>
                                                                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="U5q-bW-0ak">
                                                                                                 <rect key="frame" x="0.0" y="0.0" width="144" height="40"/>
+                                                                                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                                                 <fontDescription key="fontDescription" name="Gotham-Book" family="Gotham" pointSize="14"/>
                                                                                                 <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                                                                                                 <connections>
@@ -810,7 +811,7 @@
                                                                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="A53-hf-ttR">
                                                                                         <rect key="frame" x="0.0" y="26.666666666666689" width="293" height="48.333333333333343"/>
                                                                                         <subviews>
-                                                                                            <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Enter Last Name" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="2gz-aW-zu8">
+                                                                                            <textField opaque="NO" tag="1" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Enter Last Name" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="2gz-aW-zu8">
                                                                                                 <rect key="frame" x="8" y="2" width="277" height="44.333333333333336"/>
                                                                                                 <color key="textColor" name="ThemeFontColor"/>
                                                                                                 <fontDescription key="fontDescription" name="Poppins-Regular" family="Poppins" pointSize="14"/>
@@ -872,7 +873,7 @@
                                                                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="fI2-QF-ZsK">
                                                                                         <rect key="frame" x="0.0" y="26.666666666666689" width="293" height="48.333333333333343"/>
                                                                                         <subviews>
-                                                                                            <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Enter User Name" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="pgF-9d-23C">
+                                                                                            <textField opaque="NO" tag="2" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Enter User Name" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="pgF-9d-23C">
                                                                                                 <rect key="frame" x="8" y="2" width="277" height="44.333333333333336"/>
                                                                                                 <color key="textColor" name="ThemeFontColor"/>
                                                                                                 <fontDescription key="fontDescription" name="Poppins-Regular" family="Poppins" pointSize="14"/>
@@ -934,7 +935,7 @@
                                                                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="uFr-fo-Oa6">
                                                                                         <rect key="frame" x="0.0" y="26.666666666666632" width="293" height="48.333333333333343"/>
                                                                                         <subviews>
-                                                                                            <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Enter Email" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Nxk-aX-iYE">
+                                                                                            <textField opaque="NO" tag="3" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Enter Email" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Nxk-aX-iYE">
                                                                                                 <rect key="frame" x="8" y="2" width="277" height="44.333333333333336"/>
                                                                                                 <color key="textColor" name="ThemeFontColor"/>
                                                                                                 <fontDescription key="fontDescription" name="Poppins-Regular" family="Poppins" pointSize="14"/>
@@ -1025,7 +1026,7 @@
                                                                                                     <constraint firstAttribute="bottom" secondItem="9Sw-g7-x5I" secondAttribute="bottom" id="jxm-kd-pMy"/>
                                                                                                 </constraints>
                                                                                             </view>
-                                                                                            <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Enter Password" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="gYc-BV-fyL">
+                                                                                            <textField opaque="NO" tag="4" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Enter Password" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="gYc-BV-fyL">
                                                                                                 <rect key="frame" x="8" y="2" width="235" height="44.333333333333336"/>
                                                                                                 <color key="textColor" name="ThemeFontColor"/>
                                                                                                 <fontDescription key="fontDescription" name="Poppins-Regular" family="Poppins" pointSize="14"/>
@@ -1087,7 +1088,7 @@
                                                                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="03s-kl-9Ys">
                                                                                         <rect key="frame" x="0.0" y="26.666666666666632" width="293" height="48.333333333333343"/>
                                                                                         <subviews>
-                                                                                            <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Enter Confirm Password" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="mVe-o9-pb9">
+                                                                                            <textField opaque="NO" tag="5" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Enter Confirm Password" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="mVe-o9-pb9">
                                                                                                 <rect key="frame" x="8" y="2" width="235" height="44.333333333333336"/>
                                                                                                 <color key="textColor" name="ThemeFontColor"/>
                                                                                                 <fontDescription key="fontDescription" name="Poppins-Regular" family="Poppins" pointSize="14"/>
@@ -1254,7 +1255,7 @@
                                                                                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="EsW-48-Zns">
                                                                                                         <rect key="frame" x="0.0" y="26.666666666666632" width="133.66666666666666" height="58.333333333333343"/>
                                                                                                         <subviews>
-                                                                                                            <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Enter Gendar" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="jLP-Uu-fw8">
+                                                                                                            <textField opaque="NO" tag="6" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Enter Gendar" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="jLP-Uu-fw8">
                                                                                                                 <rect key="frame" x="8.0000000000000071" y="2" width="117.66666666666669" height="54.333333333333336"/>
                                                                                                                 <color key="textColor" name="ThemeFontColor"/>
                                                                                                                 <fontDescription key="fontDescription" name="Poppins-Regular" family="Poppins" pointSize="14"/>
@@ -1324,7 +1325,7 @@
                                                                                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="TVq-ck-zLG">
                                                                                                         <rect key="frame" x="0.0" y="26.666666666666632" width="133.33333333333334" height="58.333333333333343"/>
                                                                                                         <subviews>
-                                                                                                            <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Enter Country" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="DCY-u6-k6L">
+                                                                                                            <textField opaque="NO" tag="7" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Enter Country" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="DCY-u6-k6L">
                                                                                                                 <rect key="frame" x="7.9999999999999929" y="2" width="117.33333333333331" height="54.333333333333336"/>
                                                                                                                 <color key="textColor" name="ThemeFontColor"/>
                                                                                                                 <fontDescription key="fontDescription" name="Poppins-Regular" family="Poppins" pointSize="14"/>
@@ -1991,7 +1992,7 @@
                     <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
                     <size key="freeformSize" width="375" height="667"/>
                     <connections>
-                        <outlet property="lblRegister" destination="7aI-Y1-SAf" id="Ysf-q9-Erv"/>
+                        <outlet property="lblLogin" destination="7aI-Y1-SAf" id="O3a-MD-tre"/>
                         <outlet property="txtEmail" destination="GSF-cp-kdd" id="1q4-Ki-9ad"/>
                         <outlet property="vwEmail" destination="xyf-DL-z5u" id="qV9-iM-qpQ"/>
                     </connections>

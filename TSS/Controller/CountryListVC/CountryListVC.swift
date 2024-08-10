@@ -48,6 +48,7 @@ extension CountryListVC
 extension CountryListVC
 {
     @IBAction func btnBackTapped(_ sender: Any) {
+        KVSpinnerView.dismiss()
         self.navigationController?.popViewController(animated: true)
     }
 }

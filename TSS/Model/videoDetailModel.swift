@@ -77,8 +77,8 @@ struct ReviewDetail: Codable {
 struct SettingsVideoDetail: Codable {
     let success: Bool?
     let message: String?
-    let count: Int?
-    let nextPage: Int?
+    let count: String?
+    let nextPage: String?
     let userID: String?
 
     enum CodingKeys: String, CodingKey {

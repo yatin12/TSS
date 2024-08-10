@@ -14,20 +14,36 @@ class TermsConditionVC: UIViewController {
     @IBOutlet weak var objWebView: WKWebView!
 
     //  - Outlets - 
+    @IBOutlet weak var vwNotification: UIView!
     @IBOutlet weak var constHeightHeader: NSLayoutConstraint!
-   
+    @IBOutlet weak var vwSearch: UIView!
+    
 }
 extension TermsConditionVC
 {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.setUpHeaderView()
+        self.setUpHeadreViewHideShow()
         self.loadTermsConditionURL()
     }
 }
 //MARK: General Methods
 extension TermsConditionVC
 {
+    func setUpHeadreViewHideShow()
+    {
+        if isFromTermsViewSetting == true
+        {
+            vwSearch.isHidden = false
+            vwNotification.isHidden = false
+        }
+        else
+        {
+            vwSearch.isHidden = true
+            vwNotification.isHidden = true
+        }
+    }
     func setUpHeaderView()
     {
         DeviceUtility.setHeaderViewHeight(constHeightHeader)
@@ -53,6 +69,7 @@ extension TermsConditionVC
     }
     
     @IBAction func btnBackTapped(_ sender: Any) {
+        KVSpinnerView.dismiss()
         self.navigationController?.popViewController(animated: true)
     }
     @IBAction func btnNotificationTapped(_ sender: Any) {

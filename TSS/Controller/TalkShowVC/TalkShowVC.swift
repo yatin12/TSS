@@ -7,12 +7,14 @@
 
 import UIKit
 import KVSpinnerView
+import WebKit
 
 class TalkShowVC: UIViewController {
     //  - Variables - 
     var objBlogCategoryResponse: blogCategoryResponse?
     var objTalkShowListResponse: talkShowListResponse?
 
+    @IBOutlet weak var objWebViewSeason1BTS: WKWebView!
     private let objblogCategoryViewModel = blogCategoryViewModel()
     private let objTalkShowViewModel = talkShowViewModel()
     
@@ -21,7 +23,7 @@ class TalkShowVC: UIViewController {
     var selectedIndex: Int = 0
     var categoryId: String = ""
     var videoId: String = "11480"
-    
+    var isSubscribedUser: String = ""
     //  - Outlets - 
     @IBOutlet weak var lblNoData: UILabel!
     @IBOutlet weak var imgLogo: UIImageView!
@@ -42,13 +44,27 @@ extension TalkShowVC
         self.registerNib()
         self.setupCollectionview()
         self.setNotificationObserverMethod()
-        self.apiCallGetBlogCategoryList()
+       // self.apiCallGetBlogCategoryList()
+        self.checkSubscribeUserOrnot()
         
     }
 }
 //MARK: General Methods
 extension TalkShowVC
 {
+    func checkSubscribeUserOrnot()
+    {
+        isSubscribedUser = AppUserDefaults.object(forKey: "SubscribedUserType") as? String ?? "\(SubscibeUserType.free)"
+        if isSubscribedUser != "\(SubscibeUserType.free)"
+        {
+            self.apiCallGetBlogCategoryList()
+        }
+        else
+        {
+            AlertUtility.presentSimpleAlert(in: self, title: "", message: "\(AlertMessages.subscribeForTabMsg)")
+
+        }
+    }
     func setNotificationObserverMethod()
     {
         NotificationCenter.default.removeObserver(self)
@@ -57,7 +73,7 @@ extension TalkShowVC
     }
     @objc func apicallTalkShowTab(notification: Notification)
     {
-        self.apiCallGetBlogCategoryList()
+        self.checkSubscribeUserOrnot()
     }
     func getUserId()
     {
@@ -82,7 +98,9 @@ extension TalkShowVC
         GenericFunction.registerNibs(for: ["TalkShowTBC"], withNibNames: ["TalkShowTBC"], tbl: tblTalkShow)
         tblTalkShow.isHidden = false
         lblNoData.isHidden = true
-
+        objWebViewSeason1BTS.isHidden = true
+        
+        
         tblTalkShow.delegate = self
         tblTalkShow.dataSource = self
         tblTalkShow.reloadData()
@@ -217,14 +235,52 @@ extension TalkShowVC: UICollectionViewDataSource, UICollectionViewDelegateFlowLa
         selectedIndex = indexPath.item
         categoryId = "\(objBlogCategoryResponse?.data?[indexPath.item].categoryID ?? 0)"
         strSelectedBlog = "\(objBlogCategoryResponse?.data?[indexPath.item].categoryName ?? "")"
+        if strSelectedBlog == "Season1BTS"
+        {
+            objWebViewSeason1BTS.isHidden = false
+            tblTalkShow.isHidden = true
+            lblNoData.isHidden = true
+            let season1BTSUrl: String = "\(objBlogCategoryResponse?.data?[indexPath.item].url ?? "")"
+            
+            isSubscribedUser = AppUserDefaults.object(forKey: "SubscribedUserType") as? String ?? "\(SubscibeUserType.free)"
+            if isSubscribedUser == "\(SubscibeUserType.premium)"
+            {
+                self.loadSeason1BTSURL(strURL: season1BTSUrl)
 
+            }
+            else
+            {
+                AlertUtility.presentSimpleAlert(in: self, title: "", message: "\(AlertMessages.subscribeForTabMsg)")
+
+            }
+            
+            
+        }
+        else
+        {
+            objWebViewSeason1BTS.isHidden = true
+            tblTalkShow.isHidden = false
+            lblNoData.isHidden = true
+            
+            
+            self.apiCallGetTalkShowList(isFromUserClick: true)
+        }
         objCollectionViewCategory.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)
-
-        
-        self.apiCallGetTalkShowList(isFromUserClick: true)
         objCollectionViewCategory.reloadData()
+
+      
     }
-    
+    func loadSeason1BTSURL(strURL: String) {
+        if let url = URL(string: strURL) {
+            let requestObj = URLRequest(url: url)
+            objWebViewSeason1BTS.navigationDelegate = self
+            objWebViewSeason1BTS.uiDelegate = self
+            objWebViewSeason1BTS.load(requestObj)
+        } else {
+            // Handle the case where the URL string is invalid or nil
+           // print("Invalid URL string: \(PrivacyPolicyURL)")
+        }
+    }
 }
 //MARK: API Call
 extension TalkShowVC
@@ -303,6 +359,7 @@ extension TalkShowVC
                         {
                             self.tblTalkShow.isHidden = false
                             self.lblNoData.isHidden = true
+                            self.objWebViewSeason1BTS.isHidden = true
                             
                             self.objTalkShowListResponse = response
                             self.tblTalkShow.dataSource = self
@@ -313,6 +370,7 @@ extension TalkShowVC
                         {
                             self.tblTalkShow.isHidden = true
                             self.lblNoData.isHidden = false
+                            self.objWebViewSeason1BTS.isHidden = true
                         }
                     }
                     else
@@ -342,5 +400,18 @@ extension TalkShowVC
              AlertUtility.presentSimpleAlert(in: self, title: "", message: "\(AlertMessages.NoInternetAlertMsg)")
         }
       
+    }
+}
+//MARK: UIWebViewDelegate
+extension TalkShowVC : WKUIDelegate, UIWebViewDelegate,WKNavigationDelegate
+{
+    func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
+        KVSpinnerView.dismiss()
+    }
+    func webView(_ webView: WKWebView, didStartProvisionalNavigation navigation: WKNavigation!) {
+        KVSpinnerView.show()
+    }
+    func webView(_ webView: WKWebView, didFail navigation: WKNavigation!, withError error: Error) {
+        KVSpinnerView.dismiss()
     }
 }

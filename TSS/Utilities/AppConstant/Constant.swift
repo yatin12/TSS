@@ -13,6 +13,16 @@ enum AppEnvironment {
     case beta
 }
 
+struct SubscibeUserType {
+    
+    static let free:String = "Free"
+    static let basic:String = "Basic"
+    static let premium:String = "Premium"
+}
+var isFromPrivacyViewSetting: Bool = false
+var isFromTermsViewSetting: Bool = false
+
+
 let dateFormate = "yyyy-MM-dd"
 let currentEnvironment: AppEnvironment = .beta
 let AppUserDefaults = UserDefaults.standard
@@ -71,6 +81,7 @@ let HomeEndpoint = "homepage"
 let forgotPasswordEndpoint = "reset-password"
 let deleteAccountEndpoint = "delete-account"
 
+var strSlectedBlogCatNews: String = ""
 
 let ServerDateFormat = "dd/MM/yyyy"
 var PrivacyPolicyURL: String = ""
@@ -130,11 +141,10 @@ struct AlertMessages {
     static let BlankMessage:String = "Message is mandatory."
     static let LogoutMsg:String = "Do you want to logout?"
     static let deleteAccountMsg:String = "Do you want to delete account?"
-
     static let RateMsg:String = "Please give some rate by pressing a star. Thank you!"
     static let ForceFullyRegister:String = "To access all content, please register."
-
-
+    static let subscribeMsg: String = "Please subscribe to continue watching."
+    static let subscribeForTabMsg: String = "Access to this content is restricted; please subscribe to view it."
 }
 
 class AppUtility {

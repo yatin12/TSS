@@ -35,6 +35,7 @@ extension LoginVC
         self.setUpUIForLowerDeclaration()
         self.setUpPlaceholderColor()
         self.loadCredentials()
+        self.setTextfileds()
         self.passViewControllerObjToViewModel()
     }
 }
@@ -82,15 +83,33 @@ extension LoginVC
     @objc func termsTapped() {
         // Handle Terms of Use tap
         print("Terms of Use tapped")
+        isFromTermsViewSetting = false
+        NavigationHelper.push(storyboardKey.InnerScreen, viewControllerIdentifier: "TermsConditionVC", from: navigationController!, animated: true)
     }
     
     @objc func privacyTapped() {
         // Handle Privacy Policy tap
         print("Privacy Policy tapped")
+        isFromPrivacyViewSetting = false
+        NavigationHelper.push(storyboardKey.InnerScreen, viewControllerIdentifier: "PrivacyPolicyVC", from: navigationController!, animated: true)
+    }
+    func setTextfileds()
+    {
+        txtEmail.iq.toolbar.doneBarButton.setTarget(self, action: #selector(doneButtonClicked))
+        txtPassword.iq.toolbar.doneBarButton.setTarget(self, action: #selector(doneButtonClicked))
+
+    }
+    @objc func doneButtonClicked(_ sender: UIButton)
+    {
+        print(sender.tag)
+        if sender.tag == 0 {
+          updateBorder(for: txtEmail, isEditing: true)
+        }
+        else if sender.tag == 1 {
+            updateBorder(for: txtPassword, isEditing: true)
+        }
     }
     private func updateBorder(for textField: UITextField, isEditing: Bool) {
-        
-        
         if textField == txtEmail {
             vwEmail.layer.borderColor = isEditing ? highlightColor : clearColor
             vwEmail.layer.borderWidth = isEditing ? 1.0 : 0.0
@@ -150,6 +169,9 @@ extension LoginVC
 extension LoginVC
 {
     @IBAction func btnSigninAsGuestUserTapped(_ sender: Any) {
+        UserDefaultUtility.saveValueToUserDefaults(value: "\(SubscibeUserType.free)", forKey: "SubscribedUserType")
+
+        
         UserDefaultUtility.saveValueToUserDefaults(value: "YES", forKey: "isUserLoggedIn")
         UserDefaultUtility.saveValueToUserDefaults(value: "GuestUser", forKey: "USERROLE")
         UserDefaultUtility.saveValueToUserDefaults(value: "", forKey: "USERID")
@@ -232,6 +254,17 @@ extension LoginVC
                             self.saveCredentials(username: self.txtEmail.text ?? "" , password: self.txtPassword.text ?? "")
                         } else {
                             self.clearCredentials()
+                        }
+                        
+                        let strSubscriptionName = loginResponse.data?.membershipLevel?.name ?? "\(SubscibeUserType.free)"
+                        if strSubscriptionName == "Free" {
+                            UserDefaultUtility.saveValueToUserDefaults(value: "\(SubscibeUserType.free)", forKey: "SubscribedUserType")
+                        }
+                        else if strSubscriptionName == "Basic" {
+                            UserDefaultUtility.saveValueToUserDefaults(value: "\(SubscibeUserType.basic)", forKey: "SubscribedUserType")
+                        }
+                        else if strSubscriptionName == "Premium" {
+                            UserDefaultUtility.saveValueToUserDefaults(value: "\(SubscibeUserType.premium)", forKey: "SubscribedUserType")
                         }
                         
                         UserDefaultUtility.saveValueToUserDefaults(value: "YES", forKey: "isUserLoggedIn")

@@ -34,6 +34,7 @@ extension FeedbackVC
         self.setUpPlaceholderColor()
         self.setUpHeaderView()
         self.setupTextView()
+        self.setTextfileds()
     }
 }
 //MARK: General Methods
@@ -62,6 +63,23 @@ extension FeedbackVC
     {
         DeviceUtility.setHeaderViewHeight(constHeightHeader)
     }
+    func setTextfileds()
+    {
+        txtName.iq.toolbar.doneBarButton.setTarget(self, action: #selector(doneButtonClicked))
+        txtEmail.iq.toolbar.doneBarButton.setTarget(self, action: #selector(doneButtonClicked))
+
+    }
+    @objc func doneButtonClicked(_ sender: UIButton)
+    {
+        print(sender.tag)
+        if sender.tag == 0 {
+          updateBorder(for: txtName, isEditing: true)
+        }
+        else if sender.tag == 1 {
+            updateBorder(for: txtEmail, isEditing: true)
+        }
+    }
+    
     private func updateBorder(for textField: UITextField, isEditing: Bool) {
         
         

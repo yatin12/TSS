@@ -165,6 +165,7 @@ extension FavouriteListVC: UITableViewDelegate, UITableViewDataSource
         if strSelectedSegment == "Favourite"
         {
             let videoId = "\(objFavouriteResponse?.data?.videosLiked?[indexPath.row].id ?? "0")"
+            
             NavigationHelper.pushWithPassData(storyboardKey.InnerScreen, viewControllerIdentifier: "VideoDetailsVC", from: navigationController!, data: "\(videoId)")
 
         }

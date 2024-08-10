@@ -55,6 +55,7 @@ class NewDetailTBC: UITableViewCell {
         objBlogDetailsResponse = response
         
         lblTitle.text = "\(response?.data?.title ?? "")"
+        lblBlogCategory.text = strSelectedBlog.htmlToString()
 //        let htmlString = "\(response?.data?.description ?? "")"
 //        lblDesc.text = htmlString.htmlToString()
 
@@ -75,11 +76,11 @@ class NewDetailTBC: UITableViewCell {
         
     }
     @IBAction func btnTikTokTapped(_ sender: UIButton) {
-        let tiktokUrl: String = "\(objBlogDetailsResponse?.data?.tiktokURL ?? "")"
+        let tiktokUrl: String = "\(objBlogDetailsResponse?.data?.linkedin_url ?? "")"
         delegate?.cell(self, tikTokUrl: tiktokUrl)
     }
     @IBAction func btnInstaTapped(_ sender: UIButton) {
-        let instaURL: String = "\(objBlogDetailsResponse?.data?.instaURL ?? "")"
+        let instaURL: String = "\(objBlogDetailsResponse?.data?.twitter_url ?? "")"
         delegate?.cell(self, instagramUrl: instaURL)
     }
     
@@ -144,7 +145,7 @@ extension NewDetailTBC: UICollectionViewDataSource, UICollectionViewDelegateFlow
             cellToReturn.lblDesc.text = strDesc.htmlToString()
 
          //   cellToReturn.lblTitle.text = "\(objBlogDetailsResponse?.data?.relatedBlogs?[indexPath.item].title ?? "")"
-
+            cellToReturn.imgBlog.contentMode = .scaleAspectFit
             let strBlogUrl = "\(objBlogDetailsResponse?.data?.relatedBlogs?[indexPath.item].thumbnail ?? "")"
             cellToReturn.imgBlog.sd_setImage(with: URL(string: strBlogUrl), placeholderImage: UIImage(named: "icn_Placehoder"), options: [.progressiveLoad], context: nil)
             

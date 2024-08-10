@@ -18,6 +18,8 @@
 		180CC30F2C35A9AC00F469BD /* Reachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = 180CC30E2C35A9AC00F469BD /* Reachability.swift */; };
 		18127D6F2C31B6B100578ED6 /* HomeCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18127D6D2C31B6B100578ED6 /* HomeCollectionCell.swift */; };
 		18127D702C31B6B100578ED6 /* HomeCollectionCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 18127D6E2C31B6B100578ED6 /* HomeCollectionCell.xib */; };
+		181B20EA2C66429700B0FA04 /* Season1TBSCTC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 181B20E82C66429700B0FA04 /* Season1TBSCTC.swift */; };
+		181B20EB2C66429700B0FA04 /* Season1TBSCTC.xib in Resources */ = {isa = PBXBuildFile; fileRef = 181B20E92C66429700B0FA04 /* Season1TBSCTC.xib */; };
 		1821D9B82C312C240080D508 /* NotificationTBC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1821D9B62C312C240080D508 /* NotificationTBC.swift */; };
 		1821D9B92C312C240080D508 /* NotificationTBC.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1821D9B72C312C240080D508 /* NotificationTBC.xib */; };
 		1821D9BC2C3135550080D508 /* ContactUSVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1821D9BB2C3135550080D508 /* ContactUSVC.swift */; };
@@ -199,6 +201,8 @@
 		180CC30E2C35A9AC00F469BD /* Reachability.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Reachability.swift; sourceTree = "<group>"; };
 		18127D6D2C31B6B100578ED6 /* HomeCollectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeCollectionCell.swift; sourceTree = "<group>"; };
 		18127D6E2C31B6B100578ED6 /* HomeCollectionCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = HomeCollectionCell.xib; sourceTree = "<group>"; };
+		181B20E82C66429700B0FA04 /* Season1TBSCTC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Season1TBSCTC.swift; sourceTree = "<group>"; };
+		181B20E92C66429700B0FA04 /* Season1TBSCTC.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = Season1TBSCTC.xib; sourceTree = "<group>"; };
 		1821D9B62C312C240080D508 /* NotificationTBC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationTBC.swift; sourceTree = "<group>"; };
 		1821D9B72C312C240080D508 /* NotificationTBC.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = NotificationTBC.xib; sourceTree = "<group>"; };
 		1821D9BB2C3135550080D508 /* ContactUSVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactUSVC.swift; sourceTree = "<group>"; };
@@ -408,6 +412,15 @@
 			path = HomeCollectionCell;
 			sourceTree = "<group>";
 		};
+		181B20E72C66426E00B0FA04 /* Season1TBSCTC */ = {
+			isa = PBXGroup;
+			children = (
+				181B20E82C66429700B0FA04 /* Season1TBSCTC.swift */,
+				181B20E92C66429700B0FA04 /* Season1TBSCTC.xib */,
+			);
+			path = Season1TBSCTC;
+			sourceTree = "<group>";
+		};
 		1821D9B52C312C080080D508 /* NotificationTBC */ = {
 			isa = PBXGroup;
 			children = (
@@ -577,6 +590,7 @@
 		187237262C30165400F8416F /* HomeVC */ = {
 			isa = PBXGroup;
 			children = (
+				181B20E72C66426E00B0FA04 /* Season1TBSCTC */,
 				18F1BEF72C33056D00E7716D /* MeetSisterCTC */,
 				18127D6C2C31B69900578ED6 /* HomeCollectionCell */,
 				184789D22C31724D0000F42A /* HomeTBC */,
@@ -1049,6 +1063,7 @@
 				18F3C7982C2FCA79008944E7 /* Frameworks */,
 				18F3C7992C2FCA79008944E7 /* Resources */,
 				3DA2799EF332B03181BD61B0 /* [CP] Embed Pods Frameworks */,
+				780A0FCCB4E0E8D76B939477 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -1151,6 +1166,7 @@
 				18F3C7DE2C2FCDF9008944E7 /* Poppins-MediumItalic.ttf in Resources */,
 				18F3C7D32C2FCDF9008944E7 /* Poppins-ExtraLightItalic.ttf in Resources */,
 				182413482C3D1DB700C8DEAB /* CountryTBC.xib in Resources */,
+				181B20EB2C66429700B0FA04 /* Season1TBSCTC.xib in Resources */,
 				18F3C7D82C2FCDF9008944E7 /* Poppins-SemiBoldItalic.ttf in Resources */,
 				18F3C7D12C2FCDF9008944E7 /* Poppins-SemiBold.ttf in Resources */,
 				185A270E2C345305000C32C5 /* GoogleService-Info.plist in Resources */,
@@ -1194,6 +1210,23 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-TSS/Pods-TSS-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		780A0FCCB4E0E8D76B939477 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-TSS/Pods-TSS-resources-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-TSS/Pods-TSS-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-TSS/Pods-TSS-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		80FE7306894B26A4DB320D72 /* [CP] Check Pods Manifest.lock */ = {
@@ -1330,6 +1363,7 @@
 				182413502C3D6FF100C8DEAB /* talkShowViewModel.swift in Sources */,
 				18C87DEA2C42786100CC6C0E /* UpComingTBC.swift in Sources */,
 				1872372E2C3016A400F8416F /* TalkShowVC.swift in Sources */,
+				181B20EA2C66429700B0FA04 /* Season1TBSCTC.swift in Sources */,
 				185A271E2C345C2C000C32C5 /* NewsCTC.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1475,8 +1509,9 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = CB9YG6852Q;
+				DEVELOPMENT_TEAM = 837R9AY4F8;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
+				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = TSS/Info.plist;
 				INFOPLIST_KEY_NSCameraUsageDescription = "Need to access your camera to capture a photo add and update profile picture.";
@@ -1493,7 +1528,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.uveaa.TSS1;
+				PRODUCT_BUNDLE_IDENTIFIER = com.uveaa.solar;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
@@ -1511,8 +1546,9 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = CB9YG6852Q;
+				DEVELOPMENT_TEAM = 837R9AY4F8;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
+				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = TSS/Info.plist;
 				INFOPLIST_KEY_NSCameraUsageDescription = "Need to access your camera to capture a photo add and update profile picture.";
@@ -1529,7 +1565,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.uveaa.TSS1;
+				PRODUCT_BUNDLE_IDENTIFIER = com.uveaa.solar;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;

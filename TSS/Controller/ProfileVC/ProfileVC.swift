@@ -41,6 +41,7 @@ extension ProfileVC
         self.getUserId()
         self.passViewControllerObjToViewModel()
         self.setUpHeaderView()
+        self.setTextfileds()
         self.setUpPlaceholderColor()
         self.apiCallGetProfile()
     }
@@ -74,6 +75,31 @@ extension ProfileVC
     func setUpHeaderView()
     {
         DeviceUtility.setHeaderViewHeight(constHeightHeader)
+    }
+    func setTextfileds()
+    {
+        txtDisplayNm.iq.toolbar.doneBarButton.setTarget(self, action: #selector(doneButtonClicked))
+        txtEmail.iq.toolbar.doneBarButton.setTarget(self, action: #selector(doneButtonClicked))
+        txtPhone.iq.toolbar.doneBarButton.setTarget(self, action: #selector(doneButtonClicked))
+        txtPassword.iq.toolbar.doneBarButton.setTarget(self, action: #selector(doneButtonClicked))
+        txtConfPassword.iq.toolbar.doneBarButton.setTarget(self, action: #selector(doneButtonClicked))
+
+    }
+    @objc func doneButtonClicked(_ sender: UIButton)
+    {
+        print(sender.tag)
+        if sender.tag == 0 {
+          updateBorder(for: txtDisplayNm, isEditing: true)
+        }
+        else if sender.tag == 1 {
+            updateBorder(for: txtEmail, isEditing: true)
+        }
+        else if sender.tag == 2 {
+            updateBorder(for: txtPhone, isEditing: true)
+        }
+        else if sender.tag == 3 {
+            updateBorder(for: txtConfPassword, isEditing: true)
+        }
     }
     private func updateBorder(for textField: UITextField, isEditing: Bool) {
 

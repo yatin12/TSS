@@ -2,37 +2,68 @@ PODS:
   - Alamofire (5.8.1)
   - Cosmos (25.0.1)
   - DropDown (2.3.13)
+  - FBAEMKit (15.1.0):
+    - FBSDKCoreKit_Basics (= 15.1.0)
+  - FBSDKCoreKit (15.1.0):
+    - FBAEMKit (= 15.1.0)
+    - FBSDKCoreKit_Basics (= 15.1.0)
+  - FBSDKCoreKit_Basics (15.1.0)
+  - FBSDKLoginKit (15.1.0):
+    - FBSDKCoreKit (= 15.1.0)
+  - FBSDKShareKit (15.1.0):
+    - FBSDKCoreKit (= 15.1.0)
   - KVSpinnerView (1.0.1)
   - SDWebImage (5.18.11):
     - SDWebImage/Core (= 5.18.11)
   - SDWebImage/Core (5.18.11)
   - TikTokOpenSDK (5.0.15)
+  - TwitterCore (3.2.0)
+  - TwitterKit (3.4.2):
+    - TwitterCore (>= 3.2.0)
 
 DEPENDENCIES:
   - Alamofire
   - Cosmos (~> 25.0)
   - DropDown (~> 2.3.3)
+  - FBSDKCoreKit (~> 15.0)
+  - FBSDKLoginKit (~> 15.0)
+  - FBSDKShareKit (~> 15.0)
   - KVSpinnerView
   - SDWebImage
   - TikTokOpenSDK
+  - TwitterKit (~> 3.0)
 
 SPEC REPOS:
   trunk:
     - Alamofire
     - Cosmos
     - DropDown
+    - FBAEMKit
+    - FBSDKCoreKit
+    - FBSDKCoreKit_Basics
+    - FBSDKLoginKit
+    - FBSDKShareKit
     - KVSpinnerView
     - SDWebImage
     - TikTokOpenSDK
+    - TwitterCore
+    - TwitterKit
 
 SPEC CHECKSUMS:
   Alamofire: 3ca42e259043ee0dc5c0cdd76c4bc568b8e42af7
   Cosmos: 02db0a1c953107049bfd2d7af19ceef55ecb7e98
   DropDown: 8a2116376c1981888557f72ec2ffc9a5e0e456ec
+  FBAEMKit: c7f82b5145d446bcbbcd50485c032689032fc6a2
+  FBSDKCoreKit: 7542746fc63a2a38dd6a865eeb54268341f37b83
+  FBSDKCoreKit_Basics: 92d6b26c0bed30ab09bbdd96dccaa26e6c9978d1
+  FBSDKLoginKit: 4e275d30cf90e92bdf3a7c82857a8642abf23037
+  FBSDKShareKit: 18e8ba99d38e3e92c631120cdcf162c45b661e0f
   KVSpinnerView: ce89cec80a5776ba4639c312770f01c8a091e80a
   SDWebImage: a3ba0b8faac7228c3c8eadd1a55c9c9fe5e16457
   TikTokOpenSDK: dc1199ba9c6d7815aee0eaca6ec80ad13f7d9c1f
+  TwitterCore: 8cbc9ad34d91c63a0035ea05bfbfc0d7ca72a28c
+  TwitterKit: 5e4f41d70b9abdb41df5467f52d7aa2c0fd26ebb
 
-PODFILE CHECKSUM: 27764bc50393e80fefe626bf462e149aea104a92
+PODFILE CHECKSUM: 41a0d6426fb4cd707fcd1ff158d0b3abd0401527
 
 COCOAPODS: 1.15.0

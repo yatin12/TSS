@@ -33,6 +33,7 @@ extension ContactUSVC
         self.setUpPlaceholderColor()
         self.setUpHeaderView()
         self.setupTextView()
+        self.setTextfileds()
     }
 }
 //MARK: General Methods
@@ -60,6 +61,22 @@ extension ContactUSVC
     func setUpHeaderView()
     {
         DeviceUtility.setHeaderViewHeight(constHeightHeader)
+    }
+    func setTextfileds()
+    {
+        txtName.iq.toolbar.doneBarButton.setTarget(self, action: #selector(doneButtonClicked))
+        txtEmail.iq.toolbar.doneBarButton.setTarget(self, action: #selector(doneButtonClicked))
+
+    }
+    @objc func doneButtonClicked(_ sender: UIButton)
+    {
+        print(sender.tag)
+        if sender.tag == 0 {
+          updateBorder(for: txtName, isEditing: true)
+        }
+        else if sender.tag == 1 {
+            updateBorder(for: txtEmail, isEditing: true)
+        }
     }
     private func updateBorder(for textField: UITextField, isEditing: Bool) {
         
@@ -136,6 +153,7 @@ extension ContactUSVC
 //MARK: UITextFieldDelegate
 extension ContactUSVC: UITextFieldDelegate
 {
+    
     func textFieldDidBeginEditing(_ textField: UITextField) {
         updateBorder(for: textField, isEditing: true)
         

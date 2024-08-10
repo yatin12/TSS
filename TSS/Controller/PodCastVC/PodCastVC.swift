@@ -10,7 +10,8 @@ import WebKit
 import KVSpinnerView
 
 class PodCastVC: UIViewController {
-    
+    var isSubscribedUser: String = ""
+
     var userRole: String = ""
     @IBOutlet weak var objWebView: WKWebView!
     @IBOutlet weak var constHeightHeader: NSLayoutConstraint!
@@ -21,13 +22,37 @@ extension PodCastVC
     override func viewDidLoad() {
         super.viewDidLoad()
         self.setUpHeaderView()
-        self.loadPodcastURL()
+        self.setNotificationObserverMethod()
+        self.checkSubscribeUserOrnot()
     }
 
 }
 //MARK: General Methods
 extension PodCastVC
 {
+    func checkSubscribeUserOrnot()
+    {
+        isSubscribedUser = AppUserDefaults.object(forKey: "SubscribedUserType") as? String ?? "\(SubscibeUserType.free)"
+        if isSubscribedUser != "\(SubscibeUserType.free)"
+        {
+            self.loadPodcastURL()
+        }
+        else
+        {
+            AlertUtility.presentSimpleAlert(in: self, title: "", message: "\(AlertMessages.subscribeForTabMsg)")
+
+        }
+    }
+    func setNotificationObserverMethod()
+    {
+        NotificationCenter.default.removeObserver(self)
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(self.apicallPodcastTab(notification:)), name: Notification.Name("APIcall_PodCast"), object: nil)
+    }
+    @objc func apicallPodcastTab(notification: Notification)
+    {
+        self.checkSubscribeUserOrnot()
+    }
     func setUpHeaderView()
     {
         DeviceUtility.setHeaderViewHeight(constHeightHeader)

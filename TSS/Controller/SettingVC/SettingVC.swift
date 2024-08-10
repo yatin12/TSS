@@ -13,7 +13,7 @@ class SettingVC: UIViewController {
     let arr = ["Notifications", "Subscriber", "Account Setting", "App Preferences", "Favourites", "Upcoming Events", "Help & Feedback", "About Us", "Privacy Policy", "Term & Condition", "Contact Us", "Logout", "Delete Account"]
     var userRole: String = ""
     var userId: String = ""
-    
+    var isSubscribedUser: String = ""
     //  - Outlets - 
     let objDeleteAccountViewModel = deleteAccountViewModel()
     @IBOutlet weak var tblSetting: UITableView!
@@ -85,6 +85,7 @@ extension SettingVC
             UserDefaultUtility.saveValueToUserDefaults(value: "NO", forKey: "isNotificationOn")
         }
     }
+    
 }
 //MARK: UITableViewDelegate, UITableViewDataSource
 extension SettingVC: UITableViewDelegate, UITableViewDataSource
@@ -189,7 +190,18 @@ extension SettingVC: UITableViewDelegate, UITableViewDataSource
             //Upcoming events
             if userRole == USERROLE.SignInUser
             {
-                NavigationHelper.push(storyboardKey.InnerScreen, viewControllerIdentifier: "UpComingEventVC", from: navigationController!, animated: true)
+                isSubscribedUser = AppUserDefaults.object(forKey: "SubscribedUserType") as? String ?? "\(SubscibeUserType.free)"
+                if isSubscribedUser == "\(SubscibeUserType.premium)"
+                {
+                    NavigationHelper.push(storyboardKey.InnerScreen, viewControllerIdentifier: "UpComingEventVC", from: navigationController!, animated: true)
+
+                }
+                else
+                {
+                    AlertUtility.presentSimpleAlert(in: self, title: "", message: "\(AlertMessages.subscribeForTabMsg)")
+
+                }
+                
             }
             else
             {
@@ -215,10 +227,12 @@ extension SettingVC: UITableViewDelegate, UITableViewDataSource
             break
         case 8:
             // Privacy Policy
+            isFromPrivacyViewSetting = true
             NavigationHelper.push(storyboardKey.InnerScreen, viewControllerIdentifier: "PrivacyPolicyVC", from: navigationController!, animated: true)
             break
         case 9:
             // Term & Condition
+            isFromTermsViewSetting = true
             NavigationHelper.push(storyboardKey.InnerScreen, viewControllerIdentifier: "TermsConditionVC", from: navigationController!, animated: true)
             break
         case 10:

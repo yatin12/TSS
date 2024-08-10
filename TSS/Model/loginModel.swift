@@ -55,7 +55,8 @@ struct MembershipLevel: Codable {
     let id, membershipLevelID, subscriptionID, name: String?
     let description, confirmation, expirationNumber, expirationPeriod: String?
     let allowSignups: String?
-    let initialPayment, billingAmount: Int?
+    let billingAmount: String?
+    let initialPayment: String?
     let cycleNumber, cyclePeriod, billingLimit: String?
     let trialAmount: Int?
     let trialLimit, codeID, startdate: String?

@@ -623,15 +623,27 @@
                                                 <rect key="frame" x="0.0" y="0.0" width="375" height="444"/>
                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                             </tableView>
+                                            <wkWebView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Tlc-47-HLI">
+                                                <rect key="frame" x="0.0" y="0.0" width="375" height="444"/>
+                                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                <wkWebViewConfiguration key="configuration">
+                                                    <audiovisualMediaTypes key="mediaTypesRequiringUserActionForPlayback" none="YES"/>
+                                                    <wkPreferences key="preferences"/>
+                                                </wkWebViewConfiguration>
+                                            </wkWebView>
                                         </subviews>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <constraints>
                                             <constraint firstAttribute="trailing" secondItem="fMZ-3Z-8oC" secondAttribute="trailing" id="2Gq-VE-aXE"/>
+                                            <constraint firstAttribute="trailing" secondItem="Tlc-47-HLI" secondAttribute="trailing" id="6XI-fN-eB7"/>
                                             <constraint firstItem="fMZ-3Z-8oC" firstAttribute="leading" secondItem="lul-hW-WL9" secondAttribute="leading" id="Axv-h5-r8a"/>
                                             <constraint firstAttribute="bottom" secondItem="fMZ-3Z-8oC" secondAttribute="bottom" id="HQ8-iu-bCb"/>
                                             <constraint firstItem="fMZ-3Z-8oC" firstAttribute="top" secondItem="lul-hW-WL9" secondAttribute="top" id="V5R-2z-UJk"/>
+                                            <constraint firstItem="Tlc-47-HLI" firstAttribute="leading" secondItem="lul-hW-WL9" secondAttribute="leading" id="aH4-KN-SXs"/>
                                             <constraint firstItem="f2h-p6-S0w" firstAttribute="centerX" secondItem="lul-hW-WL9" secondAttribute="centerX" id="bOY-su-TyE"/>
                                             <constraint firstItem="f2h-p6-S0w" firstAttribute="centerY" secondItem="lul-hW-WL9" secondAttribute="centerY" id="dLc-U4-lkB"/>
+                                            <constraint firstItem="Tlc-47-HLI" firstAttribute="top" secondItem="lul-hW-WL9" secondAttribute="top" id="fxf-kC-9S4"/>
+                                            <constraint firstAttribute="bottom" secondItem="Tlc-47-HLI" secondAttribute="bottom" id="sop-SC-3hz"/>
                                         </constraints>
                                     </view>
                                 </subviews>
@@ -667,6 +679,7 @@
                         <outlet property="imgLogo" destination="5Nn-7z-eyV" id="eZv-Dn-pfH"/>
                         <outlet property="lblNoData" destination="f2h-p6-S0w" id="Rrt-go-cu1"/>
                         <outlet property="objCollectionViewCategory" destination="Tvw-yQ-A2Y" id="RMA-4f-Ywh"/>
+                        <outlet property="objWebViewSeason1BTS" destination="Tlc-47-HLI" id="mdb-R8-nNm"/>
                         <outlet property="tblTalkShow" destination="fMZ-3Z-8oC" id="RAP-Jc-4GA"/>
                         <outlet property="vwBack" destination="QDE-1U-vqH" id="d5y-OI-TYo"/>
                     </connections>
@@ -1769,7 +1782,7 @@
                                                                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="NcK-eq-kKl">
                                                                                         <rect key="frame" x="0.0" y="26.666666666666689" width="329" height="48.333333333333343"/>
                                                                                         <subviews>
-                                                                                            <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Enter Email" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="cDg-7c-iBh">
+                                                                                            <textField opaque="NO" tag="1" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Enter Email" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="cDg-7c-iBh">
                                                                                                 <rect key="frame" x="8" y="2" width="313" height="44.333333333333336"/>
                                                                                                 <color key="textColor" name="ThemeFontColor"/>
                                                                                                 <fontDescription key="fontDescription" name="Poppins-Regular" family="Poppins" pointSize="14"/>
@@ -1829,7 +1842,7 @@
                                                                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="m2V-cL-aUm">
                                                                                         <rect key="frame" x="0.0" y="26.666666666666632" width="329" height="48.333333333333343"/>
                                                                                         <subviews>
-                                                                                            <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Enter Phone" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="ewf-Le-miD">
+                                                                                            <textField opaque="NO" tag="2" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Enter Phone" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="ewf-Le-miD">
                                                                                                 <rect key="frame" x="8" y="2" width="313" height="44.333333333333336"/>
                                                                                                 <color key="textColor" name="ThemeFontColor"/>
                                                                                                 <fontDescription key="fontDescription" name="Poppins-Regular" family="Poppins" pointSize="14"/>
@@ -1889,7 +1902,7 @@
                                                                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="sgC-9F-ube">
                                                                                         <rect key="frame" x="0.0" y="26.666666666666632" width="323" height="48.333333333333343"/>
                                                                                         <subviews>
-                                                                                            <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Enter Password" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Ccc-h2-lsC">
+                                                                                            <textField opaque="NO" tag="3" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Enter Password" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Ccc-h2-lsC">
                                                                                                 <rect key="frame" x="8" y="2" width="265" height="44.333333333333336"/>
                                                                                                 <color key="textColor" name="ThemeFontColor"/>
                                                                                                 <fontDescription key="fontDescription" name="Poppins-Regular" family="Poppins" pointSize="14"/>
@@ -1980,7 +1993,7 @@
                                                                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="3wZ-ms-vQu">
                                                                                         <rect key="frame" x="0.0" y="26.666666666666632" width="323" height="48.333333333333343"/>
                                                                                         <subviews>
-                                                                                            <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Enter Confirm Password" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="63a-IW-N4X">
+                                                                                            <textField opaque="NO" tag="4" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Enter Confirm Password" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="63a-IW-N4X">
                                                                                                 <rect key="frame" x="8" y="2" width="265" height="44.333333333333336"/>
                                                                                                 <color key="textColor" name="ThemeFontColor"/>
                                                                                                 <fontDescription key="fontDescription" name="Poppins-Regular" family="Poppins" pointSize="14"/>
@@ -2815,21 +2828,21 @@ addressing real issues &amp; promoting Africa.</string>
                                                                                 <color key="textColor" name="ThemeFontColor"/>
                                                                                 <nil key="highlightedColor"/>
                                                                             </label>
-                                                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Juq-iY-dRL">
-                                                                                <rect key="frame" x="0.0" y="100" width="329" height="50"/>
+                                                                            <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Juq-iY-dRL">
+                                                                                <rect key="frame" x="0.0" y="100" width="329" height="0.0"/>
                                                                                 <subviews>
-                                                                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="hFP-WE-xRG" userLabel="View-Setting">
-                                                                                        <rect key="frame" x="0.0" y="0.0" width="40" height="50"/>
+                                                                                    <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="hFP-WE-xRG" userLabel="View-Setting">
+                                                                                        <rect key="frame" x="0.0" y="0.0" width="40" height="0.0"/>
                                                                                         <subviews>
                                                                                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="icn_FB" translatesAutoresizingMaskIntoConstraints="NO" id="R61-Hz-Lt8">
-                                                                                                <rect key="frame" x="11" y="16" width="18" height="18"/>
+                                                                                                <rect key="frame" x="11" y="-9" width="18" height="18"/>
                                                                                                 <constraints>
                                                                                                     <constraint firstAttribute="width" constant="18" id="7Ff-Pa-ovH"/>
                                                                                                     <constraint firstAttribute="height" constant="18" id="s08-Q4-amy"/>
                                                                                                 </constraints>
                                                                                             </imageView>
                                                                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="m8r-nl-ObO">
-                                                                                                <rect key="frame" x="0.0" y="0.0" width="40" height="50"/>
+                                                                                                <rect key="frame" x="0.0" y="0.0" width="40" height="0.0"/>
                                                                                                 <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                                                                                                 <connections>
                                                                                                     <action selector="btnFBTapped:" destination="t0m-u0-IIF" eventType="touchUpInside" id="CzW-n4-DBd"/>
@@ -2847,18 +2860,18 @@ addressing real issues &amp; promoting Africa.</string>
                                                                                             <constraint firstAttribute="width" constant="40" id="avy-Sx-X41"/>
                                                                                         </constraints>
                                                                                     </view>
-                                                                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="SBs-iV-cGl" userLabel="View-Search">
-                                                                                        <rect key="frame" x="40" y="0.0" width="40" height="50"/>
+                                                                                    <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="SBs-iV-cGl" userLabel="View-Search">
+                                                                                        <rect key="frame" x="40" y="0.0" width="40" height="0.0"/>
                                                                                         <subviews>
                                                                                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="icn_Inst" translatesAutoresizingMaskIntoConstraints="NO" id="kab-ZR-XQf">
-                                                                                                <rect key="frame" x="11" y="16" width="18" height="18"/>
+                                                                                                <rect key="frame" x="11" y="-9" width="18" height="18"/>
                                                                                                 <constraints>
                                                                                                     <constraint firstAttribute="height" constant="18" id="Get-M9-Fgr"/>
                                                                                                     <constraint firstAttribute="width" constant="18" id="VG6-0L-qbJ"/>
                                                                                                 </constraints>
                                                                                             </imageView>
                                                                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3cb-HU-5VX">
-                                                                                                <rect key="frame" x="0.0" y="0.0" width="40" height="50"/>
+                                                                                                <rect key="frame" x="0.0" y="0.0" width="40" height="0.0"/>
                                                                                                 <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                                                                                                 <connections>
                                                                                                     <action selector="btnInstaTapped:" destination="t0m-u0-IIF" eventType="touchUpInside" id="9ki-tA-1z1"/>
@@ -2876,18 +2889,18 @@ addressing real issues &amp; promoting Africa.</string>
                                                                                             <constraint firstItem="3cb-HU-5VX" firstAttribute="top" secondItem="SBs-iV-cGl" secondAttribute="top" id="knt-SZ-PPk"/>
                                                                                         </constraints>
                                                                                     </view>
-                                                                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="UXz-7W-lzF" userLabel="View-Notification">
-                                                                                        <rect key="frame" x="80" y="0.0" width="40" height="50"/>
+                                                                                    <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="UXz-7W-lzF" userLabel="View-Notification">
+                                                                                        <rect key="frame" x="80" y="0.0" width="40" height="0.0"/>
                                                                                         <subviews>
                                                                                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="icn_tiktok" translatesAutoresizingMaskIntoConstraints="NO" id="16q-6J-S2n">
-                                                                                                <rect key="frame" x="11" y="16" width="18" height="18"/>
+                                                                                                <rect key="frame" x="11" y="-9" width="18" height="18"/>
                                                                                                 <constraints>
                                                                                                     <constraint firstAttribute="width" constant="18" id="Ib2-Bm-pjS"/>
                                                                                                     <constraint firstAttribute="height" constant="18" id="NrJ-Sl-Rnk"/>
                                                                                                 </constraints>
                                                                                             </imageView>
                                                                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4tK-h2-wKF">
-                                                                                                <rect key="frame" x="0.0" y="0.0" width="40" height="50"/>
+                                                                                                <rect key="frame" x="0.0" y="0.0" width="40" height="0.0"/>
                                                                                                 <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                                                                                                 <connections>
                                                                                                     <action selector="btnTikTokTapped:" destination="t0m-u0-IIF" eventType="touchUpInside" id="pIk-vu-dTq"/>
@@ -2910,7 +2923,7 @@ addressing real issues &amp; promoting Africa.</string>
                                                                                 <constraints>
                                                                                     <constraint firstItem="hFP-WE-xRG" firstAttribute="top" secondItem="Juq-iY-dRL" secondAttribute="top" id="67e-Lw-s5f"/>
                                                                                     <constraint firstItem="UXz-7W-lzF" firstAttribute="top" secondItem="Juq-iY-dRL" secondAttribute="top" id="FN2-sX-iRd"/>
-                                                                                    <constraint firstAttribute="height" constant="50" id="Koa-Ki-iqC"/>
+                                                                                    <constraint firstAttribute="height" id="Koa-Ki-iqC"/>
                                                                                     <constraint firstAttribute="bottom" secondItem="SBs-iV-cGl" secondAttribute="bottom" id="Pk3-uE-Rfg"/>
                                                                                     <constraint firstItem="SBs-iV-cGl" firstAttribute="leading" secondItem="hFP-WE-xRG" secondAttribute="trailing" id="fGX-4b-oh2"/>
                                                                                     <constraint firstAttribute="bottom" secondItem="hFP-WE-xRG" secondAttribute="bottom" id="jk6-jp-Nvt"/>
@@ -3023,7 +3036,7 @@ addressing real issues &amp; promoting Africa.</string>
                                                                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="a2m-Lo-pO7">
                                                                                         <rect key="frame" x="0.0" y="26.666666666666689" width="329" height="48.333333333333343"/>
                                                                                         <subviews>
-                                                                                            <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Enter Email" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="1Ru-RG-wYJ">
+                                                                                            <textField opaque="NO" tag="1" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Enter Email" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="1Ru-RG-wYJ">
                                                                                                 <rect key="frame" x="8" y="2" width="313" height="44.333333333333336"/>
                                                                                                 <color key="textColor" name="ThemeFontColor"/>
                                                                                                 <fontDescription key="fontDescription" name="Poppins-Regular" family="Poppins" pointSize="14"/>
@@ -3497,7 +3510,7 @@ addressing real issues &amp; promoting Africa.</string>
                                                                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="rax-HN-NyJ">
                                                                                         <rect key="frame" x="0.0" y="26.666666666666661" width="329" height="48.333333333333343"/>
                                                                                         <subviews>
-                                                                                            <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Enter Email" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="bcK-gf-FA0">
+                                                                                            <textField opaque="NO" tag="1" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Enter Email" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="bcK-gf-FA0">
                                                                                                 <rect key="frame" x="8" y="2" width="313" height="44.333333333333336"/>
                                                                                                 <color key="textColor" name="ThemeFontColor"/>
                                                                                                 <fontDescription key="fontDescription" name="Poppins-Regular" family="Poppins" pointSize="14"/>
@@ -3882,6 +3895,8 @@ addressing real issues &amp; promoting Africa.</string>
                     <connections>
                         <outlet property="constHeightHeader" destination="bh2-pm-CUC" id="toz-IC-Yey"/>
                         <outlet property="objWebView" destination="cjS-Qs-9uB" id="2kY-sb-yeX"/>
+                        <outlet property="vwNotification" destination="2Qo-kg-O4n" id="sjG-WP-F8g"/>
+                        <outlet property="vwSearch" destination="3XH-Jt-udO" id="6lW-Vu-NfI"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="U9g-PY-d79" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -4061,6 +4076,8 @@ addressing real issues &amp; promoting Africa.</string>
                     <connections>
                         <outlet property="constHeightHeader" destination="ShM-0P-PZW" id="cqP-J6-P76"/>
                         <outlet property="objWebView" destination="pAh-k8-Uto" id="77U-28-igN"/>
+                        <outlet property="vwNotification" destination="Nli-1e-M8p" id="2hK-w1-tOv"/>
+                        <outlet property="vwSearch" destination="oyh-60-Z1B" id="8xx-eS-gJ5"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="cHd-L9-c1R" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -6038,7 +6055,7 @@ appointments.</string>
                                                         </constraints>
                                                     </imageView>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Season1 TBS" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="n0h-RR-qco" userLabel="Email  or  Username">
-                                                        <rect key="frame" x="40.999999999999993" y="35.333333333333336" width="110.33333333333331" height="25.333333333333336"/>
+                                                        <rect key="frame" x="41" y="35.333333333333336" width="110" height="25.333333333333336"/>
                                                         <fontDescription key="fontDescription" name="Poppins-Medium" family="Poppins" pointSize="18"/>
                                                         <color key="textColor" name="ThemeFontColor"/>
                                                         <nil key="highlightedColor"/>

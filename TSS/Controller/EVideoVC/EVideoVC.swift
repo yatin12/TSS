@@ -15,6 +15,7 @@ class EVideoVC: UIViewController {
 
     private let objVideoListViewModel = videoListViewModel()
     private let objblogCategoryViewModel = blogCategoryViewModel()
+    var isSubscribedUser: String = ""
     var userId: String = ""
     var userRole: String = ""
     var selectedIndex: Int = 0
@@ -41,13 +42,27 @@ extension EVideoVC
         self.registerNib()
         self.setupCollectionview()
         self.setNotificationObserverMethod()
-        self.apiCallGetBlogCategoryList()
+        //self.apiCallGetBlogCategoryList()
+        self.checkSubscribeUserOrnot()
        
     }
 }
 //MARK: General Methods
 extension EVideoVC
 {
+    func checkSubscribeUserOrnot()
+    {
+        isSubscribedUser = AppUserDefaults.object(forKey: "SubscribedUserType") as? String ?? "\(SubscibeUserType.free)"
+        if isSubscribedUser != "\(SubscibeUserType.free)"
+        {
+            self.apiCallGetBlogCategoryList()
+        }
+        else
+        {
+            AlertUtility.presentSimpleAlert(in: self, title: "", message: "\(AlertMessages.subscribeForTabMsg)")
+
+        }
+    }
     func setNotificationObserverMethod()
     {
         NotificationCenter.default.removeObserver(self)
@@ -56,7 +71,7 @@ extension EVideoVC
     }
     @objc func apicallEvideoTab(notification: Notification)
     {
-        self.apiCallGetBlogCategoryList()
+        self.checkSubscribeUserOrnot()
     }
     func getUserId()
     {

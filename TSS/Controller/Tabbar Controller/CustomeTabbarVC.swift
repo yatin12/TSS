@@ -84,7 +84,7 @@ class CustomeTabbarVC: UITabBarController {
             //PodCast
             isFromViewAll = false
             
-            NotificationCenter.default.post(name: Notification.Name("APIcallforProfileTab"), object: nil, userInfo: nil)
+            NotificationCenter.default.post(name: Notification.Name("APIcall_PodCast"), object: nil, userInfo: nil)
         }
     }
     override var traitCollection: UITraitCollection {

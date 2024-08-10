@@ -48,6 +48,7 @@ extension RegistrationVC
         self.setUpPlaceholderColor()
         self.setUpUIRegisterLabel()
         self.setUpUIForLowerDeclaration()
+        self.setTextfileds()
        
     }
 }
@@ -134,11 +135,56 @@ extension RegistrationVC
     @objc func termsTapped() {
         // Handle Terms of Use tap
         print("Terms of Use tapped")
+        isFromTermsViewSetting = false
+        NavigationHelper.push(storyboardKey.InnerScreen, viewControllerIdentifier: "TermsConditionVC", from: navigationController!, animated: true)
     }
     
     @objc func privacyTapped() {
         // Handle Privacy Policy tap
         print("Privacy Policy tapped")
+        isFromPrivacyViewSetting = false
+        NavigationHelper.push(storyboardKey.InnerScreen, viewControllerIdentifier: "PrivacyPolicyVC", from: navigationController!, animated: true)
+    }
+    func setTextfileds()
+    {
+        txtFristNm.iq.toolbar.doneBarButton.setTarget(self, action: #selector(doneButtonClicked))
+        txtLastNm.iq.toolbar.doneBarButton.setTarget(self, action: #selector(doneButtonClicked))
+        txtUserNm.iq.toolbar.doneBarButton.setTarget(self, action: #selector(doneButtonClicked))
+        txtEmail.iq.toolbar.doneBarButton.setTarget(self, action: #selector(doneButtonClicked))
+        txtPassword.iq.toolbar.doneBarButton.setTarget(self, action: #selector(doneButtonClicked))
+        txtConfPassword.iq.toolbar.doneBarButton.setTarget(self, action: #selector(doneButtonClicked))
+        txtBirthday.iq.toolbar.doneBarButton.setTarget(self, action: #selector(doneButtonClicked))
+        txtGendar.iq.toolbar.doneBarButton.setTarget(self, action: #selector(doneButtonClicked))
+
+        
+    }
+    @objc func doneButtonClicked(_ sender: UIButton)
+    {
+        print(sender.tag)
+        if sender.tag == 0 {
+          updateBorder(for: txtFristNm, isEditing: true)
+        }
+        else if sender.tag == 1 {
+            updateBorder(for: txtLastNm, isEditing: true)
+        }
+        else if sender.tag == 2 {
+            updateBorder(for: txtUserNm, isEditing: true)
+        }
+        else if sender.tag == 3 {
+            updateBorder(for: txtEmail, isEditing: true)
+        }
+        else if sender.tag == 4 {
+            updateBorder(for: txtPassword, isEditing: true)
+        }
+        else if sender.tag == 5 {
+            updateBorder(for: txtConfPassword, isEditing: true)
+        }
+        else if sender.tag == 6 {
+            updateBorder(for: txtBirthday, isEditing: true)
+        }
+        else if sender.tag == 7 {
+            updateBorder(for: txtGendar, isEditing: true)
+        }
     }
     private func updateBorder(for textField: UITextField, isEditing: Bool) {
         
@@ -510,8 +556,19 @@ extension RegistrationVC
                 
                     if loginResponse.settings?.success == true
                     {
+                        let strSubscriptionName = loginResponse.data?.membershipLevel?.name ?? "\(SubscibeUserType.free)"
+                        if strSubscriptionName == "Free" {
+                            UserDefaultUtility.saveValueToUserDefaults(value: "\(SubscibeUserType.free)", forKey: "SubscribedUserType")
+                        }
+                        else if strSubscriptionName == "Basic" {
+                            UserDefaultUtility.saveValueToUserDefaults(value: "\(SubscibeUserType.basic)", forKey: "SubscribedUserType")
+                        }
+                        else if strSubscriptionName == "Premium" {
+                            UserDefaultUtility.saveValueToUserDefaults(value: "\(SubscibeUserType.premium)", forKey: "SubscribedUserType")
+                        }
+                        
                         UserDefaultUtility.saveValueToUserDefaults(value: "YES", forKey: "isUserLoggedIn")
-                        UserDefaultUtility.saveValueToUserDefaults(value: "\(loginResponse.data?.userID ?? 0)", forKey: "USERID")
+                        UserDefaultUtility.saveValueToUserDefaults(value: "\(loginResponse.data?.userID ?? "0")", forKey: "USERID")
                         UserDefaultUtility.saveValueToUserDefaults(value: "\(loginResponse.settings?.authorization ?? "")", forKey: "AUTHTOKEN")
                         UserDefaultUtility.saveValueToUserDefaults(value: "SignInUser", forKey: "USERROLE")
 

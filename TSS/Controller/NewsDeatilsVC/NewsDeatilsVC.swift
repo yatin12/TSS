@@ -8,6 +8,8 @@
 import UIKit
 import KVSpinnerView
 import Photos
+import TwitterKit
+import FBSDKShareKit
 
 class NewsDeatilsVC: UIViewController {
     
@@ -98,11 +100,50 @@ extension NewsDeatilsVC: UITableViewDelegate, UITableViewDataSource
 }
 extension NewsDeatilsVC: NewDetailTBCDelegate
 {
-    func cell(_ cell: NewDetailTBC, faceBookUrl: String, sender: Any) {
+    func cell(_ cell: NewDetailTBC, faceBookUrl: String, sender: Any)
+    {
+        //https://test.fha.nqn.mybluehostin.me?p=10191
+        print("SocialMediaUrl-->\(faceBookUrl)")
+        let urlString = faceBookUrl
+        
+        if let decodedURL = urlString.removingPercentEncoding {
+            print("Decoded URL: \(decodedURL)")
+            
+            
+            guard let url = URL(string: urlString) else {
+                    // Handle invalid URL
+                    let alert = UIAlertController(title: "Error", message: "Invalid URL.", preferredStyle: .alert)
+                    alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+                    present(alert, animated: true, completion: nil)
+                    return
+                }
+                
+                let content = ShareLinkContent()
+                content.contentURL = url
+                content.quote = "Check out this link!"
+                
+            let dialog = ShareDialog(viewController: self, content: content, delegate: nil)
+                dialog.mode = .automatic
+                
+                do {
+                    try dialog.show()
+                } catch {
+                    // Handle error
+                    let alert = UIAlertController(title: "Error", message: "Failed to share on Facebook.", preferredStyle: .alert)
+                    alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+                    present(alert, animated: true, completion: nil)
+                }
+        }
+        
+    }
+    
+   
+    /*
+    {
         print("faceBookUrl-\(faceBookUrl)")
         
         let text = "Check out this link!"
-        if let url = URL(string: "https://test.fha.nqn.mybluehostin.me/?p=11480") {
+        if let url = URL(string: "\(faceBookUrl)") {
             let activityViewController = UIActivityViewController(activityItems: [text, url], applicationActivities: nil)
             
             // Exclude unnecessary activities if needed
@@ -124,8 +165,50 @@ extension NewsDeatilsVC: NewDetailTBCDelegate
             present(alert, animated: true, completion: nil)
         }
     }
+    */
     
-    func cell(_ cell: NewDetailTBC, instagramUrl: String) {
+    func cell(_ cell: NewDetailTBC, instagramUrl: String)
+    {
+        print("SocialMediaUrl-->\(instagramUrl)")
+        let strText = "Check out this link!"
+        //let url = "https://test.fha.nqn.mybluehostin.me?p=10191"
+
+        let url = instagramUrl
+        let encodedText = strText.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? ""
+            let encodedURL = url.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? ""
+
+            // Combine text and URL
+            let urlString = "twitter://post?message=\(encodedText) \(encodedURL)"
+            
+            // Check if Twitter app can be opened
+            if let url = URL(string: urlString), UIApplication.shared.canOpenURL(url) {
+                UIApplication.shared.open(url, options: [:], completionHandler: nil)
+            } else {
+                // Fallback to web-based share
+                let webURLString = "https://twitter.com/intent/tweet?text=\(encodedText)%20\(encodedURL)"
+                if let webURL = URL(string: webURLString) {
+                    UIApplication.shared.open(webURL, options: [:], completionHandler: nil)
+                }
+            }
+    }
+    /*
+    {
+        UIPasteboard.general.string = instagramUrl
+           
+           // Open Instagram
+           let instagramURL = URL(string: "instagram://app")!
+           
+           if UIApplication.shared.canOpenURL(instagramURL) {
+               // Instagram is installed, open the app
+               UIApplication.shared.open(instagramURL, options: [:], completionHandler: nil)
+           } else {
+               // Instagram is not installed, open the App Store page for Instagram
+               let appStoreURL = URL(string: "https://apps.apple.com/us/app/instagram/id389801252")!
+               UIApplication.shared.open(appStoreURL, options: [:], completionHandler: nil)
+           }
+    }
+    */
+    /*{
         print("instagramUrl-\(instagramUrl)")
         
         guard let videoURL = URL(string: "https://test.fha.nqn.mybluehostin.me/?p=11480") else {
@@ -141,9 +224,24 @@ extension NewsDeatilsVC: NewDetailTBCDelegate
         UIImageWriteToSavedPhotosAlbum(image, self, #selector(imageSaved(_:didFinishSavingWithError:contextInfo:)), nil)
         
     }
+    */
     
     func cell(_ cell: NewDetailTBC, tikTokUrl: String) {
-        print("tikTokUrl-\(tikTokUrl)")
+        print("SocialMediaUrl-->\(tikTokUrl)")
+        
+        let strText = "Check out this link!"
+        let url = "https://test.fha.nqn.mybluehostin.me?p=10191"
+        
+        let encodedText = strText.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? ""
+            let encodedURL = url.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? ""
+
+            // Combine text and URL for LinkedIn
+            let linkedInURLString = "https://www.linkedin.com/sharing/share-offsite/?url=\(encodedURL)&title=\(encodedText)"
+            
+            // Open the URL
+            if let url = URL(string: linkedInURLString) {
+                UIApplication.shared.open(url, options: [:], completionHandler: nil)
+            }
     }
     
     func cell(_ cell: NewDetailTBC, nextPostId: String) {

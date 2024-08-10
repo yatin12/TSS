@@ -13,6 +13,7 @@ import FirebaseCore
 import UserNotifications
 import FirebaseMessaging
 import FirebaseAuth
+import FBSDKCoreKit
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterDelegate, MessagingDelegate {
@@ -77,7 +78,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     func setUpUITabBar()
     {
         UITabBar.appearance().unselectedItemTintColor = .white
-        UITabBar.appearance().tintColor = .white
+        UITabBar.appearance().tintColor = UIColor(named: "ThemePinkColor")
         
         UITabBarItem.appearance().setTitleTextAttributes([NSAttributedString.Key.font: UIFont(name: AppFontName.Poppins_SemiBold.rawValue, size: 11)!], for: .normal)
         UITabBarItem.appearance().setTitleTextAttributes([NSAttributedString.Key.font: UIFont(name: AppFontName.Poppins_SemiBold.rawValue, size: 11)!], for: .selected)
@@ -115,6 +116,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         
         
     }
+    func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey : Any]) -> Bool {
+    
+        let handledByFacebook = ApplicationDelegate.shared.application(app, open: url, options: options)
+
+        // Return true if either Facebook or Google handled the URL
+        return handledByFacebook
+    }
+    
     func registerForPushNotifications() {
         
         if #available(iOS 10.0, *) {

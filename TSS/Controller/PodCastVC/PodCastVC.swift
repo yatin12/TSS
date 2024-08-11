@@ -32,6 +32,8 @@ extension PodCastVC
 {
     func checkSubscribeUserOrnot()
     {
+        self.loadPodcastURL()
+        /*
         isSubscribedUser = AppUserDefaults.object(forKey: "SubscribedUserType") as? String ?? "\(SubscibeUserType.free)"
         if isSubscribedUser != "\(SubscibeUserType.free)"
         {
@@ -42,6 +44,7 @@ extension PodCastVC
             AlertUtility.presentSimpleAlert(in: self, title: "", message: "\(AlertMessages.subscribeForTabMsg)")
 
         }
+        */
     }
     func setNotificationObserverMethod()
     {

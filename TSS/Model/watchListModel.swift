@@ -17,7 +17,8 @@ struct watchListResponse: Codable {
 
 // MARK: - Datum
 struct DataWatchList: Codable {
-    let id, title, description, tag: String
+    let id, title, description, tag: String?
+    let post_type: String?
     let date: String?
     let author: [Int]?
     let thumbnail: String?

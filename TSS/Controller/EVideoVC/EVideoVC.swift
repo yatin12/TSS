@@ -52,6 +52,8 @@ extension EVideoVC
 {
     func checkSubscribeUserOrnot()
     {
+        self.apiCallGetBlogCategoryList()
+        /*
         isSubscribedUser = AppUserDefaults.object(forKey: "SubscribedUserType") as? String ?? "\(SubscibeUserType.free)"
         if isSubscribedUser != "\(SubscibeUserType.free)"
         {
@@ -60,8 +62,8 @@ extension EVideoVC
         else
         {
             AlertUtility.presentSimpleAlert(in: self, title: "", message: "\(AlertMessages.subscribeForTabMsg)")
-
         }
+        */
     }
     func setNotificationObserverMethod()
     {

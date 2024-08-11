@@ -33,6 +33,11 @@ extension FavouriteListVC
         self.registerNib()
         self.setUpHeaderView()
         self.setUpSegmentControl()
+        
+    }
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        objSegment.selectedSegmentIndex = 0
         self.apiCallFavouriteList()
     }
 }
@@ -110,7 +115,7 @@ extension FavouriteListVC: UITableViewDelegate, UITableViewDataSource
         var rowCnt: Int = 0
         if strSelectedSegment == "Favourite"
         {
-            rowCnt = objFavouriteResponse?.data?.videosLiked?.count ?? 0
+            rowCnt = objFavouriteResponse?.data?.count ?? 0
         }
         else
         {
@@ -125,9 +130,9 @@ extension FavouriteListVC: UITableViewDelegate, UITableViewDataSource
         {
             cell.lblTimeAgo.isHidden = true
             
-            cell.lblTitle.text = "\(objFavouriteResponse?.data?.videosLiked?[indexPath.row].title ?? "")"
+            cell.lblTitle.text = "\(objFavouriteResponse?.data?[indexPath.row].title ?? "")"
             
-            let strBlogUrl = "\(objFavouriteResponse?.data?.videosLiked?[indexPath.row].thumbnail ?? "")"
+            let strBlogUrl = "\(objFavouriteResponse?.data?[indexPath.row].thumbnail ?? "")"
             cell.imgFav.sd_setImage(with: URL(string: strBlogUrl), placeholderImage: UIImage(named: "icn_Placehoder"), options: [.progressiveLoad], context: nil)
          
           
@@ -164,14 +169,15 @@ extension FavouriteListVC: UITableViewDelegate, UITableViewDataSource
         
         if strSelectedSegment == "Favourite"
         {
-            let videoId = "\(objFavouriteResponse?.data?.videosLiked?[indexPath.row].id ?? "0")"
-            
+            let videoId = "\(objFavouriteResponse?.data?[indexPath.row].id ?? "0")"
+            strSelectedPostName = "\(objFavouriteResponse?.data?[indexPath.row].post_type ?? "")"
             NavigationHelper.pushWithPassData(storyboardKey.InnerScreen, viewControllerIdentifier: "VideoDetailsVC", from: navigationController!, data: "\(videoId)")
 
         }
         else
         {
             let videoId = "\(objWatchListResponse?.data?[indexPath.row].id ?? "0")"
+            strSelectedPostName = "\(objWatchListResponse?.data?[indexPath.row].post_type ?? "0")"
             NavigationHelper.pushWithPassData(storyboardKey.InnerScreen, viewControllerIdentifier: "VideoDetailsVC", from: navigationController!, data: "\(videoId)")
         }
     }
@@ -192,7 +198,7 @@ extension FavouriteListVC
                    
                     if response.settings?.success == true
                     {
-                        if response.data?.videosLiked?.count ?? 0 > 0
+                        if response.data?.count ?? 0 > 0
                         {
                             self.tblFavourite.isHidden = false
                             self.lblNoData.isHidden = true

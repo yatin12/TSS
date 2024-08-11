@@ -9,7 +9,41 @@ import Foundation
 struct favBlogRequest: Encodable {
     let userId: String
 }
+// MARK: - Welcome
+struct favouriteResponse: Codable {
+    let settings: SettingsFav?
+    let data: [DataFavourite]?
+}
 
+// MARK: - Datum
+struct DataFavourite: Codable {
+    let id, title, description: String?
+    let post_type: String?
+    let tag, date, author: String?
+    let thumbnail: String?
+
+    enum CodingKeys: String, CodingKey {
+        case id
+        case post_type
+        case title, description, tag, date, author, thumbnail
+    }
+}
+
+// MARK: - Settings
+struct SettingsFav: Codable {
+    let success: Bool?
+    let message: String?
+    let count: Int?
+    let nextPage: Int?
+    let userID: String?
+
+    enum CodingKeys: String, CodingKey {
+        case success, message, count, nextPage
+        case userID = "userId"
+    }
+}
+
+/*
 struct favouriteResponse: Codable {
     let settings: SettingsFav?
     let data: DataFavourite?
@@ -28,6 +62,7 @@ struct DataFavourite: Codable {
 // MARK: - Liked
 struct Favliked: Codable {
     let id: String?
+    let post_type: String?
     let title, description, tag, date: String?
     let author: [String]?
     let thumbnail: String?
@@ -46,3 +81,4 @@ struct SettingsFav: Codable {
         case userID = "userId"
     }
 }
+*/

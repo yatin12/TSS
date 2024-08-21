@@ -20,6 +20,11 @@ class EVideoVC: UIViewController {
     var userRole: String = ""
     var selectedIndex: Int = 0
     var categoryId: String = ""
+    var pageNo: Int = 1
+    var isLoadingList : Bool = false
+    var isValFromUserClick: Bool = false
+    
+    
     //var videoId: String = ""
     
     //  - Outlets - 
@@ -169,6 +174,7 @@ extension EVideoVC: UITableViewDelegate, UITableViewDataSource
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        strSelectedPostName = "evideos"
         if userRole == USERROLE.SignInUser
         {
             let videoId = "\(objVideoListResponse?.data?[indexPath.row].id ?? "0")"
@@ -205,8 +211,10 @@ extension EVideoVC: UICollectionViewDataSource, UICollectionViewDelegateFlowLayo
                 categoryId = "\(objBlogCategoryResponse?.data?[0].categoryID ?? 0)"
                 strSelectedBlog = "\(objBlogCategoryResponse?.data?[0].categoryName ?? "")"
                 objCollectionViewCategory.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)
- 
-                self.apiCallGetEvideoList(isFromUserClick: false)
+                self.pageNo = 1
+                self.isLoadingList = false
+                self.isValFromUserClick = false
+                self.apiCallGetEvideoList(isFromUserClick: isValFromUserClick)
             }
         }
         else
@@ -233,15 +241,27 @@ extension EVideoVC: UICollectionViewDataSource, UICollectionViewDelegateFlowLayo
         strSelectedBlog = "\(objBlogCategoryResponse?.data?[indexPath.item].categoryName ?? "")"
 
         objCollectionViewCategory.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)
-
-        self.apiCallGetEvideoList(isFromUserClick: true)
+        self.pageNo = 1
+        self.isLoadingList = false
+        isValFromUserClick = true
+        self.apiCallGetEvideoList(isFromUserClick: isValFromUserClick)
         objCollectionViewCategory.reloadData()
     }
-    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        
+        if (((scrollView.contentOffset.y + scrollView.frame.size.height) > scrollView.contentSize.height ) && !isLoadingList){
+            self.isLoadingList = true
+            self.loadData()
+        }
+    }
 }
 //MARK: API Call
 extension EVideoVC
 {
+    @objc func loadData() {
+        pageNo += 1
+        self.apiCallGetEvideoList(isFromUserClick: isValFromUserClick)
+    }
     func setUpUIAfterGettingResponse(response: blogCategoryResponse?)
     {
         if response?.data?.count ?? 0 > 0
@@ -306,10 +326,47 @@ extension EVideoVC
        
         if Reachability.isConnectedToNetwork()
         {
-            objVideoListViewModel.videoList(userId: userId, category_id: categoryId) { result in
+            objVideoListViewModel.videoList(userId: userId, category_id: categoryId, pagination_number: "\(pageNo)") { result in
                 switch result {
                 case .success(let response):
                     print(response)
+                    
+                    // Check if the response is successful
+                    if response.settings?.success == true {
+                        let newData = response.data ?? []
+                        
+                        if newData.count > 0 {
+                            // If it's the first page, initialize or reset the data
+                            if self.pageNo == 1 {
+                                self.objVideoListResponse = response
+                            } else {
+                                // If it's not the first page, append data
+                                self.objVideoListResponse?.data?.append(contentsOf: newData)
+                            }
+
+                            self.isLoadingList = false
+                            self.tblEvideo.isHidden = false
+                            self.lblNoData.isHidden = true
+                        } else {
+                            // Handle case where data is empty for pages other than the first
+                            if self.pageNo == 1 {
+                                self.objVideoListResponse = response
+                            }
+                            self.tblEvideo.isHidden = self.pageNo == 1
+                            self.lblNoData.isHidden = self.pageNo != 1
+                        }
+                        KVSpinnerView.dismiss()
+                        self.tblEvideo.dataSource = self
+                        self.tblEvideo.delegate = self
+                        self.tblEvideo.reloadData()
+                        
+                    } else {
+                        KVSpinnerView.dismiss()
+                        AlertUtility.presentSimpleAlert(in: self, title: "", message: "\(response.settings?.message ?? "")")
+                    }
+
+                    
+                    /*
                     KVSpinnerView.dismiss()
                    
                     if response.settings?.success == true
@@ -335,6 +392,7 @@ extension EVideoVC
                         AlertUtility.presentSimpleAlert(in: self, title: "", message: "\(response.settings?.message ?? "")")
 
                     }
+                    */
                     
                 case .failure(let error):
                     // Handle failure

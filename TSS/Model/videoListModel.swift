@@ -9,11 +9,12 @@ import Foundation
 struct videoListRequest: Encodable {
     let userId: String
     let category_id: String
+    let pagination_number: String
 }
 // MARK: - Welcome
 struct videoListResponse: Codable {
     let settings: SettingsVideoList?
-    let data: [DataVideoList]?
+    var data: [DataVideoList]?
 }
 
 // MARK: - Datum

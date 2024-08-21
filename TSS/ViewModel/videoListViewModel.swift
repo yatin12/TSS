@@ -9,9 +9,10 @@ import Foundation
 
 class videoListViewModel
 {
-    func videoList(userId: String, category_id: String, completion: @escaping (Result<videoListResponse, Error>) -> Void)
+    func videoList(userId: String, category_id: String, pagination_number: String, completion: @escaping (Result<videoListResponse, Error>) -> Void)
     {
-        let request = videoListRequest(userId: userId, category_id: category_id)
+        let request = videoListRequest(userId: userId, category_id: category_id, pagination_number: pagination_number)
+        
         APIManager.shared.videoList(request: request, responseModelType: videoListResponse.self) { result in
             switch result {
             case .success(let response):

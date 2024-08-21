@@ -24,6 +24,10 @@ class TalkShowVC: UIViewController {
     var categoryId: String = ""
     var videoId: String = "11480"
     var isSubscribedUser: String = ""
+    var pageNo: Int = 1
+    var isLoadingList : Bool = false
+    var isValFromUserClick:Bool = false
+    
     //  - Outlets - 
     @IBOutlet weak var lblNoData: UILabel!
     @IBOutlet weak var imgLogo: UIImageView!
@@ -177,6 +181,7 @@ extension TalkShowVC: UITableViewDelegate, UITableViewDataSource
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        strSelectedPostName = "talk_shows"
         if userRole == USERROLE.SignInUser
         {
             let videoId = "\(objTalkShowListResponse?.data?[indexPath.row].id ?? "0")"
@@ -213,7 +218,10 @@ extension TalkShowVC: UICollectionViewDataSource, UICollectionViewDelegateFlowLa
                 categoryId = "\(objBlogCategoryResponse?.data?[0].categoryID ?? 0)"
                 strSelectedBlog = "\(objBlogCategoryResponse?.data?[0].categoryName ?? "")"
                 objCollectionViewCategory.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)
-                self.apiCallGetTalkShowList(isFromUserClick: false)
+                self.pageNo = 1
+                self.isLoadingList = false
+                isValFromUserClick = false
+                self.apiCallGetTalkShowList(isFromUserClick: isValFromUserClick)
             }
         }
         else
@@ -264,14 +272,27 @@ extension TalkShowVC: UICollectionViewDataSource, UICollectionViewDelegateFlowLa
             objWebViewSeason1BTS.isHidden = true
             tblTalkShow.isHidden = false
             lblNoData.isHidden = true
-            
-            
-            self.apiCallGetTalkShowList(isFromUserClick: true)
+            self.pageNo = 1
+            self.isLoadingList = false
+            isValFromUserClick = true
+            self.apiCallGetTalkShowList(isFromUserClick: isValFromUserClick)
         }
         objCollectionViewCategory.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)
+        
         objCollectionViewCategory.reloadData()
 
       
+    }
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        
+        if (((scrollView.contentOffset.y + scrollView.frame.size.height) > scrollView.contentSize.height ) && !isLoadingList){
+            self.isLoadingList = true
+            self.loadData()
+        }
+    }
+    @objc func loadData() {
+        pageNo += 1
+        self.apiCallGetTalkShowList(isFromUserClick: isValFromUserClick)
     }
     func loadSeason1BTSURL(strURL: String) {
         if let url = URL(string: strURL) {
@@ -351,11 +372,48 @@ extension TalkShowVC
         }
         if Reachability.isConnectedToNetwork()
         {
-            objTalkShowViewModel.takShowList(userId: userId, category_id: categoryId) { result in
+            objTalkShowViewModel.takShowList(userId: userId, category_id: categoryId, pagination_number: "\(pageNo)") { result in
                 switch result {
                 case .success(let response):
                     print(response)
-                    KVSpinnerView.dismiss()
+                   
+                    
+                    if response.settings?.success == true {
+                        let newData = response.data ?? []
+                        
+                        if newData.count > 0 {
+                            // If it's the first page, initialize or reset the data
+                            if self.pageNo == 1 {
+                                self.objTalkShowListResponse = response
+                            } else {
+                                // If it's not the first page, append data
+                                self.objTalkShowListResponse?.data?.append(contentsOf: newData)
+                            }
+
+                            self.isLoadingList = false
+                            self.tblTalkShow.isHidden = false
+                            self.lblNoData.isHidden = true
+                            self.objWebViewSeason1BTS.isHidden = true
+                        } else {
+                            // Handle case where data is empty for pages other than the first
+                            if self.pageNo == 1 {
+                                self.objTalkShowListResponse = response
+                            }
+                            self.tblTalkShow.isHidden = self.pageNo == 1
+                            self.lblNoData.isHidden = self.pageNo != 1
+                            self.objWebViewSeason1BTS.isHidden = true
+                        }
+                        KVSpinnerView.dismiss()
+                        self.tblTalkShow.dataSource = self
+                        self.tblTalkShow.delegate = self
+                        self.tblTalkShow.reloadData()
+                        
+                    } else {
+                        KVSpinnerView.dismiss()
+                        AlertUtility.presentSimpleAlert(in: self, title: "", message: "\(response.settings?.message ?? "")")
+                    }
+                    
+                    /*
                     if response.settings?.success == true
                     {
                         if response.data?.count ?? 0 > 0
@@ -381,6 +439,7 @@ extension TalkShowVC
                         AlertUtility.presentSimpleAlert(in: self, title: "", message: "\(response.settings?.message ?? "")")
 
                     }
+                    */
                     
                 case .failure(let error):
                     // Handle failure

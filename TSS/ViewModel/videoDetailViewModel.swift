@@ -8,11 +8,11 @@
 import Foundation
 class videoDetailViewModel
 {
-    func videoDetail(userId: String, videoId: String, completion: @escaping (Result<videoDetailResponse, Error>) -> Void)
+    func VideoDetailApi(userId: String, videoId: String, completion: @escaping (Result<videoDetailResponse, Error>) -> Void)
     {
         let request = videoDetailRequest(userId: userId, videoId: videoId, postType: strSelectedPostName)
         
-        APIManager.shared.VideoDetail(request: request, responseModelType: videoDetailResponse.self) { result in
+        APIManager.shared.VideoDetailApi(request: request, responseModelType: videoDetailResponse.self) { result in
             switch result {
             case .success(let response):
                 completion(.success(response))

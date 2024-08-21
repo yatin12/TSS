@@ -220,7 +220,8 @@ extension VideoDetailsVC: VideoSec_1TBCDelegate
 {
     func pauseVideoBackBtn() {
         for case let cell as VideoSec_1TBC in tblVideoDetail.visibleCells {
-            cell.pauseVideoBackBtn()
+            //cell.pauseVideoBackBtn()
+            cell.videoBG.stop()
         }
     }
     
@@ -324,7 +325,7 @@ extension VideoDetailsVC
         if Reachability.isConnectedToNetwork()
         {
             KVSpinnerView.show()
-            objVideoDetailViewModel.videoDetail(userId: userId, videoId: videoId) { result in
+            objVideoDetailViewModel.VideoDetailApi(userId: userId, videoId: videoId) { result in
                 switch result {
                 case .success(let response):
                     print(response)

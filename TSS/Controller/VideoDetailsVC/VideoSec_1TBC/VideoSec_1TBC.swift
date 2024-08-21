@@ -25,6 +25,7 @@
         weak var vc: VideoDetailsVC?
         var isSubscribedUser: String = ""
         
+        @IBOutlet weak var videoBG: MP4VideoPlayerView!
         @IBOutlet weak var imgEvideos: UIImageView!
         @IBOutlet weak var imgLike: UIImageView!
         @IBOutlet weak var lblDesc: UILabel!
@@ -86,7 +87,10 @@
             if strSelectedPostName == "talk_shows"
             {
                 vwEvideoContainer.isHidden = true
-                vwVideo.isHidden = false
+//                vwVideo.isHidden = false//Final
+                vwVideo.isHidden = true
+
+                videoBG.isHidden = false
                 
                 if isSubscribedUser == "\(SubscibeUserType.premium)" || isSubscribedUser == "\(SubscibeUserType.basic)"
                 {
@@ -95,8 +99,36 @@
                 }
                 else
                 {
-                    self.playVideo(strVideo: response?.data?.eVideo?[0].Trailer_Video_URL ?? "")
-
+                    
+                 
+                    if let videoURLString = response?.data?.eVideo?[0].Trailer_Video_URL,
+                       let videoURL = URL(string: videoURLString) {
+                        self.videoBG.prepareVideo(with: videoURL, isFromHome: false)
+                        self.videoBG.play()
+                    } else {
+                        print("Invalid video URL.")
+                        // Handle the case where the URL is nil
+                    }
+                   
+                  
+                    /*
+                    var arrVideos: [URL] = []
+                    if let videoPath1 = Bundle.main.path(forResource: "trailer-1-final-promo", ofType: "mp4"),
+                       let videoPath2 = Bundle.main.path(forResource: "2", ofType: "mp4"),
+                       let videoPath3 = Bundle.main.path(forResource: "1", ofType: "mp4"),
+                       let videoPath4 = Bundle.main.path(forResource: "trailer-2-final-promo", ofType: "mp4") {
+                        arrVideos.append(URL(fileURLWithPath: videoPath1))
+                        arrVideos.append(URL(fileURLWithPath: videoPath2))
+                        arrVideos.append(URL(fileURLWithPath: videoPath3))
+                        arrVideos.append(URL(fileURLWithPath: videoPath4))
+                    }
+                     
+                     self.videoBG.prepareVideo(with: arrVideos[0], isFromHome: false)
+                     self.videoBG.play()
+               
+                    */
+                   
+                    
                 }
 
             }
@@ -106,7 +138,10 @@
                 if isSubscribedUser == "\(SubscibeUserType.premium)" ||  isSubscribedUser == "\(SubscibeUserType.basic)"
                 {
                     vwEvideoContainer.isHidden = true
-                    vwVideo.isHidden = false
+//                    vwVideo.isHidden = false //Final
+                    vwVideo.isHidden = true
+
+                    videoBG.isHidden = false
                     
                     self.playVideo(strVideo: response?.data?.eVideo?[0].Full_Video_URL ?? "")
                 }
@@ -114,6 +149,7 @@
                 {
                     vwEvideoContainer.isHidden = false
                     vwVideo.isHidden = true
+                    videoBG.isHidden = true
                     
                      let strBlogUrl = "\(response?.data?.eVideo?[0].thumbnail ?? "")"
                      imgEvideos.sd_setImage(with: URL(string: strBlogUrl), placeholderImage: UIImage(named: "icn_Placehoder"), options: [.progressiveLoad], context: nil)

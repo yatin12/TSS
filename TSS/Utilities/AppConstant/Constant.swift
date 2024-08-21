@@ -8,6 +8,8 @@
 import UIKit
 import CoreLocation
 
+var hasVideoPlayed1 = false
+
 enum AppEnvironment {
     case production
     case beta
@@ -80,6 +82,7 @@ let searchEndpoint = "search"
 let HomeEndpoint = "homepage"
 let forgotPasswordEndpoint = "reset-password"
 let deleteAccountEndpoint = "delete-account"
+let logoutEndpoint = "user-logout"
 
 var strSlectedBlogCatNews: String = ""
 

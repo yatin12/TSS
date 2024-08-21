@@ -209,6 +209,7 @@ extension NewsVC: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout
         categoryId = "\(objBlogCategoryResponse?.data?[indexPath.item].categoryID ?? 0)"
         strSelectedBlog = "\(objBlogCategoryResponse?.data?[indexPath.item].categoryName ?? "")"
         self.pageNo = 1
+        self.isLoadingList = false
         self.apiCallGetNewsListByCategory()
         
         objCollectionCategory.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)

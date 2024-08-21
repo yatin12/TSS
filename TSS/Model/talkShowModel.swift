@@ -9,10 +9,11 @@ import Foundation
 struct talkShowListRequest: Encodable {
     let userId: String
     let category_id: String
+    let pagination_number: String
 }
 struct talkShowListResponse: Codable {
     let settings: SettingsTalkShow?
-    let data: [DataTalkShow]?
+    var data: [DataTalkShow]?
 }
 
 // MARK: - Datum

@@ -16,6 +16,8 @@ class SettingVC: UIViewController {
     var isSubscribedUser: String = ""
     //  - Outlets - 
     let objDeleteAccountViewModel = deleteAccountViewModel()
+    let objLogoutViewModel = LogoutViewModel()
+
     @IBOutlet weak var tblSetting: UITableView!
     @IBOutlet weak var constHeightHeader: NSLayoutConstraint!
 }
@@ -254,9 +256,11 @@ extension SettingVC: UITableViewDelegate, UITableViewDataSource
             AlertUtility.presentAlert(in: self, title: "", message: "\(AlertMessages.LogoutMsg)", options: "Yes", "No") { option in
                 switch(option) {
                 case 0:
-                    
+                    self.apiCallLogout()
+                    /*
                     self.clearParamInLocal()
                     NavigationHelper.push(storyboardKey.IntroScreen, viewControllerIdentifier: "SplashScreenVC", from: self.navigationController!, animated: false)
+                    */
                     break
                     
                 case 1:
@@ -302,6 +306,48 @@ extension SettingVC
     func getUserId()
     {
         userId = AppUserDefaults.object(forKey: "USERID") as? String ?? ""
+    }
+    func apiCallLogout()
+    {
+        KVSpinnerView.show()
+        self.view.endEditing(true)
+        if Reachability.isConnectedToNetwork()
+        {
+            objLogoutViewModel.logoutAPi(userId: userId) { result in
+                KVSpinnerView.dismiss()
+                switch result {
+                case .success(let loginResponse):
+                    // Handle successful
+                    
+                    if loginResponse.settings?.success == true
+                    {
+                        self.clearParamInLocal()
+                        NavigationHelper.push(storyboardKey.IntroScreen, viewControllerIdentifier: "SplashScreenVC", from: self.navigationController!, animated: false)
+                    }
+                    else
+                    {
+                        AlertUtility.presentSimpleAlert(in: self, title: "", message: "\(loginResponse.settings?.message ?? "")")
+                    }
+                case .failure(let error):
+                    // Handle failure
+                    if let apiError = error as? APIError {
+                        ErrorHandlingUtility.handleAPIError(apiError, in: self)
+                    } else {
+                        // Handle other types of errors
+                        // print("Unexpected error: \(error)")
+                        AlertUtility.presentSimpleAlert(in: self, title: "", message: "\(error.localizedDescription)")
+                        
+                    }
+                }
+            }
+          
+        }
+        else
+        {
+            KVSpinnerView.dismiss()
+            AlertUtility.presentSimpleAlert(in: self, title: "", message: "\(AlertMessages.NoInternetAlertMsg)")
+            
+        }
     }
     func apiCallDeleteAccount()
     {

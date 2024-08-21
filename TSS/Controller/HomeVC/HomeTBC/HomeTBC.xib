@@ -31,9 +31,6 @@
                                 </collectionViewFlowLayout>
                                 <cells/>
                             </collectionView>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="imgTemp" translatesAutoresizingMaskIntoConstraints="NO" id="sOt-QE-Jgh">
-                                <rect key="frame" x="0.0" y="0.0" width="375" height="202"/>
-                            </imageView>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" bounces="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" bouncesZoom="NO" dataMode="none" translatesAutoresizingMaskIntoConstraints="NO" id="hqR-cd-WJa">
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="202"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -61,18 +58,14 @@
                         <constraints>
                             <constraint firstItem="hqR-cd-WJa" firstAttribute="leading" secondItem="Lvg-kx-ZS9" secondAttribute="leading" id="7hP-0Z-LyR"/>
                             <constraint firstAttribute="bottom" secondItem="hqR-cd-WJa" secondAttribute="bottom" id="7xs-ze-FgS"/>
-                            <constraint firstItem="sOt-QE-Jgh" firstAttribute="leading" secondItem="Lvg-kx-ZS9" secondAttribute="leading" id="J9t-mC-LgS"/>
                             <constraint firstAttribute="trailing" secondItem="hqR-cd-WJa" secondAttribute="trailing" id="JM7-P1-Q8I"/>
                             <constraint firstAttribute="bottom" secondItem="OVX-vf-B43" secondAttribute="bottom" id="KVT-s1-UF4"/>
                             <constraint firstAttribute="trailing" secondItem="M36-LK-cQL" secondAttribute="trailing" id="RbM-x0-qA6"/>
                             <constraint firstItem="OVX-vf-B43" firstAttribute="leading" secondItem="Lvg-kx-ZS9" secondAttribute="leading" id="SeL-m0-zL4"/>
                             <constraint firstAttribute="trailing" secondItem="OVX-vf-B43" secondAttribute="trailing" id="UVp-iy-Hun"/>
-                            <constraint firstAttribute="trailing" secondItem="sOt-QE-Jgh" secondAttribute="trailing" id="YOS-Om-xCh"/>
-                            <constraint firstAttribute="bottom" secondItem="sOt-QE-Jgh" secondAttribute="bottom" id="aF3-ff-IVY"/>
                             <constraint firstItem="M36-LK-cQL" firstAttribute="leading" secondItem="Lvg-kx-ZS9" secondAttribute="leading" id="bKA-eZ-XAK"/>
                             <constraint firstItem="OVX-vf-B43" firstAttribute="top" secondItem="Lvg-kx-ZS9" secondAttribute="top" id="bNX-Lu-vgv"/>
                             <constraint firstItem="M36-LK-cQL" firstAttribute="top" secondItem="Lvg-kx-ZS9" secondAttribute="top" id="dT6-Kp-88a"/>
-                            <constraint firstItem="sOt-QE-Jgh" firstAttribute="top" secondItem="Lvg-kx-ZS9" secondAttribute="top" id="mgo-VG-tMn"/>
                             <constraint firstAttribute="bottom" secondItem="M36-LK-cQL" secondAttribute="bottom" id="nfv-9O-Ogq"/>
                             <constraint firstItem="hqR-cd-WJa" firstAttribute="top" secondItem="Lvg-kx-ZS9" secondAttribute="top" id="qGk-7k-noe"/>
                         </constraints>
@@ -89,7 +82,6 @@
             <viewLayoutGuide key="safeArea" id="njF-e1-oar"/>
             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
             <connections>
-                <outlet property="imgSectionZero" destination="sOt-QE-Jgh" id="VUD-KD-D0e"/>
                 <outlet property="objCollection1TBS" destination="OVX-vf-B43" id="x8A-uC-Aum"/>
                 <outlet property="objCollectionHome" destination="M36-LK-cQL" id="VaL-OX-CsD"/>
                 <outlet property="objCollectionMeetSister" destination="hqR-cd-WJa" id="5mO-SK-XR7"/>
@@ -97,7 +89,4 @@
             <point key="canvasLocation" x="76" y="-12"/>
         </tableViewCell>
     </objects>
-    <resources>
-        <image name="imgTemp" width="246" height="128"/>
-    </resources>
 </document>

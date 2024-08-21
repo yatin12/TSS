@@ -7,6 +7,7 @@
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
+        <capability name="collection view cell content view" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <customFonts key="customFonts">
@@ -192,17 +193,77 @@
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="etz-Po-wOv">
                                 <rect key="frame" x="0.0" y="80" width="375" height="504"/>
                                 <subviews>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="wOH-L6-Z9o">
+                                        <rect key="frame" x="0.0" y="0.0" width="375" height="236"/>
+                                        <subviews>
+                                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" pagingEnabled="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="fE4-L3-IEf">
+                                                <rect key="frame" x="0.0" y="0.0" width="375" height="200"/>
+                                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="200" id="WLG-bX-NUO"/>
+                                                </constraints>
+                                                <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="0.0" minimumInteritemSpacing="0.0" id="KrB-Iq-9fY">
+                                                    <size key="itemSize" width="393" height="200"/>
+                                                    <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                                                    <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                                                    <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                                </collectionViewFlowLayout>
+                                                <cells>
+                                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="videoCollectionCell" id="Eth-EI-UJk" customClass="videoCollectionCell" customModule="TSS" customModuleProvider="target">
+                                                        <rect key="frame" x="-9" y="0.0" width="393" height="200"/>
+                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                        <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="N7G-57-TGI">
+                                                            <rect key="frame" x="0.0" y="0.0" width="393" height="200"/>
+                                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                            <subviews>
+                                                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="7z0-lp-75A" customClass="MP4VideoPlayerView" customModule="TSS" customModuleProvider="target">
+                                                                    <rect key="frame" x="0.0" y="0.0" width="393" height="200"/>
+                                                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                </view>
+                                                            </subviews>
+                                                            <constraints>
+                                                                <constraint firstItem="7z0-lp-75A" firstAttribute="top" secondItem="N7G-57-TGI" secondAttribute="top" id="2ip-wp-xCR"/>
+                                                                <constraint firstItem="7z0-lp-75A" firstAttribute="leading" secondItem="N7G-57-TGI" secondAttribute="leading" id="Q74-ja-dHz"/>
+                                                                <constraint firstAttribute="trailing" secondItem="7z0-lp-75A" secondAttribute="trailing" id="aEA-t4-581"/>
+                                                                <constraint firstAttribute="bottom" secondItem="7z0-lp-75A" secondAttribute="bottom" id="vXI-q4-3mH"/>
+                                                            </constraints>
+                                                        </collectionViewCellContentView>
+                                                        <connections>
+                                                            <outlet property="videoBG" destination="7z0-lp-75A" id="OUW-7v-Khf"/>
+                                                        </connections>
+                                                    </collectionViewCell>
+                                                </cells>
+                                            </collectionView>
+                                            <pageControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="mPd-IJ-iDx">
+                                                <rect key="frame" x="166.33333333333334" y="210" width="42.666666666666657" height="0.0"/>
+                                                <color key="pageIndicatorTintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                <color key="currentPageIndicatorTintColor" name="ThemePinkColor"/>
+                                            </pageControl>
+                                        </subviews>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <constraints>
+                                            <constraint firstItem="mPd-IJ-iDx" firstAttribute="centerX" secondItem="wOH-L6-Z9o" secondAttribute="centerX" id="IOi-lY-Che"/>
+                                            <constraint firstAttribute="height" constant="236" id="TM2-4r-IVj"/>
+                                            <constraint firstAttribute="trailing" secondItem="fE4-L3-IEf" secondAttribute="trailing" id="Uqx-y2-5fH"/>
+                                            <constraint firstItem="mPd-IJ-iDx" firstAttribute="top" secondItem="fE4-L3-IEf" secondAttribute="bottom" constant="10" id="bN7-IJ-jgG"/>
+                                            <constraint firstItem="fE4-L3-IEf" firstAttribute="leading" secondItem="wOH-L6-Z9o" secondAttribute="leading" id="rca-Si-GFV"/>
+                                            <constraint firstItem="fE4-L3-IEf" firstAttribute="top" secondItem="wOH-L6-Z9o" secondAttribute="top" id="xHk-TI-s8x"/>
+                                        </constraints>
+                                    </view>
                                     <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="0SU-BQ-lAQ">
-                                        <rect key="frame" x="0.0" y="0.0" width="375" height="504"/>
+                                        <rect key="frame" x="0.0" y="236" width="375" height="268"/>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     </tableView>
                                 </subviews>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
+                                    <constraint firstItem="wOH-L6-Z9o" firstAttribute="leading" secondItem="etz-Po-wOv" secondAttribute="leading" id="3jc-gy-LZ4"/>
+                                    <constraint firstAttribute="trailing" secondItem="wOH-L6-Z9o" secondAttribute="trailing" id="7Pm-kM-OJb"/>
                                     <constraint firstAttribute="trailing" secondItem="0SU-BQ-lAQ" secondAttribute="trailing" id="Dth-gG-Qv3"/>
                                     <constraint firstItem="0SU-BQ-lAQ" firstAttribute="leading" secondItem="etz-Po-wOv" secondAttribute="leading" id="LyZ-Yq-OZG"/>
-                                    <constraint firstItem="0SU-BQ-lAQ" firstAttribute="top" secondItem="etz-Po-wOv" secondAttribute="top" id="Zb8-SE-KFt"/>
                                     <constraint firstAttribute="bottom" secondItem="0SU-BQ-lAQ" secondAttribute="bottom" id="bD5-RP-9KC"/>
+                                    <constraint firstItem="0SU-BQ-lAQ" firstAttribute="top" secondItem="wOH-L6-Z9o" secondAttribute="bottom" id="iea-bO-hau"/>
+                                    <constraint firstItem="wOH-L6-Z9o" firstAttribute="top" secondItem="etz-Po-wOv" secondAttribute="top" id="vw3-dd-lTa"/>
                                 </constraints>
                             </view>
                         </subviews>
@@ -223,6 +284,8 @@
                     <size key="freeformSize" width="375" height="667"/>
                     <connections>
                         <outlet property="constHeightHeader" destination="Oem-nX-rhA" id="VRz-R4-BlX"/>
+                        <outlet property="objCollNewSeaction1" destination="fE4-L3-IEf" id="IFC-Gt-ReH"/>
+                        <outlet property="objPgControlNew" destination="mPd-IJ-iDx" id="nTZ-4Z-SZZ"/>
                         <outlet property="tblHome" destination="0SU-BQ-lAQ" id="vkb-04-KXm"/>
                     </connections>
                 </viewController>
@@ -1782,7 +1845,7 @@
                                                                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="NcK-eq-kKl">
                                                                                         <rect key="frame" x="0.0" y="26.666666666666689" width="329" height="48.333333333333343"/>
                                                                                         <subviews>
-                                                                                            <textField opaque="NO" tag="1" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Enter Email" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="cDg-7c-iBh">
+                                                                                            <textField opaque="NO" userInteractionEnabled="NO" tag="1" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Enter Email" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="cDg-7c-iBh">
                                                                                                 <rect key="frame" x="8" y="2" width="313" height="44.333333333333336"/>
                                                                                                 <color key="textColor" name="ThemeFontColor"/>
                                                                                                 <fontDescription key="fontDescription" name="Poppins-Regular" family="Poppins" pointSize="14"/>

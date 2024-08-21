@@ -287,7 +287,7 @@ class APIManager {
                 }
             }
     }
-    func VideoDetail<T: Decodable>(request: videoDetailRequest, responseModelType: T.Type, completion: @escaping (Result<T, APIError>) -> Void) {
+    func VideoDetailApi<T: Decodable>(request: videoDetailRequest, responseModelType: T.Type, completion: @escaping (Result<T, APIError>) -> Void) {
         
         let authToken: String = AppUserDefaults.object(forKey: "AUTHTOKEN") as? String ?? ""
         
@@ -400,7 +400,7 @@ class APIManager {
                 completion(.success(result))
             } catch {
                 // Handle decoding error here
-               // print("Error decoding data: \(error)")
+                print("Error decoding data: \(error)")
                 self.handleFailureResponse(response, completion: completion)
             }
         }
@@ -721,6 +721,37 @@ class APIManager {
 
         
         let URLstr: String = "\(APIConfig.baseURL+HomeEndpoint)"
+        
+        Logger.logRequest(url: URLstr, method: "Post", headers: customHeaders, body: nil)
+        AF.request(URLstr, method: .post, parameters: request, encoder: JSONParameterEncoder.default, headers: customHeaders)
+            .validate()
+            .responseDecodable(of: T.self) { response in
+                Logger.logResponse(url: URLstr, response: response)
+                
+                if let data = response.data {
+                    print(String(data: data, encoding: .utf8) ?? "Unable to print data")
+                }
+                
+                do {
+                    let result = try response.result.get() // This line will throw an error if the decoding fails
+                    completion(.success(result))
+                } catch {
+                    // Handle decoding error here
+                    print("Error decoding data: \(error)")
+                    self.handleFailureResponse(response, completion: completion)
+                }
+            }
+    }
+    func logoutApi<T: Decodable>(request: logoutRequest, responseModelType: T.Type, completion: @escaping (Result<T, APIError>) -> Void) {
+        
+        let authToken: String = AppUserDefaults.object(forKey: "AUTHTOKEN") as? String ?? ""
+        
+        let customHeaders: HTTPHeaders = [
+            "Authorization": authToken
+        ]
+
+        
+        let URLstr: String = "\(APIConfig.baseURL+logoutEndpoint)"
         
         Logger.logRequest(url: URLstr, method: "Post", headers: customHeaders, body: nil)
         AF.request(URLstr, method: .post, parameters: request, encoder: JSONParameterEncoder.default, headers: customHeaders)

@@ -57,6 +57,10 @@
                                                     <constraint firstItem="yHC-pw-Kxb" firstAttribute="centerX" secondItem="pql-Qd-J2L" secondAttribute="centerX" id="p6J-jn-JND"/>
                                                 </constraints>
                                             </view>
+                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="6F4-58-zug" customClass="MP4VideoPlayerView" customModule="TSS" customModuleProvider="target">
+                                                <rect key="frame" x="0.0" y="0.0" width="329" height="227"/>
+                                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                            </view>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="fQn-Vs-d6N">
                                                 <rect key="frame" x="0.0" y="0.0" width="329" height="227"/>
                                                 <subviews>
@@ -119,8 +123,12 @@
                                             <constraint firstAttribute="height" constant="227" id="QRE-pj-JtW"/>
                                             <constraint firstItem="fQn-Vs-d6N" firstAttribute="top" secondItem="56z-LC-BPG" secondAttribute="top" id="RA4-ri-E0b"/>
                                             <constraint firstItem="pql-Qd-J2L" firstAttribute="top" secondItem="56z-LC-BPG" secondAttribute="top" id="VLX-el-rrw"/>
+                                            <constraint firstAttribute="bottom" secondItem="6F4-58-zug" secondAttribute="bottom" id="YU8-h5-Dhv"/>
                                             <constraint firstItem="pql-Qd-J2L" firstAttribute="leading" secondItem="56z-LC-BPG" secondAttribute="leading" id="i5l-XM-uqb"/>
                                             <constraint firstItem="fQn-Vs-d6N" firstAttribute="leading" secondItem="56z-LC-BPG" secondAttribute="leading" id="inz-1q-jFw"/>
+                                            <constraint firstItem="6F4-58-zug" firstAttribute="top" secondItem="56z-LC-BPG" secondAttribute="top" id="rjp-en-0yZ"/>
+                                            <constraint firstAttribute="trailing" secondItem="6F4-58-zug" secondAttribute="trailing" id="wqR-j8-lBi"/>
+                                            <constraint firstItem="6F4-58-zug" firstAttribute="leading" secondItem="56z-LC-BPG" secondAttribute="leading" id="y97-GQ-eCh"/>
                                         </constraints>
                                     </view>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="bgx-AA-3Ni">
@@ -475,6 +483,7 @@
                 <outlet property="lblTitle" destination="FNw-mr-39l" id="adq-Pn-9YY"/>
                 <outlet property="lblViews" destination="Kxf-25-97B" id="iPp-qm-unO"/>
                 <outlet property="objLoader" destination="yHC-pw-Kxb" id="kWd-Dc-qq8"/>
+                <outlet property="videoBG" destination="6F4-58-zug" id="uC0-i9-RgZ"/>
                 <outlet property="vwEvideoContainer" destination="fQn-Vs-d6N" id="S7c-BF-WNM"/>
                 <outlet property="vwVideo" destination="pql-Qd-J2L" id="fLU-nG-lNq"/>
             </connections>

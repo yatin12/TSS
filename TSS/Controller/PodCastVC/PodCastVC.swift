@@ -8,10 +8,13 @@
 import UIKit
 import WebKit
 import KVSpinnerView
+import GoogleMobileAds
 
 class PodCastVC: UIViewController {
     var isSubscribedUser: String = ""
 
+    @IBOutlet weak var constHeightBannervw: NSLayoutConstraint!
+    @IBOutlet weak var bannerView: GADBannerView!
     var userRole: String = ""
     @IBOutlet weak var objWebView: WKWebView!
     @IBOutlet weak var constHeightHeader: NSLayoutConstraint!
@@ -22,6 +25,8 @@ extension PodCastVC
     override func viewDidLoad() {
         super.viewDidLoad()
         self.setUpHeaderView()
+
+        self.loadBannerView()
         self.setNotificationObserverMethod()
         self.checkSubscribeUserOrnot()
     }
@@ -30,21 +35,41 @@ extension PodCastVC
 //MARK: General Methods
 extension PodCastVC
 {
-    func checkSubscribeUserOrnot()
+    func loadBannerView()
     {
-        self.loadPodcastURL()
-        /*
-        isSubscribedUser = AppUserDefaults.object(forKey: "SubscribedUserType") as? String ?? "\(SubscibeUserType.free)"
-        if isSubscribedUser != "\(SubscibeUserType.free)"
+        if userRole == USERROLE.SignInUser
         {
-            self.loadPodcastURL()
+            let isSubscribedUser = AppUserDefaults.object(forKey: "SubscribedUserType") as? String ?? "\(SubscibeUserType.free)"
+            if isSubscribedUser == "\(SubscibeUserType.premium)" || isSubscribedUser == "\(SubscibeUserType.basic)"
+            {
+                constHeightBannervw.constant = 0
+            }
+            else
+            {
+                constHeightBannervw.constant = 50
+                if currentEnvironment == .production
+                {
+                    bannerView.adUnitID = LiveAdmobId
+
+                }
+                else
+                {
+                    bannerView.adUnitID = testAdmobId
+
+                }
+                // bannerView.rootViewController = self
+                bannerView.delegate = self
+                 bannerView.load(GADRequest())
+            }
         }
         else
         {
-            AlertUtility.presentSimpleAlert(in: self, title: "", message: "\(AlertMessages.subscribeForTabMsg)")
-
+            constHeightBannervw.constant = 50
         }
-        */
+    }
+    func checkSubscribeUserOrnot()
+    {
+        self.loadPodcastURL()
     }
     func setNotificationObserverMethod()
     {
@@ -102,8 +127,8 @@ extension PodCastVC
     }
 
 }
-//MARK: UIWebViewDelegate
-extension PodCastVC : WKUIDelegate, UIWebViewDelegate,WKNavigationDelegate
+//MARK: WKUIDelegate
+extension PodCastVC : WKUIDelegate, WKNavigationDelegate
 {
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
         KVSpinnerView.dismiss()
@@ -113,5 +138,32 @@ extension PodCastVC : WKUIDelegate, UIWebViewDelegate,WKNavigationDelegate
     }
     func webView(_ webView: WKWebView, didFail navigation: WKNavigation!, withError error: Error) {
         KVSpinnerView.dismiss()
+    }
+}
+//MARK: - GADBannerViewDelegate
+extension PodCastVC: GADBannerViewDelegate
+{
+    func bannerViewDidReceiveAd(_ bannerView: GADBannerView) {
+      print("bannerViewDidReceiveAd")
+    }
+
+    func bannerView(_ bannerView: GADBannerView, didFailToReceiveAdWithError error: Error) {
+      print("bannerView:didFailToReceiveAdWithError: \(error.localizedDescription)")
+    }
+
+    func bannerViewDidRecordImpression(_ bannerView: GADBannerView) {
+      print("bannerViewDidRecordImpression")
+    }
+
+    func bannerViewWillPresentScreen(_ bannerView: GADBannerView) {
+      print("bannerViewWillPresentScreen")
+    }
+
+    func bannerViewWillDismissScreen(_ bannerView: GADBannerView) {
+      print("bannerViewWillDIsmissScreen")
+    }
+
+    func bannerViewDidDismissScreen(_ bannerView: GADBannerView) {
+      print("bannerViewDidDismissScreen")
     }
 }

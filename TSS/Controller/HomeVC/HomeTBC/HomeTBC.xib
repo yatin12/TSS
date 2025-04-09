@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="22155" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="32700.99.1234" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_12" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22131"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22685"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -73,10 +73,10 @@
                 </subviews>
                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                 <constraints>
+                    <constraint firstItem="Lvg-kx-ZS9" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" id="3uY-gE-pBB"/>
                     <constraint firstAttribute="bottom" secondItem="Lvg-kx-ZS9" secondAttribute="bottom" constant="5" id="5PD-xn-3lP"/>
-                    <constraint firstItem="Lvg-kx-ZS9" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" id="CRU-Uf-8A6"/>
                     <constraint firstItem="Lvg-kx-ZS9" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="5" id="DlD-QI-ctV"/>
-                    <constraint firstAttribute="trailing" secondItem="Lvg-kx-ZS9" secondAttribute="trailing" id="MoR-Ev-KkC"/>
+                    <constraint firstAttribute="trailing" secondItem="Lvg-kx-ZS9" secondAttribute="trailing" id="m1d-ss-0ha"/>
                 </constraints>
             </tableViewCellContentView>
             <viewLayoutGuide key="safeArea" id="njF-e1-oar"/>

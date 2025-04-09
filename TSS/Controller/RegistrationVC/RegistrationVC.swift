@@ -11,6 +11,8 @@ import KVSpinnerView
 class RegistrationVC: UIViewController {
     //  - Variables - 
     private let objRegistrationViewModel = RegistrationViewModel()
+    private let objAddFCMTokenViewModel = AddFCMTokenViewModel()
+
     var strSelectedGender: String = ""
     
     //  - Outlets - 
@@ -20,6 +22,14 @@ class RegistrationVC: UIViewController {
     @IBOutlet weak var lblLowerDeclaration: TappableLabel!
     @IBOutlet weak var lblLogin: UILabel!
     
+    @IBOutlet weak var lblCountry: UILabel!
+    @IBOutlet weak var lblGender: UILabel!
+    @IBOutlet weak var lblConfPassword: UILabel!
+    @IBOutlet weak var lblPassword: UILabel!
+    @IBOutlet weak var lblFirstNm: UILabel!
+    @IBOutlet weak var lblUserNm: UILabel!
+    @IBOutlet weak var lblLastNm: UILabel!
+    @IBOutlet weak var lblEmail: UILabel!
     @IBOutlet weak var txtGendar: UITextField!
     @IBOutlet weak var vwCountry: UIView!
     @IBOutlet weak var vwGendar: UIView!
@@ -119,8 +129,8 @@ extension RegistrationVC
         let termsRange = (text as NSString).range(of: "Terms of Use")
         let privacyRange = (text as NSString).range(of: "Privacy Policy")
         
-        attributedString.addAttribute(.foregroundColor, value: UIColor.white, range: termsRange)
-        attributedString.addAttribute(.foregroundColor, value: UIColor.white, range: privacyRange)
+        attributedString.addAttribute(.foregroundColor, value: UIColor(named: "ThemeFontColor") ?? .black, range: termsRange)
+        attributedString.addAttribute(.foregroundColor, value: UIColor(named: "ThemeFontColor") ?? .black, range: privacyRange)
         
         lblLowerDeclaration.attributedText = attributedString
         
@@ -189,269 +199,255 @@ extension RegistrationVC
     private func updateBorder(for textField: UITextField, isEditing: Bool) {
         
         if textField == txtFristNm {
-            vwFristNm.layer.borderColor = isEditing ? highlightColor : clearColor
-            vwFristNm.layer.borderWidth = isEditing ? 1.0 : 0.0
+            vwFristNm.layer.borderColor = isEditing ? highlightColor : DefaultBorderColor
+            lblFirstNm.textColor = isEditing ? highlightColor_Lbl : DefaultBorderColor_Lbl
             
-            vwLastNm.layer.borderColor = isEditing ? clearColor : highlightColor
-            vwLastNm.layer.borderWidth = isEditing ? 0.0 : 1.0
+            vwLastNm.layer.borderColor = isEditing ? DefaultBorderColor : highlightColor
+            lblLastNm.textColor = isEditing ? DefaultBorderColor_Lbl : highlightColor_Lbl
+
+            vwUserNm.layer.borderColor = isEditing ? DefaultBorderColor : highlightColor
+            lblUserNm.textColor = isEditing ? DefaultBorderColor_Lbl : highlightColor_Lbl
+
+            vwEmail.layer.borderColor = isEditing ? DefaultBorderColor : highlightColor
+            lblEmail.textColor = isEditing ? DefaultBorderColor_Lbl : highlightColor_Lbl
+
+            vwPassword.layer.borderColor = isEditing ? DefaultBorderColor : highlightColor
+            lblPassword.textColor = isEditing ? DefaultBorderColor_Lbl : highlightColor_Lbl
+
+            vwConfPassword.layer.borderColor = isEditing ? DefaultBorderColor : highlightColor
+            lblConfPassword.textColor = isEditing ? DefaultBorderColor_Lbl : highlightColor_Lbl
+
             
-            vwUserNm.layer.borderColor = isEditing ? clearColor : highlightColor
-            vwUserNm.layer.borderWidth = isEditing ? 0.0 : 1.0
-            
-            vwEmail.layer.borderColor = isEditing ? clearColor : highlightColor
-            vwEmail.layer.borderWidth = isEditing ? 0.0 : 1.0
-            
-            vwPassword.layer.borderColor = isEditing ? clearColor : highlightColor
-            vwPassword.layer.borderWidth = isEditing ? 0.0 : 1.0
-            
-            vwConfPassword.layer.borderColor = isEditing ? clearColor : highlightColor
-            vwConfPassword.layer.borderWidth = isEditing ? 0.0 : 1.0
-            
-            vwBirthday.layer.borderColor = isEditing ? clearColor : highlightColor
-            vwBirthday.layer.borderWidth = isEditing ? 0.0 : 1.0
-            
-            vwGendar.layer.borderColor = isEditing ? clearColor : highlightColor
-            vwGendar.layer.borderWidth = isEditing ? 0.0 : 1.0
-            
-            vwCountry.layer.borderColor = isEditing ? clearColor : highlightColor
-            vwCountry.layer.borderWidth = isEditing ? 0.0 : 1.0
+            vwBirthday.layer.borderColor = isEditing ? DefaultBorderColor : highlightColor
+
+            vwGendar.layer.borderColor = isEditing ? DefaultBorderColor : highlightColor
+            lblGender.textColor = isEditing ? DefaultBorderColor_Lbl : highlightColor_Lbl
+
+            vwCountry.layer.borderColor = isEditing ? DefaultBorderColor : highlightColor
+            lblCountry.textColor = isEditing ? DefaultBorderColor_Lbl : highlightColor_Lbl
 
         }
         else if textField == txtLastNm {
-            vwLastNm.layer.borderColor = isEditing ? highlightColor : clearColor
-            vwLastNm.layer.borderWidth = isEditing ? 1.0 : 0.0
+            vwLastNm.layer.borderColor = isEditing ? highlightColor : DefaultBorderColor
+            lblLastNm.textColor = isEditing ? highlightColor_Lbl : DefaultBorderColor_Lbl
+
+            vwFristNm.layer.borderColor = isEditing ? DefaultBorderColor : highlightColor
+            lblFirstNm.textColor = isEditing ? DefaultBorderColor_Lbl : highlightColor_Lbl
+
+            vwUserNm.layer.borderColor = isEditing ? DefaultBorderColor : highlightColor
+            lblUserNm.textColor = isEditing ? DefaultBorderColor_Lbl : highlightColor_Lbl
+
+            vwEmail.layer.borderColor = isEditing ? DefaultBorderColor : highlightColor
+            lblEmail.textColor = isEditing ? DefaultBorderColor_Lbl : highlightColor_Lbl
+
+            vwPassword.layer.borderColor = isEditing ? DefaultBorderColor : highlightColor
+            lblPassword.textColor = isEditing ? DefaultBorderColor_Lbl : highlightColor_Lbl
+
+            vwConfPassword.layer.borderColor = isEditing ? DefaultBorderColor : highlightColor
+            lblConfPassword.textColor = isEditing ? DefaultBorderColor_Lbl : highlightColor_Lbl
+
+            vwBirthday.layer.borderColor = isEditing ? DefaultBorderColor : highlightColor
             
-            vwFristNm.layer.borderColor = isEditing ? clearColor : highlightColor
-            vwFristNm.layer.borderWidth = isEditing ? 0.0 : 1.0
-            
-            vwUserNm.layer.borderColor = isEditing ? clearColor : highlightColor
-            vwUserNm.layer.borderWidth = isEditing ? 0.0 : 1.0
-            
-            vwEmail.layer.borderColor = isEditing ? clearColor : highlightColor
-            vwEmail.layer.borderWidth = isEditing ? 0.0 : 1.0
-            
-            vwPassword.layer.borderColor = isEditing ? clearColor : highlightColor
-            vwPassword.layer.borderWidth = isEditing ? 0.0 : 1.0
-            
-            vwConfPassword.layer.borderColor = isEditing ? clearColor : highlightColor
-            vwConfPassword.layer.borderWidth = isEditing ? 0.0 : 1.0
-            
-            vwBirthday.layer.borderColor = isEditing ? clearColor : highlightColor
-            vwBirthday.layer.borderWidth = isEditing ? 0.0 : 1.0
-            
-            vwGendar.layer.borderColor = isEditing ? clearColor : highlightColor
-            vwGendar.layer.borderWidth = isEditing ? 0.0 : 1.0
-            
-            vwCountry.layer.borderColor = isEditing ? clearColor : highlightColor
-            vwCountry.layer.borderWidth = isEditing ? 0.0 : 1.0
+            vwGendar.layer.borderColor = isEditing ? DefaultBorderColor : highlightColor
+            lblGender.textColor = isEditing ? DefaultBorderColor_Lbl : highlightColor_Lbl
+
+            vwCountry.layer.borderColor = isEditing ? DefaultBorderColor : highlightColor
+            lblCountry.textColor = isEditing ? DefaultBorderColor_Lbl : highlightColor_Lbl
 
         }
         else if textField == txtUserNm {
-            vwUserNm.layer.borderColor = isEditing ? highlightColor : clearColor
-            vwUserNm.layer.borderWidth = isEditing ? 1.0 : 0.0
+            vwUserNm.layer.borderColor = isEditing ? highlightColor : DefaultBorderColor
+            lblUserNm.textColor = isEditing ? highlightColor_Lbl : DefaultBorderColor_Lbl
+
+            vwFristNm.layer.borderColor = isEditing ? DefaultBorderColor : highlightColor
+            lblFirstNm.textColor = isEditing ? DefaultBorderColor_Lbl : highlightColor_Lbl
+
+            vwLastNm.layer.borderColor = isEditing ? DefaultBorderColor : highlightColor
+            lblLastNm.textColor = isEditing ? DefaultBorderColor_Lbl : highlightColor_Lbl
+
+            vwEmail.layer.borderColor = isEditing ? DefaultBorderColor : highlightColor
+            lblEmail.textColor = isEditing ? DefaultBorderColor_Lbl : highlightColor_Lbl
+
+            vwPassword.layer.borderColor = isEditing ? DefaultBorderColor : highlightColor
+            lblPassword.textColor = isEditing ? DefaultBorderColor_Lbl : highlightColor_Lbl
+
+            vwConfPassword.layer.borderColor = isEditing ? DefaultBorderColor : highlightColor
+            lblConfPassword.textColor = isEditing ? DefaultBorderColor_Lbl : highlightColor_Lbl
+
+            vwBirthday.layer.borderColor = isEditing ? DefaultBorderColor : highlightColor
             
-            vwFristNm.layer.borderColor = isEditing ? clearColor : highlightColor
-            vwFristNm.layer.borderWidth = isEditing ? 0.0 : 1.0
-            
-            vwLastNm.layer.borderColor = isEditing ? clearColor : highlightColor
-            vwLastNm.layer.borderWidth = isEditing ? 0.0 : 1.0
-            
-            vwEmail.layer.borderColor = isEditing ? clearColor : highlightColor
-            vwEmail.layer.borderWidth = isEditing ? 0.0 : 1.0
-            
-            vwPassword.layer.borderColor = isEditing ? clearColor : highlightColor
-            vwPassword.layer.borderWidth = isEditing ? 0.0 : 1.0
-            
-            vwConfPassword.layer.borderColor = isEditing ? clearColor : highlightColor
-            vwConfPassword.layer.borderWidth = isEditing ? 0.0 : 1.0
-            
-            vwBirthday.layer.borderColor = isEditing ? clearColor : highlightColor
-            vwBirthday.layer.borderWidth = isEditing ? 0.0 : 1.0
-            
-            vwGendar.layer.borderColor = isEditing ? clearColor : highlightColor
-            vwGendar.layer.borderWidth = isEditing ? 0.0 : 1.0
-            
-            vwCountry.layer.borderColor = isEditing ? clearColor : highlightColor
-            vwCountry.layer.borderWidth = isEditing ? 0.0 : 1.0
-            
+            vwGendar.layer.borderColor = isEditing ? DefaultBorderColor : highlightColor
+            lblGender.textColor = isEditing ? DefaultBorderColor_Lbl : highlightColor_Lbl
+
+            vwCountry.layer.borderColor = isEditing ? DefaultBorderColor : highlightColor
+            lblCountry.textColor = isEditing ? DefaultBorderColor_Lbl : highlightColor_Lbl
+
         }
         else if textField == txtEmail {
-            vwEmail.layer.borderColor = isEditing ? highlightColor : clearColor
-            vwEmail.layer.borderWidth = isEditing ? 1.0 : 0.0
+            vwEmail.layer.borderColor = isEditing ? highlightColor : DefaultBorderColor
+            lblEmail.textColor = isEditing ? highlightColor_Lbl : DefaultBorderColor_Lbl
+
+            vwFristNm.layer.borderColor = isEditing ? DefaultBorderColor : highlightColor
+            lblFirstNm.textColor = isEditing ? DefaultBorderColor_Lbl : highlightColor_Lbl
+
+            vwLastNm.layer.borderColor = isEditing ? DefaultBorderColor : highlightColor
+            lblLastNm.textColor = isEditing ? DefaultBorderColor_Lbl : highlightColor_Lbl
+
+            vwUserNm.layer.borderColor = isEditing ? DefaultBorderColor : highlightColor
+            lblUserNm.textColor = isEditing ? DefaultBorderColor_Lbl : highlightColor_Lbl
+
+            vwPassword.layer.borderColor = isEditing ? DefaultBorderColor : highlightColor
+            lblPassword.textColor = isEditing ? DefaultBorderColor_Lbl : highlightColor_Lbl
+
+            vwConfPassword.layer.borderColor = isEditing ? DefaultBorderColor : highlightColor
+            lblConfPassword.textColor = isEditing ? DefaultBorderColor_Lbl : highlightColor_Lbl
+
+            vwBirthday.layer.borderColor = isEditing ? DefaultBorderColor : highlightColor
             
-            vwFristNm.layer.borderColor = isEditing ? clearColor : highlightColor
-            vwFristNm.layer.borderWidth = isEditing ? 0.0 : 1.0
-            
-            vwLastNm.layer.borderColor = isEditing ? clearColor : highlightColor
-            vwLastNm.layer.borderWidth = isEditing ? 0.0 : 1.0
-            
-            vwUserNm.layer.borderColor = isEditing ? clearColor : highlightColor
-            vwUserNm.layer.borderWidth = isEditing ? 0.0 : 1.0
-            
-            vwPassword.layer.borderColor = isEditing ? clearColor : highlightColor
-            vwPassword.layer.borderWidth = isEditing ? 0.0 : 1.0
-            
-            vwConfPassword.layer.borderColor = isEditing ? clearColor : highlightColor
-            vwConfPassword.layer.borderWidth = isEditing ? 0.0 : 1.0
-            
-            vwBirthday.layer.borderColor = isEditing ? clearColor : highlightColor
-            vwBirthday.layer.borderWidth = isEditing ? 0.0 : 1.0
-            
-            vwGendar.layer.borderColor = isEditing ? clearColor : highlightColor
-            vwGendar.layer.borderWidth = isEditing ? 0.0 : 1.0
-            
-            vwCountry.layer.borderColor = isEditing ? clearColor : highlightColor
-            vwCountry.layer.borderWidth = isEditing ? 0.0 : 1.0
+            vwGendar.layer.borderColor = isEditing ? DefaultBorderColor : highlightColor
+            lblGender.textColor = isEditing ? DefaultBorderColor_Lbl : highlightColor_Lbl
+
+            vwCountry.layer.borderColor = isEditing ? DefaultBorderColor : highlightColor
+            lblCountry.textColor = isEditing ? DefaultBorderColor_Lbl : highlightColor_Lbl
+
         }
         else if textField == txtPassword {
-            vwPassword.layer.borderColor = isEditing ? highlightColor : clearColor
-            vwPassword.layer.borderWidth = isEditing ? 1.0 : 0.0
+            vwPassword.layer.borderColor = isEditing ? highlightColor : DefaultBorderColor
+            lblPassword.textColor = isEditing ? highlightColor_Lbl : DefaultBorderColor_Lbl
+
+            vwFristNm.layer.borderColor = isEditing ? DefaultBorderColor : highlightColor
+            lblFirstNm.textColor = isEditing ? DefaultBorderColor_Lbl : highlightColor_Lbl
+
+            vwLastNm.layer.borderColor = isEditing ? DefaultBorderColor : highlightColor
+            lblLastNm.textColor = isEditing ? DefaultBorderColor_Lbl : highlightColor_Lbl
+
+            vwUserNm.layer.borderColor = isEditing ? DefaultBorderColor : highlightColor
+            lblUserNm.textColor = isEditing ? DefaultBorderColor_Lbl : highlightColor_Lbl
+
+            vwEmail.layer.borderColor = isEditing ? DefaultBorderColor : highlightColor
+            lblEmail.textColor = isEditing ? DefaultBorderColor_Lbl : highlightColor_Lbl
+
+            vwConfPassword.layer.borderColor = isEditing ? DefaultBorderColor : highlightColor
+            lblConfPassword.textColor = isEditing ? DefaultBorderColor_Lbl : highlightColor_Lbl
+
+            vwBirthday.layer.borderColor = isEditing ? DefaultBorderColor : highlightColor
             
-            vwFristNm.layer.borderColor = isEditing ? clearColor : highlightColor
-            vwFristNm.layer.borderWidth = isEditing ? 0.0 : 1.0
-            
-            vwLastNm.layer.borderColor = isEditing ? clearColor : highlightColor
-            vwLastNm.layer.borderWidth = isEditing ? 0.0 : 1.0
-            
-            vwUserNm.layer.borderColor = isEditing ? clearColor : highlightColor
-            vwUserNm.layer.borderWidth = isEditing ? 0.0 : 1.0
-            
-            vwEmail.layer.borderColor = isEditing ? clearColor : highlightColor
-            vwEmail.layer.borderWidth = isEditing ? 0.0 : 1.0
-            
-            vwConfPassword.layer.borderColor = isEditing ? clearColor : highlightColor
-            vwConfPassword.layer.borderWidth = isEditing ? 0.0 : 1.0
-            
-            vwBirthday.layer.borderColor = isEditing ? clearColor : highlightColor
-            vwBirthday.layer.borderWidth = isEditing ? 0.0 : 1.0
-            
-            vwGendar.layer.borderColor = isEditing ? clearColor : highlightColor
-            vwGendar.layer.borderWidth = isEditing ? 0.0 : 1.0
-            
-            vwCountry.layer.borderColor = isEditing ? clearColor : highlightColor
-            vwCountry.layer.borderWidth = isEditing ? 0.0 : 1.0
-            
+            vwGendar.layer.borderColor = isEditing ? DefaultBorderColor : highlightColor
+            lblGender.textColor = isEditing ? DefaultBorderColor_Lbl : highlightColor_Lbl
+
+            vwCountry.layer.borderColor = isEditing ? DefaultBorderColor : highlightColor
+            lblCountry.textColor = isEditing ? DefaultBorderColor_Lbl : highlightColor_Lbl
+
         }
         else if textField == txtConfPassword {
-            vwConfPassword.layer.borderColor = isEditing ? highlightColor : clearColor
-            vwConfPassword.layer.borderWidth = isEditing ? 1.0 : 0.0
+            vwConfPassword.layer.borderColor = isEditing ? highlightColor : DefaultBorderColor
+            lblConfPassword.textColor = isEditing ? highlightColor_Lbl : DefaultBorderColor_Lbl
+
+            vwFristNm.layer.borderColor = isEditing ? DefaultBorderColor : highlightColor
+            lblFirstNm.textColor = isEditing ? DefaultBorderColor_Lbl : highlightColor_Lbl
+
+            vwLastNm.layer.borderColor = isEditing ? DefaultBorderColor : highlightColor
+            lblLastNm.textColor = isEditing ? DefaultBorderColor_Lbl : highlightColor_Lbl
+
+            vwUserNm.layer.borderColor = isEditing ? DefaultBorderColor : highlightColor
+            lblUserNm.textColor = isEditing ? DefaultBorderColor_Lbl : highlightColor_Lbl
+
+            vwEmail.layer.borderColor = isEditing ? DefaultBorderColor : highlightColor
+            lblEmail.textColor = isEditing ? DefaultBorderColor_Lbl : highlightColor_Lbl
+
+            vwPassword.layer.borderColor = isEditing ? DefaultBorderColor : highlightColor
+            lblPassword.textColor = isEditing ? DefaultBorderColor_Lbl : highlightColor_Lbl
+
+            vwBirthday.layer.borderColor = isEditing ? DefaultBorderColor : highlightColor
             
-            vwFristNm.layer.borderColor = isEditing ? clearColor : highlightColor
-            vwFristNm.layer.borderWidth = isEditing ? 0.0 : 1.0
-            
-            vwLastNm.layer.borderColor = isEditing ? clearColor : highlightColor
-            vwLastNm.layer.borderWidth = isEditing ? 0.0 : 1.0
-            
-            vwUserNm.layer.borderColor = isEditing ? clearColor : highlightColor
-            vwUserNm.layer.borderWidth = isEditing ? 0.0 : 1.0
-            
-            vwEmail.layer.borderColor = isEditing ? clearColor : highlightColor
-            vwEmail.layer.borderWidth = isEditing ? 0.0 : 1.0
-            
-            vwPassword.layer.borderColor = isEditing ? clearColor : highlightColor
-            vwPassword.layer.borderWidth = isEditing ? 0.0 : 1.0
-            
-            vwBirthday.layer.borderColor = isEditing ? clearColor : highlightColor
-            vwBirthday.layer.borderWidth = isEditing ? 0.0 : 1.0
-            
-            vwGendar.layer.borderColor = isEditing ? clearColor : highlightColor
-            vwGendar.layer.borderWidth = isEditing ? 0.0 : 1.0
-            
-            vwCountry.layer.borderColor = isEditing ? clearColor : highlightColor
-            vwCountry.layer.borderWidth = isEditing ? 0.0 : 1.0
-           
+            vwGendar.layer.borderColor = isEditing ? DefaultBorderColor : highlightColor
+            lblGender.textColor = isEditing ? DefaultBorderColor_Lbl : highlightColor_Lbl
+
+            vwCountry.layer.borderColor = isEditing ? DefaultBorderColor : highlightColor
+            lblCountry.textColor = isEditing ? DefaultBorderColor_Lbl : highlightColor_Lbl
+
         }
         else if textField == txtBirthday
         {
             
-            vwBirthday.layer.borderColor = isEditing ? highlightColor : clearColor
-            vwBirthday.layer.borderWidth = isEditing ? 1.0 : 0.0
+            vwBirthday.layer.borderColor = isEditing ? highlightColor : DefaultBorderColor
             
-            vwFristNm.layer.borderColor = isEditing ? clearColor : highlightColor
-            vwFristNm.layer.borderWidth = isEditing ? 0.0 : 1.0
+            vwFristNm.layer.borderColor = isEditing ? DefaultBorderColor : highlightColor
             
-            vwLastNm.layer.borderColor = isEditing ? clearColor : highlightColor
-            vwLastNm.layer.borderWidth = isEditing ? 0.0 : 1.0
+            vwLastNm.layer.borderColor = isEditing ? DefaultBorderColor : highlightColor
             
-            vwUserNm.layer.borderColor = isEditing ? clearColor : highlightColor
-            vwUserNm.layer.borderWidth = isEditing ? 0.0 : 1.0
+            vwUserNm.layer.borderColor = isEditing ? DefaultBorderColor : highlightColor
             
-            vwEmail.layer.borderColor = isEditing ? clearColor : highlightColor
-            vwEmail.layer.borderWidth = isEditing ? 0.0 : 1.0
+            vwEmail.layer.borderColor = isEditing ? DefaultBorderColor : highlightColor
             
-            vwPassword.layer.borderColor = isEditing ? clearColor : highlightColor
-            vwPassword.layer.borderWidth = isEditing ? 0.0 : 1.0
+            vwPassword.layer.borderColor = isEditing ? DefaultBorderColor : highlightColor
             
-            vwConfPassword.layer.borderColor = isEditing ? clearColor : highlightColor
-            vwConfPassword.layer.borderWidth = isEditing ? 0.0 : 1.0
+            vwConfPassword.layer.borderColor = isEditing ? DefaultBorderColor : highlightColor
             
-            vwGendar.layer.borderColor = isEditing ? clearColor : highlightColor
-            vwGendar.layer.borderWidth = isEditing ? 0.0 : 1.0
+            vwGendar.layer.borderColor = isEditing ? DefaultBorderColor : highlightColor
             
-            vwCountry.layer.borderColor = isEditing ? clearColor : highlightColor
-            vwCountry.layer.borderWidth = isEditing ? 0.0 : 1.0
+            vwCountry.layer.borderColor = isEditing ? DefaultBorderColor : highlightColor
             
             
         }
         else if textField == txtGendar
         {
-            vwGendar.layer.borderColor = isEditing ? highlightColor : clearColor
-            vwGendar.layer.borderWidth = isEditing ? 1.0 : 0.0
+            vwGendar.layer.borderColor = isEditing ? highlightColor : DefaultBorderColor
+            lblGender.textColor = isEditing ? highlightColor_Lbl : DefaultBorderColor_Lbl
+
+            vwFristNm.layer.borderColor = isEditing ? DefaultBorderColor : highlightColor
+            lblFirstNm.textColor = isEditing ? DefaultBorderColor_Lbl : highlightColor_Lbl
+
             
-            vwFristNm.layer.borderColor = isEditing ? clearColor : highlightColor
-            vwFristNm.layer.borderWidth = isEditing ? 0.0 : 1.0
+            vwLastNm.layer.borderColor = isEditing ? DefaultBorderColor : highlightColor
+            lblLastNm.textColor = isEditing ? DefaultBorderColor_Lbl : highlightColor_Lbl
+
+            vwUserNm.layer.borderColor = isEditing ? DefaultBorderColor : highlightColor
+            lblUserNm.textColor = isEditing ? DefaultBorderColor_Lbl : highlightColor_Lbl
+
+            vwEmail.layer.borderColor = isEditing ? DefaultBorderColor : highlightColor
+            lblEmail.textColor = isEditing ? DefaultBorderColor_Lbl : highlightColor_Lbl
+
+            vwPassword.layer.borderColor = isEditing ? DefaultBorderColor : highlightColor
+            lblPassword.textColor = isEditing ? DefaultBorderColor_Lbl : highlightColor_Lbl
+
+            vwConfPassword.layer.borderColor = isEditing ? DefaultBorderColor : highlightColor
+            lblConfPassword.textColor = isEditing ? DefaultBorderColor_Lbl : highlightColor_Lbl
+
+            vwBirthday.layer.borderColor = isEditing ? DefaultBorderColor : highlightColor
             
-            vwLastNm.layer.borderColor = isEditing ? clearColor : highlightColor
-            vwLastNm.layer.borderWidth = isEditing ? 0.0 : 1.0
-            
-            vwUserNm.layer.borderColor = isEditing ? clearColor : highlightColor
-            vwUserNm.layer.borderWidth = isEditing ? 0.0 : 1.0
-            
-            vwEmail.layer.borderColor = isEditing ? clearColor : highlightColor
-            vwEmail.layer.borderWidth = isEditing ? 0.0 : 1.0
-            
-            vwPassword.layer.borderColor = isEditing ? clearColor : highlightColor
-            vwPassword.layer.borderWidth = isEditing ? 0.0 : 1.0
-            
-            vwConfPassword.layer.borderColor = isEditing ? clearColor : highlightColor
-            vwConfPassword.layer.borderWidth = isEditing ? 0.0 : 1.0
-            
-            vwBirthday.layer.borderColor = isEditing ? clearColor : highlightColor
-            vwBirthday.layer.borderWidth = isEditing ? 0.0 : 1.0
-            
-            vwCountry.layer.borderColor = isEditing ? clearColor : highlightColor
-            vwCountry.layer.borderWidth = isEditing ? 0.0 : 1.0
-            
+            vwCountry.layer.borderColor = isEditing ? DefaultBorderColor : highlightColor
+            lblCountry.textColor = isEditing ? DefaultBorderColor_Lbl : highlightColor_Lbl
+
         }
         else if textField == txtCountry
         {
-            vwCountry.layer.borderColor = isEditing ? highlightColor : clearColor
-            vwCountry.layer.borderWidth = isEditing ? 1.0 : 0.0
+            vwCountry.layer.borderColor = isEditing ? highlightColor : DefaultBorderColor
+            lblCountry.textColor = isEditing ? highlightColor_Lbl : DefaultBorderColor_Lbl
+
+            vwFristNm.layer.borderColor = isEditing ? DefaultBorderColor : highlightColor
+            lblFirstNm.textColor = isEditing ? DefaultBorderColor_Lbl : highlightColor_Lbl
+
+            vwLastNm.layer.borderColor = isEditing ? DefaultBorderColor : highlightColor
+            lblLastNm.textColor = isEditing ? DefaultBorderColor_Lbl : highlightColor_Lbl
+
+            vwUserNm.layer.borderColor = isEditing ? DefaultBorderColor : highlightColor
+            lblUserNm.textColor = isEditing ? DefaultBorderColor_Lbl : highlightColor_Lbl
+
+            vwEmail.layer.borderColor = isEditing ? DefaultBorderColor : highlightColor
+            lblEmail.textColor = isEditing ? DefaultBorderColor_Lbl : highlightColor_Lbl
+
+            vwPassword.layer.borderColor = isEditing ? DefaultBorderColor : highlightColor
+            lblPassword.textColor = isEditing ? DefaultBorderColor_Lbl : highlightColor_Lbl
+
+            vwConfPassword.layer.borderColor = isEditing ? DefaultBorderColor : highlightColor
+            lblConfPassword.textColor = isEditing ? DefaultBorderColor_Lbl : highlightColor_Lbl
+
+            vwBirthday.layer.borderColor = isEditing ? DefaultBorderColor : highlightColor
             
-            vwFristNm.layer.borderColor = isEditing ? clearColor : highlightColor
-            vwFristNm.layer.borderWidth = isEditing ? 0.0 : 1.0
-            
-            vwLastNm.layer.borderColor = isEditing ? clearColor : highlightColor
-            vwLastNm.layer.borderWidth = isEditing ? 0.0 : 1.0
-            
-            vwUserNm.layer.borderColor = isEditing ? clearColor : highlightColor
-            vwUserNm.layer.borderWidth = isEditing ? 0.0 : 1.0
-            
-            vwEmail.layer.borderColor = isEditing ? clearColor : highlightColor
-            vwEmail.layer.borderWidth = isEditing ? 0.0 : 1.0
-            
-            vwPassword.layer.borderColor = isEditing ? clearColor : highlightColor
-            vwPassword.layer.borderWidth = isEditing ? 0.0 : 1.0
-            
-            vwConfPassword.layer.borderColor = isEditing ? clearColor : highlightColor
-            vwConfPassword.layer.borderWidth = isEditing ? 0.0 : 1.0
-            
-            vwBirthday.layer.borderColor = isEditing ? clearColor : highlightColor
-            vwBirthday.layer.borderWidth = isEditing ? 0.0 : 1.0
-            
-            vwGendar.layer.borderColor = isEditing ? clearColor : highlightColor
-            vwGendar.layer.borderWidth = isEditing ? 0.0 : 1.0
-            
+            vwGendar.layer.borderColor = isEditing ? DefaultBorderColor : highlightColor
+            lblGender.textColor = isEditing ? DefaultBorderColor_Lbl : highlightColor_Lbl
+
         }
     }
 }
@@ -482,6 +478,7 @@ extension RegistrationVC
     }
     @IBAction func btnCountryTapped(_ sender: Any)
     {
+        self.view.endEditing(true)
         updateBorder(for: txtCountry, isEditing: true)
         
         let storyboard = UIStoryboard(name: storyboardKey.InnerScreen, bundle: nil)
@@ -492,6 +489,7 @@ extension RegistrationVC
     }
     @IBAction func btnGendarTapped(_ sender: Any)
     {
+        self.view.endEditing(true)
         updateBorder(for: txtGendar, isEditing: true)
         self.openGenderActionSheet()
     }
@@ -549,45 +547,46 @@ extension RegistrationVC
         {
             KVSpinnerView.show()
             objRegistrationViewModel.registrationUser(first_name: txtFristNm.text ?? "", last_name: txtLastNm.text ?? "", username: txtUserNm.text ?? "", email: txtEmail.text ?? "", password: txtPassword.text ?? "", dob: txtBirthday.text ?? "", gender: strSelectedGender, country: txtCountry.text ?? "", device_token: deviceId) { result in
-                KVSpinnerView.dismiss()
+                
                 switch result {
                 case .success(let loginResponse):
                     // Handle successful
                 
                     if loginResponse.settings?.success == true
                     {
+                        UserDefaultUtility.saveValueToUserDefaults(value: "\(loginResponse.data?.username ?? "")", forKey: "UserName")
+                        UserDefaultUtility.saveValueToUserDefaults(value: "\(loginResponse.data?.email ?? "")", forKey: "UserEmail")
+                        
+                        
                         let strSubscriptionName = loginResponse.data?.membershipLevel?.name ?? "\(SubscibeUserType.free)"
-                        if strSubscriptionName == "Free" {
+                        if strSubscriptionName == SubscibeUserType.free {
                             UserDefaultUtility.saveValueToUserDefaults(value: "\(SubscibeUserType.free)", forKey: "SubscribedUserType")
                         }
-                        else if strSubscriptionName == "Basic" {
+                        else if strSubscriptionName == SubscibeUserType.basic {
                             UserDefaultUtility.saveValueToUserDefaults(value: "\(SubscibeUserType.basic)", forKey: "SubscribedUserType")
                         }
-                        else if strSubscriptionName == "Premium" {
+                        else if strSubscriptionName == SubscibeUserType.premium {
                             UserDefaultUtility.saveValueToUserDefaults(value: "\(SubscibeUserType.premium)", forKey: "SubscribedUserType")
                         }
                         
-                        UserDefaultUtility.saveValueToUserDefaults(value: "YES", forKey: "isUserLoggedIn")
+                        
                         UserDefaultUtility.saveValueToUserDefaults(value: "\(loginResponse.data?.userID ?? "0")", forKey: "USERID")
                         UserDefaultUtility.saveValueToUserDefaults(value: "\(loginResponse.settings?.authorization ?? "")", forKey: "AUTHTOKEN")
-                        UserDefaultUtility.saveValueToUserDefaults(value: "SignInUser", forKey: "USERROLE")
+                       
+                        self.apiCallAddFCMToken()
 
-
-                        NavigationHelper.push(storyboardKey.InnerScreen, viewControllerIdentifier: "HomeNev", from: self.navigationController!, animated: true)
+                       // NavigationHelper.push(storyboardKey.InnerScreen, viewControllerIdentifier: "HomeNev", from: self.navigationController!, animated: true)
                     }
                     else
                     {
+                        KVSpinnerView.dismiss()
                         AlertUtility.presentSimpleAlert(in: self, title: "", message: "\(loginResponse.settings?.message ?? "")")
 
                     }
                    
-
-                    
-                   // self.apiCallAddFCMToken()
-                    
                 case .failure(let error):
                     // Handle failure
-                    
+                    KVSpinnerView.dismiss()
                     if let apiError = error as? APIError {
                         ErrorHandlingUtility.handleAPIError(apiError, in: self)
                     } else {
@@ -602,6 +601,55 @@ extension RegistrationVC
         else
         {
             KVSpinnerView.dismiss()
+            AlertUtility.presentSimpleAlert(in: self, title: "", message: "\(AlertMessages.NoInternetAlertMsg)")
+
+        }
+    }
+    func apiCallAddFCMToken()
+    {
+        var deviceId: String = AppUserDefaults.object(forKey: "DEVICETOKEN") as? String ?? ""
+        if deviceId == ""
+        {
+            deviceId = "111"
+        }
+        var fcmToken: String = AppUserDefaults.object(forKey: "FCMTOKEN") as? String ?? ""
+        if fcmToken == ""
+        {
+            fcmToken = "222"
+        }
+        let userId = AppUserDefaults.object(forKey: "USERID") as? String ?? ""
+        
+        if Reachability.isConnectedToNetwork()
+        {
+           // KVSpinnerView.show()
+            objAddFCMTokenViewModel.addFCMToken(deviceId: deviceId, fcmToken: fcmToken, userId: userId) { result in
+                KVSpinnerView.dismiss()
+                switch result {
+                case .success(_):
+                    // Handle successful
+                    
+                    print("done")
+                    
+                    UserDefaultUtility.saveValueToUserDefaults(value: "SignInUser", forKey: "USERROLE")
+                    UserDefaultUtility.saveValueToUserDefaults(value: "YES", forKey: "isUserLoggedIn")
+                    
+                    NavigationHelper.push(storyboardKey.InnerScreen, viewControllerIdentifier: "HomeNev", from: self.navigationController!, animated: true)
+                    
+                case .failure(let error):
+                    // Handle failure
+                    if let apiError = error as? APIError {
+                        ErrorHandlingUtility.handleAPIError(apiError, in: self)
+                    } else {
+                        // Handle other types of errors
+                       // print("Unexpected error: \(error)")
+                        AlertUtility.presentSimpleAlert(in: self, title: "", message: "\(error.localizedDescription)")
+
+                    }
+                }
+            }
+        }
+        else
+        {
             AlertUtility.presentSimpleAlert(in: self, title: "", message: "\(AlertMessages.NoInternetAlertMsg)")
 
         }

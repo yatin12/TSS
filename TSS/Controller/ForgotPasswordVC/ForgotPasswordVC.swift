@@ -56,8 +56,8 @@ extension ForgotPasswordVC: UITextFieldDelegate
 {
     private func updateBorder(for textField: UITextField, isEditing: Bool) {
         if textField == txtEmail {
-            vwEmail.layer.borderColor = isEditing ? highlightColor : clearColor
-            vwEmail.layer.borderWidth = isEditing ? 1.0 : 0.0
+            vwEmail.layer.borderColor = isEditing ? highlightColor : DefaultBorderColor
+            //vwEmail.layer.borderWidth = isEditing ? 1.0 : 0.0
         }
     }
     func textFieldDidBeginEditing(_ textField: UITextField) {
@@ -122,7 +122,7 @@ extension ForgotPasswordVC
                         AlertUtility.presentSimpleAlert(in: self, title: "", message: "\(loginResponse.settings?.message ?? "")")
                     }
                     
-                    // self.apiCallAddFCMToken()
+                    
                     
                 case .failure(let error):
                     // Handle failure

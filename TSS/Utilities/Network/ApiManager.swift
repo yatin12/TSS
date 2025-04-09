@@ -46,6 +46,36 @@ class APIManager {
                 }
             }
     }
+    func AddFCMToken<T: Decodable>(request: AddFCMTokenRequest, responseModelType: T.Type, completion: @escaping (Result<T, APIError>) -> Void) {
+        
+        let URLstr: String = "\(APIConfig.baseURL+addFCMTokenEndpoint)"
+        
+        let authToken: String = AppUserDefaults.object(forKey: "AUTHTOKEN") as? String ?? ""
+        
+        let customHeaders: HTTPHeaders = [
+            "Authorization": authToken
+        ]
+        
+        Logger.logRequest(url: URLstr, method: "Post", headers: nil, body: nil)
+        AF.request(URLstr, method: .post, parameters: request, encoder: JSONParameterEncoder.default, headers: customHeaders)
+            .validate()
+            .responseDecodable(of: T.self) { response in
+                Logger.logResponse(url: URLstr, response: response)
+                
+                if let data = response.data {
+                    print(String(data: data, encoding: .utf8) ?? "Unable to print data")
+                }
+                
+                do {
+                    let result = try response.result.get() // This line will throw an error if the decoding fails
+                    completion(.success(result))
+                } catch {
+                    // Handle decoding error here
+                    print("Error decoding data: \(error)")
+                    self.handleFailureResponse(response, completion: completion)
+                }
+            }
+    }
     func registrationUser<T: Decodable>(request: RegistrationRequest, responseModelType: T.Type, completion: @escaping (Result<T, APIError>) -> Void) {
         
         let URLstr: String = "\(APIConfig.baseURL+registerEndpoint)"
@@ -587,6 +617,171 @@ class APIManager {
                 }
             }
     }
+    func postSubscriptionCancelledInfo(userID: String, isCancelled: String,  completion: @escaping (Result<[String: Any], Error>) -> Void) {
+        // Define the URL
+        let urlString = "\(APIConfig.baseURL+subscriptionPurchaseEndpoint)"
+        
+        guard let url = URL(string: urlString) else {
+            completion(.failure(NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "Invalid URL"])))
+            return
+        }
+        
+        // Set up the request parameters
+        let parameters: [String: Any] = [
+            "userID": userID,
+            "isCancelled": isCancelled
+        ]
+        
+        // Set up the headers
+        let authToken: String = AppUserDefaults.object(forKey: "AUTHTOKEN") as? String ?? ""
+
+        let headers: HTTPHeaders = [
+            "Authorization": authToken,
+            "Content-Type": "application/json"
+        ]
+        
+        // Make the request
+        AF.request(url, method: .post, parameters: parameters, encoding: JSONEncoding.default, headers: headers)
+            .responseJSON { response in
+                switch response.result {
+                case .success(let value):
+                    if let json = value as? [String: Any] {
+                        completion(.success(json))
+                    } else {
+                        completion(.failure(NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "Invalid JSON structure"])))
+                    }
+                case .failure(let error):
+                    completion(.failure(error))
+                }
+            }
+    }
+    func postUpcomingEventPurchaseInfo(userID: String, postid: String, productId: String, transactionIdentifier: String, transactionDate: String, transactionState: String, productPrice: String, productPriceLocal: String, productPurchaseCurrencyCode: String, isCancelled: String,  completion: @escaping (Result<[String: Any], Error>) -> Void) {
+        // Define the URL
+        let urlString = "\(APIConfig.baseURL+UpcomingEventPurchaseEndpoint)"
+        
+        guard let url = URL(string: urlString) else {
+            completion(.failure(NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "Invalid URL"])))
+            return
+        }
+        
+        // Set up the request parameters
+        let parameters: [String: Any] = [
+            "userID": userID,
+            "postid": postid,
+            "productId": productId,
+            "transactionIdentifier": transactionIdentifier,
+            "transactionDate": transactionDate,
+            "transactionState": transactionState,
+            "productPrice": productPrice,
+            "productPriceLocal": productPriceLocal,
+            "productPurchaseCurrencyCode": productPurchaseCurrencyCode,
+            "isCancelled": isCancelled
+        ]
+        
+        // Set up the headers
+        let authToken: String = AppUserDefaults.object(forKey: "AUTHTOKEN") as? String ?? ""
+
+        let headers: HTTPHeaders = [
+            "Authorization": authToken,
+            "Content-Type": "application/json"
+        ]
+        
+        // Make the request
+        AF.request(url, method: .post, parameters: parameters, encoding: JSONEncoding.default, headers: headers)
+            .responseJSON { response in
+                switch response.result {
+                case .success(let value):
+                    if let json = value as? [String: Any] {
+                        completion(.success(json))
+                    } else {
+                        completion(.failure(NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "Invalid JSON structure"])))
+                    }
+                case .failure(let error):
+                    completion(.failure(error))
+                }
+            }
+    }
+    func postSubscriptionInfoNew(userID: String, productId: String, transactionIdentifier: String, transactionDate: String, transactionState: String, productPrice: String, productPriceLocal: String, productPurchaseCurrencyCode: String, planType: String, isCancelled: String,  completion: @escaping (Result<[String: Any], Error>) -> Void) {
+        // Define the URL
+        let urlString = "\(APIConfig.baseURL+subscriptionPurchaseEndpoint)"
+        
+        guard let url = URL(string: urlString) else {
+            completion(.failure(NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "Invalid URL"])))
+            return
+        }
+        
+        // Set up the request parameters
+        let parameters: [String: Any] = [
+            "userID": userID,
+            "productId": productId,
+            "transactionIdentifier": transactionIdentifier,
+            "transactionDate": transactionDate,
+            "transactionState": transactionState,
+            "productPrice": productPrice,
+            "productPriceLocal": productPriceLocal,
+            "productPurchaseCurrencyCode": productPurchaseCurrencyCode,
+            "planType": planType,
+            "isCancelled": isCancelled
+        ]
+        
+        // Set up the headers
+        let authToken: String = AppUserDefaults.object(forKey: "AUTHTOKEN") as? String ?? ""
+
+        let headers: HTTPHeaders = [
+            "Authorization": authToken,
+            "Content-Type": "application/json"
+        ]
+        
+        // Make the request
+        AF.request(url, method: .post, parameters: parameters, encoding: JSONEncoding.default, headers: headers)
+            .responseJSON { response in
+                switch response.result {
+                case .success(let value):
+                    if let json = value as? [String: Any] {
+                        completion(.success(json))
+                    } else {
+                        completion(.failure(NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "Invalid JSON structure"])))
+                    }
+                case .failure(let error):
+                    completion(.failure(error))
+                }
+            }
+    }
+    /*
+    func postSubscriptionInfo<T: Decodable>(request: subscriptionPurchaseRequest, responseModelType: T.Type, completion: @escaping (Result<T, APIError>) -> Void) {
+        
+        let authToken: String = AppUserDefaults.object(forKey: "AUTHTOKEN") as? String ?? ""
+        
+        let customHeaders: HTTPHeaders = [
+            "Authorization": authToken
+        ]
+        
+        let URLstr: String = "\(APIConfig.baseURL+subscriptionPurchaseEndpoint)"
+        
+        
+        Logger.logRequest(url: URLstr, method: "POST", headers: customHeaders, body: nil)
+        
+        AF.request(URLstr, method: .post, parameters: request, encoder: URLEncodedFormParameterEncoder.default, headers: customHeaders)
+            .validate()
+            .responseDecodable(of: T.self) { response in
+                Logger.logResponse(url: URLstr, response: response)
+                
+                if let data = response.data {
+                    print(String(data: data, encoding: .utf8) ?? "Unable to print data")
+                }
+                
+                do {
+                    let result = try response.result.get() // This line will throw an error if the decoding fails
+                    completion(.success(result))
+                } catch {
+                    // Handle decoding error here
+                    print("Error decoding data: \(error)")
+                    self.handleFailureResponse(response, completion: completion)
+                }
+                
+            }
+    }
+    */
     func VideoFavUnFav<T: Decodable>(request: LikeVideoRequest, responseModelType: T.Type, completion: @escaping (Result<T, APIError>) -> Void) {
         
         let authToken: String = AppUserDefaults.object(forKey: "AUTHTOKEN") as? String ?? ""
@@ -711,6 +906,37 @@ class APIManager {
                 }
             }
     }
+    func getUpcomingEventsList<T: Decodable>(request: upcomingRequest, responseModelType: T.Type, completion: @escaping (Result<T, APIError>) -> Void) {
+        
+        let authToken: String = AppUserDefaults.object(forKey: "AUTHTOKEN") as? String ?? ""
+        
+        let customHeaders: HTTPHeaders = [
+            "Authorization": authToken
+        ]
+
+        
+        let URLstr: String = "\(APIConfig.baseURL+UpcomingEventsEndpoint)"
+        
+        Logger.logRequest(url: URLstr, method: "Post", headers: customHeaders, body: nil)
+        AF.request(URLstr, method: .post, parameters: request, encoder: JSONParameterEncoder.default, headers: customHeaders)
+            .validate()
+            .responseDecodable(of: T.self) { response in
+                Logger.logResponse(url: URLstr, response: response)
+                
+                if let data = response.data {
+                    print(String(data: data, encoding: .utf8) ?? "Unable to print data")
+                }
+                
+                do {
+                    let result = try response.result.get() // This line will throw an error if the decoding fails
+                    completion(.success(result))
+                } catch {
+                    // Handle decoding error here
+                    print("Error decoding data: \(error)")
+                    self.handleFailureResponse(response, completion: completion)
+                }
+            }
+    }
     func getHomeList<T: Decodable>(request: HomeRequest, responseModelType: T.Type, completion: @escaping (Result<T, APIError>) -> Void) {
         
         let authToken: String = AppUserDefaults.object(forKey: "AUTHTOKEN") as? String ?? ""
@@ -721,6 +947,50 @@ class APIManager {
 
         
         let URLstr: String = "\(APIConfig.baseURL+HomeEndpoint)"
+        
+        Logger.logRequest(url: URLstr, method: "Post", headers: customHeaders, body: nil)
+        AF.request(URLstr, method: .post, parameters: request, encoder: JSONParameterEncoder.default, headers: customHeaders)
+            .validate()
+            .responseDecodable(of: T.self) { response in
+                Logger.logResponse(url: URLstr, response: response)
+                
+                if let data = response.data {
+                    print(String(data: data, encoding: .utf8) ?? "Unable to print data")
+                }
+                
+                do {
+                    let result = try response.result.get() // This line will throw an error if the decoding fails
+                    completion(.success(result))
+                } catch {
+                    // Handle decoding error here
+                    print("Error decoding data: \(error)")
+                    self.handleFailureResponse(response, completion: completion)
+                }
+            }
+    }
+    func getLiveShowDetailApi<T: Decodable>(request: lievShowDetailRequest, responseModelType: T.Type, completion: @escaping (Result<T, APIError>) -> Void) {
+        
+        
+        let authToken: String = AppUserDefaults.object(forKey: "AUTHTOKEN") as? String ?? ""
+        
+        let customHeaders: HTTPHeaders = [
+            "Authorization": authToken
+        ]
+
+        
+        let URLstr: String = "\(APIConfig.baseURL+liveShowDetailsEndpoint)"
+        
+        
+        /*
+        let URLstr: String = "https://test.fha.nqn.mybluehostin.me/wp-json/pmpro/v1/get-liveshow-detail"
+        
+        let authToken: String = "Basic YWRtaW46SmNteHoyMTY0OTAj"
+        
+        let customHeaders: HTTPHeaders = [
+            "Authorization": authToken
+        ]
+        */
+        
         
         Logger.logRequest(url: URLstr, method: "Post", headers: customHeaders, body: nil)
         AF.request(URLstr, method: .post, parameters: request, encoder: JSONParameterEncoder.default, headers: customHeaders)

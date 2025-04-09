@@ -65,8 +65,8 @@ extension AboutUsVC
 
     }
 }
-//MARK: UIWebViewDelegate
-extension AboutUsVC : WKUIDelegate, UIWebViewDelegate,WKNavigationDelegate
+//MARK: WKUIDelegate
+extension AboutUsVC : WKUIDelegate, WKNavigationDelegate
 {
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
         KVSpinnerView.dismiss()

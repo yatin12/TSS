@@ -17,6 +17,8 @@ class CountryListVC: UIViewController {
     var objCountryList: [String: String] = [:]
     var delegate: countryDataPassProtocol!
     var selectedIndex: IndexPath?
+    var sortedCountryList: [(key: String, value: String)] = []
+
     
     //  - Outlets - 
     @IBOutlet weak var txtSearch: UITextField!
@@ -67,6 +69,8 @@ extension CountryListVC
                     print(loginResponse)
                     let countryList = loginResponse.countrylist
                        self.objCountryList = countryList
+                    self.sortedCountryList = self.objCountryList.sorted { $0.value < $1.value }
+
                     print(self.objCountryList)
                     self.tblCountry.delegate = self
                     self.tblCountry.dataSource = self
@@ -82,7 +86,6 @@ extension CountryListVC
                         // Handle other types of errors
                        // print("Unexpected error: \(error)")
                         AlertUtility.presentSimpleAlert(in: self, title: "", message: "\(error.localizedDescription)")
-
                     }
                 }
             }
@@ -97,16 +100,17 @@ extension CountryListVC
 //MARK: UITableViewDataSource
 extension CountryListVC: UITableViewDataSource,UITableViewDelegate {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return objCountryList.count
+       // return objCountryList.count
+        return sortedCountryList.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "CountryTBC", for: indexPath) as! CountryTBC
         cell.selectionStyle = .none
         
-        let countryCodes = Array(objCountryList.keys)
-        let countryCode = countryCodes[indexPath.row]
-        let countryName = objCountryList[countryCode]
+        let country = sortedCountryList[indexPath.row]
+        
+        cell.lblCountryName.text = country.value
         
         if indexPath == selectedIndex
         {
@@ -116,7 +120,6 @@ extension CountryListVC: UITableViewDataSource,UITableViewDelegate {
         {
             cell.imgTick.isHidden = true
         }
-        cell.lblCountryName.text = countryName
         
         return cell
     }
@@ -128,11 +131,10 @@ extension CountryListVC: UITableViewDataSource,UITableViewDelegate {
         selectedIndex = indexPath
         tblCountry.reloadData()
         
-        let countryCodes = Array(objCountryList.keys)
-        let countryCode = countryCodes[indexPath.row]
-        let countryName = objCountryList[countryCode]
+        let country = sortedCountryList[indexPath.row]
+        let countryName = country.value
         
-        delegate?.countryNamePass(strSelectCountry: countryName ?? "")
+        delegate?.countryNamePass(strSelectCountry: countryName)
         self.navigationController?.popViewController(animated: true)
 
     }
@@ -141,23 +143,19 @@ extension CountryListVC: UITableViewDataSource,UITableViewDelegate {
 extension CountryListVC: UITextFieldDelegate
 {
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
-            let currentText = textField.text ?? ""
-            let textRange = Range(range, in: currentText)!
-            let updatedText = currentText.replacingCharacters(in: textRange, with: string)
-            
-            // Filter the itemsDocument based on the updated text
-            if updatedText.isEmpty {
-                objCountryList.removeAll()
-                apiCallGetCountryList()
-                
-            } else {
-                //isSearchText = true
-                objCountryList = objCountryList.filter { $0.value.localizedCaseInsensitiveContains(updatedText) }
-
-            }
-          
-            tblCountry.reloadData()
-            
-            return true
+        let currentText = textField.text ?? ""
+        let textRange = Range(range, in: currentText)!
+        let updatedText = currentText.replacingCharacters(in: textRange, with: string)
+        
+        if updatedText.isEmpty {
+            // Reset the filtered list to the original sorted list
+            sortedCountryList = objCountryList.sorted { $0.value < $1.value }
+        } else {
+            // Filter the sorted country list based on the search text
+            sortedCountryList = objCountryList.filter { $0.value.localizedCaseInsensitiveContains(updatedText) }
         }
+        
+        tblCountry.reloadData()
+        return true
+    }
 }

@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="32700.99.1234" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_12" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22685"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <customFonts key="customFonts">
+        <array key="Poppins-Medium.ttf">
+            <string>Poppins-Medium</string>
+        </array>
+    </customFonts>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="KGk-i7-Jjw" customClass="ReportTBC" customModule="TSS" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="375" height="80"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
+                <rect key="frame" x="0.0" y="0.0" width="375" height="80"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="7QM-H2-41q">
+                        <rect key="frame" x="24" y="24" width="327" height="32"/>
+                        <subviews>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="icn_Radio_UnSelect" translatesAutoresizingMaskIntoConstraints="NO" id="9Nc-Fv-35J">
+                                <rect key="frame" x="0.0" y="4" width="24" height="24"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="24" id="arK-NQ-bEK"/>
+                                    <constraint firstAttribute="width" constant="24" id="ioi-55-VKO"/>
+                                </constraints>
+                            </imageView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Apperance" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ykj-T2-h6h" userLabel="Email  or  Username">
+                                <rect key="frame" x="34" y="3.3333333333333321" width="283" height="25.333333333333332"/>
+                                <fontDescription key="fontDescription" name="Poppins-Medium" family="Poppins" pointSize="18"/>
+                                <color key="textColor" name="ThemeFontColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="9Nc-Fv-35J" firstAttribute="leading" secondItem="7QM-H2-41q" secondAttribute="leading" id="Euc-NC-xDt"/>
+                            <constraint firstItem="9Nc-Fv-35J" firstAttribute="centerY" secondItem="7QM-H2-41q" secondAttribute="centerY" id="Olk-oa-eQx"/>
+                            <constraint firstItem="Ykj-T2-h6h" firstAttribute="centerY" secondItem="7QM-H2-41q" secondAttribute="centerY" id="U4a-Pu-EfD"/>
+                            <constraint firstItem="Ykj-T2-h6h" firstAttribute="leading" secondItem="9Nc-Fv-35J" secondAttribute="trailing" constant="10" id="Yd9-XK-TDj"/>
+                            <constraint firstAttribute="trailing" secondItem="Ykj-T2-h6h" secondAttribute="trailing" constant="10" id="eaN-N6-2og"/>
+                            <constraint firstAttribute="height" constant="32" id="jMp-J6-o12"/>
+                        </constraints>
+                    </view>
+                </subviews>
+                <constraints>
+                    <constraint firstAttribute="trailing" secondItem="7QM-H2-41q" secondAttribute="trailing" constant="24" id="5YA-eb-d7A"/>
+                    <constraint firstItem="7QM-H2-41q" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="24" id="eo7-Oy-70c"/>
+                    <constraint firstItem="7QM-H2-41q" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="kJb-ge-Mcx"/>
+                </constraints>
+            </tableViewCellContentView>
+            <viewLayoutGuide key="safeArea" id="njF-e1-oar"/>
+            <connections>
+                <outlet property="imgRadioBtn" destination="9Nc-Fv-35J" id="mQY-ky-fdT"/>
+                <outlet property="lblReportReason" destination="Ykj-T2-h6h" id="2A5-aW-cdV"/>
+            </connections>
+            <point key="canvasLocation" x="92.36641221374046" y="-12.67605633802817"/>
+        </tableViewCell>
+    </objects>
+    <resources>
+        <image name="icn_Radio_UnSelect" width="24" height="24.333333969116211"/>
+        <namedColor name="ThemeFontColor">
+            <color red="0.17299999296665192" green="0.17299999296665192" blue="0.17299999296665192" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+    </resources>
+</document>

@@ -7,26 +7,19 @@
 
 import UIKit
 import AVFoundation
+protocol HomeTBCDelegate: AnyObject {
+    func cell(_ cell: HomeTBC, id: String, strSectionName: String, MeetSisterUrl: String)
 
+}
 class HomeTBC: UITableViewCell
 {
-    
-   // var currentVideoIndexPath: IndexPath?
-//    var currentPlayingIndexPath: IndexPath?
-//    let arrVideosLocal = ["trailer-1-final-promo", "trailer-2-final-promo"]
-//    
-    
-  //  @IBOutlet weak var objPgControl: UIPageControl!
-    //@IBOutlet weak var vwSection1: UIView!
+ 
     @IBOutlet weak var objCollectionMeetSister: UICollectionView!
-   // @IBOutlet weak var imgSectionZero: UIImageView!
     @IBOutlet weak var objCollectionHome: UICollectionView!
-    
-  //  @IBOutlet weak var objCollectionSection1: UICollectionView!
     @IBOutlet weak var objCollection1TBS: UICollectionView!
     var objHomeResposne: HomeResposne?
     var strCurrSectionNm: String = ""
-    // hasVideoPlayed = false
+    var delegate: HomeTBCDelegate?
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -41,31 +34,24 @@ class HomeTBC: UITableViewCell
     
     func setupCollectionview()
     {
-        /*
-        self.objCollectionSection1.register(UINib.init(nibName: "Seaction1CTC", bundle: .main), forCellWithReuseIdentifier: "Seaction1CTC")
-      //  objCollectionSection1.isPagingEnabled = true
-        
-        let layout12: UICollectionViewFlowLayout = UICollectionViewFlowLayout()
-        let itemWidth12 = UIScreen.main.bounds.width
-        layout12.itemSize = CGSize(width: itemWidth12, height: 225.0)
-        
-        // Configure layout properties
-        layout12.sectionInset = UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5)
-        layout12.minimumInteritemSpacing = 5
-        layout12.minimumLineSpacing = 5
-        layout12.scrollDirection = .horizontal
-        
-        // Initialize the collection view
-        objCollectionSection1.collectionViewLayout = layout12
-        
-        
-        self.objCollectionSection1.dataSource = self
-        self.objCollectionSection1.delegate = self
-        self.objCollectionSection1.reloadData()
-        
-        */
         
         self.objCollectionHome.register(UINib.init(nibName: "HomeCollectionCell", bundle: .main), forCellWithReuseIdentifier: "HomeCollectionCell")
+        
+        let layout11: UICollectionViewFlowLayout = UICollectionViewFlowLayout()
+//        let itemWidth1 = UIScreen.main.bounds.width - 48.0
+        let itemWidth11 = UIScreen.main.bounds.width 
+
+        layout11.itemSize = CGSize(width: itemWidth11, height: 235.0)
+        
+        // Configure layout properties
+        layout11.sectionInset = UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5)
+        layout11.minimumInteritemSpacing = 5
+        layout11.minimumLineSpacing = 5
+        layout11.scrollDirection = .horizontal
+        
+        // Initialize the collection view
+        objCollectionHome.collectionViewLayout = layout11
+      
         
         self.objCollectionHome.dataSource = self
         self.objCollectionHome.delegate = self
@@ -74,7 +60,9 @@ class HomeTBC: UITableViewCell
         
         self.objCollection1TBS.register(UINib.init(nibName: "Season1TBSCTC", bundle: .main), forCellWithReuseIdentifier: "Season1TBSCTC")
         let layout1: UICollectionViewFlowLayout = UICollectionViewFlowLayout()
-        let itemWidth1 = UIScreen.main.bounds.width - 48.0
+//        let itemWidth1 = UIScreen.main.bounds.width - 48.0
+        let itemWidth1 = UIScreen.main.bounds.width
+
         layout1.itemSize = CGSize(width: itemWidth1, height: 80.0)
         
         // Configure layout properties
@@ -89,6 +77,7 @@ class HomeTBC: UITableViewCell
         self.objCollection1TBS.dataSource = self
         self.objCollection1TBS.delegate = self
         self.objCollection1TBS.reloadData()
+       
         
         self.objCollectionMeetSister.register(UINib.init(nibName: "MeetSisterCTC", bundle: .main), forCellWithReuseIdentifier: "MeetSisterCTC")
         
@@ -97,7 +86,7 @@ class HomeTBC: UITableViewCell
         let padding: CGFloat = 5
         let totalPadding = padding * (itemsPerRow + 1)
         let itemWidth = (objCollectionMeetSister.frame.width - totalPadding) / itemsPerRow
-        layout.itemSize = CGSize(width: itemWidth, height: 230.0)
+        layout.itemSize = CGSize(width: itemWidth, height: 250.0)
         
         // Configure layout properties
         layout.sectionInset = UIEdgeInsets(top: 5, left: padding, bottom: 5, right: padding)
@@ -115,9 +104,6 @@ class HomeTBC: UITableViewCell
     
     func configure(withResponse response: HomeResposne?, withIndex index: Int, strSectionNm: String) {
         objHomeResposne = response
-        
-        
-        
         strCurrSectionNm = strSectionNm
         print("strCurrSectionNm -->\(strCurrSectionNm)")
         
@@ -196,10 +182,21 @@ extension HomeTBC: UICollectionViewDataSource, UICollectionViewDelegateFlowLayou
             {
                 
                 let strTitle = "\(objHomeResposne?.data?.recentNews?[indexPath.row].title ?? "")"
-                let strDesc = "\(objHomeResposne?.data?.recentNews?[indexPath.row].description ?? "")"
-                cellToReturn.lblTitle.text = strTitle.htmlToString()
-                cellToReturn.lblDesc.text = strDesc.htmlToString()
-                
+                let strDesc = "\(objHomeResposne?.data?.recentNews?[indexPath.row].description ?? "N/A")"
+              //  cellToReturn.lblTitle.text = strTitle.htmlToString()
+                cellToReturn.lblTitle.text = strTitle.decodingHTMLEntities()
+
+                if strDesc == ""
+                {
+                    cellToReturn.lblDesc.text = "N/A"
+                }
+                else
+                {
+//                    cellToReturn.lblDesc.text = strDesc.htmlToString()
+                    cellToReturn.lblDesc.text = strDesc.decodingHTMLEntities()
+
+                }
+                cellToReturn.imgBlog.contentMode = .scaleAspectFit
                 let strBlogUrl = "\(objHomeResposne?.data?.recentNews?[indexPath.row].thumbnail ?? "")"
                 cellToReturn.imgBlog.sd_setImage(with: URL(string: strBlogUrl), placeholderImage: UIImage(named: "icn_Placehoder"), options: [.progressiveLoad], context: nil)
                 
@@ -210,7 +207,15 @@ extension HomeTBC: UICollectionViewDataSource, UICollectionViewDelegateFlowLayou
                 let strTitle = "\(objHomeResposne?.data?.season?[indexPath.row].title ?? "")"
                 let strDesc = "\(objHomeResposne?.data?.season?[indexPath.row].description ?? "")"
                 cellToReturn.lblTitle.text = strTitle
-                cellToReturn.lblDesc.text = strDesc
+                
+                if strDesc == ""
+                {
+                    cellToReturn.lblDesc.text = "N/A"
+                }
+                else
+                {
+                    cellToReturn.lblDesc.text = strDesc
+                }
                 
                 let strBlogUrl = "\(objHomeResposne?.data?.season?[indexPath.row].thumbnail ?? "")"
                 cellToReturn.imgBlog.sd_setImage(with: URL(string: strBlogUrl), placeholderImage: UIImage(named: "icn_Placehoder"), options: [.progressiveLoad], context: nil)
@@ -220,12 +225,18 @@ extension HomeTBC: UICollectionViewDataSource, UICollectionViewDelegateFlowLayou
             
             else if strCurrSectionNm == "E.Videos"
             {
-                
-                
                 let strTitle = "\(objHomeResposne?.data?.empowermentVideo?[indexPath.row].title ?? "")"
                 let strDesc = "\(objHomeResposne?.data?.empowermentVideo?[indexPath.row].description ?? "")"
                 cellToReturn.lblTitle.text = strTitle
-                cellToReturn.lblDesc.text = strDesc
+                
+                if strDesc == ""
+                {
+                    cellToReturn.lblDesc.text = "N/A"
+                }
+                else
+                {
+                    cellToReturn.lblDesc.text = strDesc
+                }
                 
                 let strBlogUrl = "\(objHomeResposne?.data?.empowermentVideo?[indexPath.row].thumbnail ?? "")"
                 cellToReturn.imgBlog.sd_setImage(with: URL(string: strBlogUrl), placeholderImage: UIImage(named: "icn_Placehoder"), options: [.progressiveLoad], context: nil)
@@ -241,7 +252,15 @@ extension HomeTBC: UICollectionViewDataSource, UICollectionViewDelegateFlowLayou
                         let strTitle = "\(recommendedEpisodes[indexPath.row].title ?? "")"
                         let strDesc = "\(recommendedEpisodes[indexPath.row].description ?? "")"
                         cellToReturn.lblTitle.text = strTitle
-                        cellToReturn.lblDesc.text = strDesc
+                        
+                        if strDesc == ""
+                        {
+                            cellToReturn.lblDesc.text = "N/A"
+                        }
+                        else
+                        {
+                            cellToReturn.lblDesc.text = strDesc
+                        }
                         
                         let strBlogUrl = "\(objHomeResposne?.data?.recommendedEpisodes?[indexPath.row].thumbnail ?? "")"
                         cellToReturn.imgBlog.sd_setImage(with: URL(string: strBlogUrl), placeholderImage: UIImage(named: "icn_Placehoder"), options: [.progressiveLoad], context: nil)
@@ -263,31 +282,62 @@ extension HomeTBC: UICollectionViewDataSource, UICollectionViewDelegateFlowLayou
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         var width = UIScreen.main.bounds.width
-        var height = 225.0
+        var height = 235.0
         if collectionView == objCollectionMeetSister
         {
             let itemsPerRow: CGFloat = 3
             let padding: CGFloat = 5
             let totalPadding = padding * (itemsPerRow + 1)
             let itemWidth = (objCollectionMeetSister.frame.width - totalPadding) / itemsPerRow
-            return CGSize(width: itemWidth, height: 230.0)
+            return CGSize(width: itemWidth, height: 250.0)
             
         }
         else if collectionView == objCollection1TBS
         {
-            width = (UIScreen.main.bounds.width - 48.0)
+//            width = (UIScreen.main.bounds.width - 48.0)
+            width = UIScreen.main.bounds.width
             return CGSize(width: width, height: 80.0)
             
         }
         else
         {
-            width = (UIScreen.main.bounds.width - 250.0)
-            height = 225.0
+//            width = (UIScreen.main.bounds.width - 250.0)
+            width = UIScreen.main.bounds.width
+            height = 255.0
         }
         
         return CGSize(width: width, height: height)
     }
-    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        
+        if strCurrSectionNm == "Tops News"
+        {
+            let newsId = "\(objHomeResposne?.data?.recentNews?[indexPath.row].id ?? "")"
+            delegate?.cell(self, id: newsId, strSectionName: strCurrSectionNm, MeetSisterUrl: "")
+        }
+        else if strCurrSectionNm == "Season 1"
+        {
+            let videoId = "\(objHomeResposne?.data?.season?[indexPath.row].id ?? "")"
+            delegate?.cell(self, id: videoId, strSectionName: strCurrSectionNm, MeetSisterUrl: "")
+        }
+        else if strCurrSectionNm == "E.Videos"
+        {
+            let videoId = "\(objHomeResposne?.data?.empowermentVideo?[indexPath.row].id ?? "")"
+            delegate?.cell(self, id: videoId, strSectionName: strCurrSectionNm, MeetSisterUrl: "")
+        }
+        else if strCurrSectionNm == "Recommended Episodes"
+        {
+            let videoId = "\(objHomeResposne?.data?.season?[indexPath.row].id ?? "")"
+            delegate?.cell(self, id: videoId, strSectionName: strCurrSectionNm, MeetSisterUrl: "")
+        }
+        else if strCurrSectionNm == "Meet The Sisters"
+        {
+            let sisterURL = "\(objHomeResposne?.data?.meetTheSisters?[indexPath.row].url ?? "")"
+            
+            delegate?.cell(self, id: "", strSectionName: strCurrSectionNm, MeetSisterUrl: sisterURL)
+        }
+        
+    }
     @objc func btnWatchNowTapped(sender: UIButton){
         NotificationCenter.default.post(name: Notification.Name("btnWatchNowTapped"), object: nil, userInfo: nil)
         

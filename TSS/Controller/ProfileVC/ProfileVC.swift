@@ -18,6 +18,11 @@ class ProfileVC: UIViewController {
     private let objUpdateProfileViewModel = updateProfileViewModel()
     var imagePickerManager: ImagePickerManager?
     
+    @IBOutlet weak var lblConfPassword: UILabel!
+    @IBOutlet weak var lblPhone: UILabel!
+    @IBOutlet weak var lblPassword: UILabel!
+    @IBOutlet weak var lblDisplayNm: UILabel!
+    @IBOutlet weak var lblEmail: UILabel!
     //  - Outlets - 
     @IBOutlet weak var lblHeaderNm: UILabel!
     @IBOutlet weak var txtConfPassword: UITextField!
@@ -105,92 +110,141 @@ extension ProfileVC
 
         
         if textField == txtDisplayNm {
-            vwDisplayNm.layer.borderColor = isEditing ? highlightColor : clearColor
-            vwDisplayNm.layer.borderWidth = isEditing ? 1.0 : 0.0
+            vwDisplayNm.layer.borderColor = isEditing ? highlightColor : DefaultBorderColor
+            lblDisplayNm.textColor = isEditing ? highlightColor_Lbl : DefaultBorderColor_Lbl
+
             
-            vwEmail.layer.borderColor = isEditing ? clearColor : highlightColor
-            vwEmail.layer.borderWidth = isEditing ? 0.0 : 1.0
+            vwEmail.layer.borderColor = isEditing ? DefaultBorderColor : highlightColor
+            lblEmail.textColor = isEditing ? DefaultBorderColor_Lbl : highlightColor_Lbl
+
+           // vwEmail.layer.borderWidth = isEditing ? 0.0 : 1.0
             
-            vwPhone.layer.borderColor = isEditing ? clearColor : highlightColor
-            vwPhone.layer.borderWidth = isEditing ? 0.0 : 1.0
+            vwPhone.layer.borderColor = isEditing ? DefaultBorderColor : highlightColor
+            lblPhone.textColor = isEditing ? DefaultBorderColor_Lbl : highlightColor_Lbl
+
+            //vwPhone.layer.borderWidth = isEditing ? 0.0 : 1.0
             
-            vwPassword.layer.borderColor = isEditing ? clearColor : highlightColor
-            vwPassword.layer.borderWidth = isEditing ? 0.0 : 1.0
+            vwPassword.layer.borderColor = isEditing ? DefaultBorderColor : highlightColor
+            lblPassword.textColor = isEditing ? DefaultBorderColor_Lbl : highlightColor_Lbl
+
+            //vwPassword.layer.borderWidth = isEditing ? 0.0 : 1.0
             
-            vwConfPassword.layer.borderColor = isEditing ? clearColor : highlightColor
-            vwConfPassword.layer.borderWidth = isEditing ? 0.0 : 1.0
+            vwConfPassword.layer.borderColor = isEditing ? DefaultBorderColor : highlightColor
+            lblConfPassword.textColor = isEditing ? DefaultBorderColor_Lbl : highlightColor_Lbl
+
+           // vwConfPassword.layer.borderWidth = isEditing ? 0.0 : 1.0
             
         }
         else if textField == txtEmail
         {
-            vwEmail.layer.borderColor = isEditing ? highlightColor : clearColor
-            vwEmail.layer.borderWidth = isEditing ? 1.0 : 0.0
+            vwEmail.layer.borderColor = isEditing ? highlightColor : DefaultBorderColor
+            lblEmail.textColor = isEditing ? highlightColor_Lbl : DefaultBorderColor_Lbl
+
+            //vwEmail.layer.borderWidth = isEditing ? 1.0 : 0.0
             
-            vwDisplayNm.layer.borderColor = isEditing ? clearColor : highlightColor
-            vwDisplayNm.layer.borderWidth = isEditing ? 0.0 : 1.0
+            vwDisplayNm.layer.borderColor = isEditing ? DefaultBorderColor : highlightColor
+            lblDisplayNm.textColor = isEditing ? DefaultBorderColor_Lbl : highlightColor_Lbl
+
+           // vwDisplayNm.layer.borderWidth = isEditing ? 0.0 : 1.0
             
-            vwPhone.layer.borderColor = isEditing ? clearColor : highlightColor
-            vwPhone.layer.borderWidth = isEditing ? 0.0 : 1.0
+            vwPhone.layer.borderColor = isEditing ? DefaultBorderColor : highlightColor
+            lblPhone.textColor = isEditing ? DefaultBorderColor_Lbl : highlightColor_Lbl
+
+           // vwPhone.layer.borderWidth = isEditing ? 0.0 : 1.0
             
-            vwPassword.layer.borderColor = isEditing ? clearColor : highlightColor
-            vwPassword.layer.borderWidth = isEditing ? 0.0 : 1.0
+            vwPassword.layer.borderColor = isEditing ? DefaultBorderColor : highlightColor
+            lblPassword.textColor = isEditing ? DefaultBorderColor_Lbl : highlightColor_Lbl
+
+           // vwPassword.layer.borderWidth = isEditing ? 0.0 : 1.0
             
-            vwConfPassword.layer.borderColor = isEditing ? clearColor : highlightColor
-            vwConfPassword.layer.borderWidth = isEditing ? 0.0 : 1.0
+            vwConfPassword.layer.borderColor = isEditing ? DefaultBorderColor : highlightColor
+            lblConfPassword.textColor = isEditing ? DefaultBorderColor_Lbl : highlightColor_Lbl
+
+           // vwConfPassword.layer.borderWidth = isEditing ? 0.0 : 1.0
             
         }
         else if textField == txtPhone
         {
-            vwPhone.layer.borderColor = isEditing ? highlightColor : clearColor
-            vwPhone.layer.borderWidth = isEditing ? 1.0 : 0.0
+            vwPhone.layer.borderColor = isEditing ? highlightColor : DefaultBorderColor
+            lblPhone.textColor = isEditing ? highlightColor_Lbl : DefaultBorderColor_Lbl
+
+          //  vwPhone.layer.borderWidth = isEditing ? 1.0 : 0.0
             
-            vwDisplayNm.layer.borderColor = isEditing ? clearColor : highlightColor
-            vwDisplayNm.layer.borderWidth = isEditing ? 0.0 : 1.0
+            vwDisplayNm.layer.borderColor = isEditing ? DefaultBorderColor : highlightColor
+            lblDisplayNm.textColor = isEditing ? DefaultBorderColor_Lbl : highlightColor_Lbl
+
+           // vwDisplayNm.layer.borderWidth = isEditing ? 0.0 : 1.0
             
-            vwEmail.layer.borderColor = isEditing ? clearColor : highlightColor
-            vwEmail.layer.borderWidth = isEditing ? 0.0 : 1.0
+            vwEmail.layer.borderColor = isEditing ? DefaultBorderColor : highlightColor
+            lblEmail.textColor = isEditing ? DefaultBorderColor_Lbl : highlightColor_Lbl
+
+           // vwEmail.layer.borderWidth = isEditing ? 0.0 : 1.0
             
-            vwPassword.layer.borderColor = isEditing ? clearColor : highlightColor
-            vwPassword.layer.borderWidth = isEditing ? 0.0 : 1.0
+            vwPassword.layer.borderColor = isEditing ? DefaultBorderColor : highlightColor
+            lblPassword.textColor = isEditing ? DefaultBorderColor_Lbl : highlightColor_Lbl
+
+           // vwPassword.layer.borderWidth = isEditing ? 0.0 : 1.0
             
-            vwConfPassword.layer.borderColor = isEditing ? clearColor : highlightColor
-            vwConfPassword.layer.borderWidth = isEditing ? 0.0 : 1.0
+            vwConfPassword.layer.borderColor = isEditing ? DefaultBorderColor : highlightColor
+            lblConfPassword.textColor = isEditing ? DefaultBorderColor_Lbl : highlightColor_Lbl
+
+           // vwConfPassword.layer.borderWidth = isEditing ? 0.0 : 1.0
             
         }
         else if textField == txtPassword
         {
-            vwPassword.layer.borderColor = isEditing ? highlightColor : clearColor
-            vwPassword.layer.borderWidth = isEditing ? 1.0 : 0.0
+            vwPassword.layer.borderColor = isEditing ? highlightColor : DefaultBorderColor
+            lblPassword.textColor = isEditing ? highlightColor_Lbl : DefaultBorderColor_Lbl
+
+         //   vwPassword.layer.borderWidth = isEditing ? 1.0 : 0.0
             
-            vwDisplayNm.layer.borderColor = isEditing ? clearColor : highlightColor
-            vwDisplayNm.layer.borderWidth = isEditing ? 0.0 : 1.0
+            vwDisplayNm.layer.borderColor = isEditing ? DefaultBorderColor : highlightColor
+            lblDisplayNm.textColor = isEditing ? DefaultBorderColor_Lbl : highlightColor_Lbl
+
+           // vwDisplayNm.layer.borderWidth = isEditing ? 0.0 : 1.0
             
-            vwEmail.layer.borderColor = isEditing ? clearColor : highlightColor
-            vwEmail.layer.borderWidth = isEditing ? 0.0 : 1.0
+            vwEmail.layer.borderColor = isEditing ? DefaultBorderColor : highlightColor
+            lblEmail.textColor = isEditing ? DefaultBorderColor_Lbl : highlightColor_Lbl
+
+          //  vwEmail.layer.borderWidth = isEditing ? 0.0 : 1.0
             
-            vwPhone.layer.borderColor = isEditing ? clearColor : highlightColor
-            vwPhone.layer.borderWidth = isEditing ? 0.0 : 1.0
+            vwPhone.layer.borderColor = isEditing ? DefaultBorderColor : highlightColor
+            lblPhone.textColor = isEditing ? DefaultBorderColor_Lbl : highlightColor_Lbl
+
+          //  vwPhone.layer.borderWidth = isEditing ? 0.0 : 1.0
             
-            vwConfPassword.layer.borderColor = isEditing ? clearColor : highlightColor
-            vwConfPassword.layer.borderWidth = isEditing ? 0.0 : 1.0
+            vwConfPassword.layer.borderColor = isEditing ? DefaultBorderColor : highlightColor
+            lblConfPassword.textColor = isEditing ? DefaultBorderColor_Lbl : highlightColor_Lbl
+
+           // vwConfPassword.layer.borderWidth = isEditing ? 0.0 : 1.0
            
         }
         else if textField == txtConfPassword
         {
-            vwConfPassword.layer.borderColor = isEditing ? highlightColor : clearColor
-            vwConfPassword.layer.borderWidth = isEditing ? 1.0 : 0.0
+            vwConfPassword.layer.borderColor = isEditing ? highlightColor : DefaultBorderColor
+            lblConfPassword.textColor = isEditing ? highlightColor_Lbl : DefaultBorderColor_Lbl
+
+           // vwConfPassword.layer.borderWidth = isEditing ? 1.0 : 0.0
             
-            vwDisplayNm.layer.borderColor = isEditing ? clearColor : highlightColor
-            vwDisplayNm.layer.borderWidth = isEditing ? 0.0 : 1.0
+            vwDisplayNm.layer.borderColor = isEditing ? DefaultBorderColor : highlightColor
+            lblDisplayNm.textColor = isEditing ? DefaultBorderColor_Lbl : highlightColor_Lbl
+
+           // vwDisplayNm.layer.borderWidth = isEditing ? 0.0 : 1.0
             
-            vwEmail.layer.borderColor = isEditing ? clearColor : highlightColor
-            vwEmail.layer.borderWidth = isEditing ? 0.0 : 1.0
+            vwEmail.layer.borderColor = isEditing ? DefaultBorderColor : highlightColor
+            lblEmail.textColor = isEditing ? DefaultBorderColor_Lbl : highlightColor_Lbl
+
+           // vwEmail.layer.borderWidth = isEditing ? 0.0 : 1.0
             
-            vwPhone.layer.borderColor = isEditing ? clearColor : highlightColor
-            vwPhone.layer.borderWidth = isEditing ? 0.0 : 1.0
+            vwPhone.layer.borderColor = isEditing ? DefaultBorderColor : highlightColor
+            lblPhone.textColor = isEditing ? DefaultBorderColor_Lbl : highlightColor_Lbl
+
+            //vwPhone.layer.borderWidth = isEditing ? 0.0 : 1.0
             
-            vwPassword.layer.borderColor = isEditing ? clearColor : highlightColor
-            vwPassword.layer.borderWidth = isEditing ? 0.0 : 1.0
+            vwPassword.layer.borderColor = isEditing ? DefaultBorderColor : highlightColor
+            lblPassword.textColor = isEditing ? DefaultBorderColor_Lbl : highlightColor_Lbl
+
+         //   vwPassword.layer.borderWidth = isEditing ? 0.0 : 1.0
             
         }
     }
@@ -273,6 +327,9 @@ extension ProfileVC
 {
     func setUpUIAfterGettingResponse(response: GetProfileResponse?)
     {
+        UserDefaultUtility.saveValueToUserDefaults(value: "\(response?.data?.userName ?? "")", forKey: "UserName")
+        UserDefaultUtility.saveValueToUserDefaults(value: "\(response?.data?.email ?? "")", forKey: "UserEmail")
+        
         txtEmail.text = "\(response?.data?.email ?? "")"
         txtPhone.text = "\(response?.data?.phone ?? "")"
         txtPassword.text = "\(response?.data?.password ?? "")"
@@ -337,6 +394,9 @@ extension ProfileVC
                     KVSpinnerView.dismiss()
                     if response.settings?.success == true
                     {
+                        UserDefaultUtility.saveValueToUserDefaults(value: "\(response.data?.userName ?? "")", forKey: "UserName")
+                        UserDefaultUtility.saveValueToUserDefaults(value: "\(response.data?.email ?? "")", forKey: "UserEmail")
+                        
                         AlertUtility.presentAlert(in: self, title: "", message: "\(response.settings?.message ?? "")", options: "Ok") { option in
                             switch(option) {
                             case 0:

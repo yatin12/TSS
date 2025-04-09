@@ -12,6 +12,7 @@ struct LikeVideoRequest: Encodable {
     let action: String
     let `Type`: String
 }
+
 // MARK: - Welcome
 struct likeVideoResponse: Codable {
     let settings: SettingsLikeVideo?

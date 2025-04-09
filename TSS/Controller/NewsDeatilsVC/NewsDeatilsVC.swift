@@ -8,9 +8,270 @@
 import UIKit
 import KVSpinnerView
 import Photos
-import TwitterKit
+//import TwitterKit
 import FBSDKShareKit
 
+import LinkPresentation
+
+class TikTokURLSharer {
+    // TikTok URL Sharing Methods
+    enum SharingMethod {
+        case directOpen
+        case deepLink
+        case shareSheet
+        case universalLink
+    }
+    
+    /// Share URL to TikTok
+    /// - Parameters:
+    ///   - urlString: URL to share
+    ///   - viewController: Current view controller for presenting alerts
+    static func shareURL(_ urlString: String, in viewController: UIViewController) {
+        // Validate URL
+        guard let url = URL(string: urlString) else {
+            showErrorAlert(in: viewController, message: "Invalid URL")
+            return
+        }
+        
+        // Sharing methods to attempt
+        let sharingMethods: [SharingMethod] = [
+            .directOpen,
+            .deepLink,
+            .shareSheet,
+            .universalLink
+        ]
+        
+        // Try each sharing method
+        for method in sharingMethods {
+            if attemptTikTokShare(url: url, method: method) {
+                return
+            }
+        }
+        
+        // Fallback to system share sheet
+        fallbackToActivityViewController(url: url, in: viewController)
+    }
+    
+    /// Attempt to share URL using different TikTok methods
+    private static func attemptTikTokShare(url: URL, method: SharingMethod) -> Bool {
+        // Encode URL to handle special characters
+        guard let encodedURL = url.absoluteString.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) else {
+            return false
+        }
+        
+        // Generate TikTok URL based on sharing method
+        var tiktokURL: URL?
+        switch method {
+        case .directOpen:
+            tiktokURL = URL(string: "tiktok://open?url=\(encodedURL)")
+        case .deepLink:
+            tiktokURL = URL(string: "tiktok://app?url=\(encodedURL)")
+        case .shareSheet:
+            tiktokURL = URL(string: "tiktok://share?url=\(encodedURL)")
+        case .universalLink:
+            tiktokURL = URL(string: "https://www.tiktok.com/link?url=\(encodedURL)")
+        }
+        
+        // Attempt to open URL
+        guard let finalURL = tiktokURL else { return false }
+        
+        // Check if TikTok is installed
+        if UIApplication.shared.canOpenURL(finalURL) {
+            UIApplication.shared.open(finalURL) { success in
+                print("TikTok sharing method \(method) - \(success ? "Succeeded" : "Failed")")
+            }
+            return true
+        }
+        
+        return false
+    }
+    
+    /// Fallback sharing method using activity view controller
+    private static func fallbackToActivityViewController(url: URL, in viewController: UIViewController) {
+        let activityViewController = UIActivityViewController(
+            activityItems: [url],
+            applicationActivities: nil
+        )
+        
+        activityViewController.completionWithItemsHandler = { (_, completed, _, _) in
+            if completed {
+                print("Shared via system share sheet")
+            }
+        }
+        
+        viewController.present(activityViewController, animated: true, completion: nil)
+    }
+    
+    /// Show error alert
+    private static func showErrorAlert(in viewController: UIViewController, message: String) {
+        let alert = UIAlertController(
+            title: "Sharing Error",
+            message: message,
+            preferredStyle: .alert
+        )
+        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+        viewController.present(alert, animated: true, completion: nil)
+    }
+}
+
+
+class InstagramURLSharer {
+    // Different Instagram URL schemes to try
+    enum InstagramScheme {
+        case openURL
+        case shareToStory
+        case directShare
+    }
+    
+    // Attempt to share URL to Instagram
+    static func shareURL(_ urlString: String, in viewController: UIViewController) {
+        guard let url = URL(string: urlString) else {
+            showErrorAlert(in: viewController, message: "Invalid URL")
+            return
+        }
+        
+        // Try multiple sharing methods
+        let sharingMethods: [InstagramScheme] = [
+            .openURL,
+            .shareToStory,
+            .directShare
+        ]
+        
+        for method in sharingMethods {
+            if openInstagram(url: url, method: method) {
+                return
+            }
+        }
+        
+        // Fallback to activity view controller
+        fallbackToActivityViewController(url: url, in: viewController)
+    }
+    
+    // Attempt to open Instagram with different URL schemes
+    private static func openInstagram(url: URL, method: InstagramScheme) -> Bool {
+        var instagramURL: URL?
+        
+        switch method {
+        case .openURL:
+            // Standard URL opening
+            instagramURL = URL(string: "instagram://app?url=\(url.absoluteString)")
+        case .shareToStory:
+            // Share to Instagram Story (requires app)
+            instagramURL = URL(string: "instagram-stories://share?url=\(url.absoluteString)")
+        case .directShare:
+            // Direct share attempt
+            instagramURL = URL(string: "instagram://sharesheet?url=\(url.absoluteString)")
+        }
+        
+        guard let finalURL = instagramURL else { return false }
+        
+        // Check if Instagram is installed and attempt to open
+        if UIApplication.shared.canOpenURL(finalURL) {
+            UIApplication.shared.open(finalURL) { success in
+                print("Instagram URL method \(method) - \(success ? "Success" : "Failed")")
+            }
+            return true
+        }
+        
+        return false
+    }
+    
+    // Fallback sharing method using activity view controller
+    private static func fallbackToActivityViewController(url: URL, in viewController: UIViewController) {
+        let activityViewController = UIActivityViewController(
+            activityItems: [url],
+            applicationActivities: nil
+        )
+        
+        activityViewController.completionWithItemsHandler = { (activityType, completed, returnedItems, error) in
+            if completed {
+                print("Shared via activity view controller")
+            }
+        }
+        
+        viewController.present(activityViewController, animated: true, completion: nil)
+    }
+    
+    // Show error alert if sharing fails
+    private static func showErrorAlert(in viewController: UIViewController, message: String) {
+        let alert = UIAlertController(
+            title: "Sharing Error",
+            message: message,
+            preferredStyle: .alert
+        )
+        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+        viewController.present(alert, animated: true, completion: nil)
+    }
+}
+/*
+class URLSharingManager {
+    // Supported social media apps
+    enum SocialApp: String {
+        case tiktok = "tiktok://"
+        case instagram = "instagram://"
+    }
+    
+    // Check if app is installed
+    static func isAppInstalled(_ app: SocialApp) -> Bool {
+        guard let url = URL(string: app.rawValue) else { return false }
+        return UIApplication.shared.canOpenURL(url)
+    }
+    
+    // Share URL via deep linking
+    static func shareURL(_ urlString: String, to app: SocialApp, in viewController: UIViewController) {
+        guard let url = URL(string: urlString) else {
+            showErrorAlert(in: viewController, message: "Invalid URL")
+            return
+        }
+        
+        // Prepare share items
+        let items: [Any] = [url]
+        
+        // Create activity view controller
+        let activityViewController = UIActivityViewController(
+            activityItems: items,
+            applicationActivities: nil
+        )
+        
+        // Customize for specific apps if needed
+        activityViewController.completionWithItemsHandler = { (activityType, completed, returnedItems, error) in
+            if completed {
+                print("Successfully shared to \(app)")
+            }
+        }
+        
+        // Present the activity view controller
+        viewController.present(activityViewController, animated: true, completion: nil)
+    }
+    
+    // Open app directly with URL
+    static func openApp(_ app: SocialApp, with urlString: String? = nil) {
+        guard let baseURL = URL(string: app.rawValue) else { return }
+        
+        var finalURL = baseURL
+        if let urlString = urlString, let encodedURL = urlString.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) {
+            finalURL = URL(string: "\(app.rawValue)open?url=\(encodedURL)") ?? baseURL
+        }
+        
+        UIApplication.shared.open(finalURL) { success in
+            if !success {
+                print("Could not open \(app)")
+            }
+        }
+    }
+    
+    // Helper method to show error alert
+    static func showErrorAlert(in viewController: UIViewController, message: String) {
+        let alert = UIAlertController(
+            title: "Sharing Error",
+            message: message,
+            preferredStyle: .alert
+        )
+        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+        viewController.present(alert, animated: true, completion: nil)
+    }
+}
+*/
 class NewsDeatilsVC: UIViewController {
     
     //  - Variables - 
@@ -37,6 +298,26 @@ extension NewsDeatilsVC
 //MARK: General Methods
 extension NewsDeatilsVC
 {
+    /*
+    func shareURLExample() {
+            let urlToShare = "https://example.com"
+            
+            // Check if TikTok is installed
+            if URLSharingManager.isAppInstalled(.tiktok) {
+                // Option 1: Share via activity view controller
+                URLSharingManager.shareURL(urlToShare, to: .tiktok, in: self)
+                
+                // Option 2: Open directly in TikTok
+                URLSharingManager.openApp(.tiktok, with: urlToShare)
+            }
+            
+            // Similar approach for Instagram
+            if URLSharingManager.isAppInstalled(.instagram) {
+                URLSharingManager.shareURL(urlToShare, to: .instagram, in: self)
+            }
+        }
+    */
+    
     func getUserId()
     {
         userId = AppUserDefaults.object(forKey: "USERID") as? String ?? ""
@@ -100,138 +381,12 @@ extension NewsDeatilsVC: UITableViewDelegate, UITableViewDataSource
 }
 extension NewsDeatilsVC: NewDetailTBCDelegate
 {
-    func cell(_ cell: NewDetailTBC, faceBookUrl: String, sender: Any)
-    {
-        //https://test.fha.nqn.mybluehostin.me?p=10191
-        print("SocialMediaUrl-->\(faceBookUrl)")
-        let urlString = faceBookUrl
-        
-        if let decodedURL = urlString.removingPercentEncoding {
-            print("Decoded URL: \(decodedURL)")
-            
-            
-            guard let url = URL(string: urlString) else {
-                    // Handle invalid URL
-                    let alert = UIAlertController(title: "Error", message: "Invalid URL.", preferredStyle: .alert)
-                    alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
-                    present(alert, animated: true, completion: nil)
-                    return
-                }
-                
-                let content = ShareLinkContent()
-                content.contentURL = url
-                content.quote = "Check out this link!"
-                
-            let dialog = ShareDialog(viewController: self, content: content, delegate: nil)
-                dialog.mode = .automatic
-                
-                do {
-                    try dialog.show()
-                } catch {
-                    // Handle error
-                    let alert = UIAlertController(title: "Error", message: "Failed to share on Facebook.", preferredStyle: .alert)
-                    alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
-                    present(alert, animated: true, completion: nil)
-                }
-        }
-        
-    }
-    
-   
-    /*
-    {
-        print("faceBookUrl-\(faceBookUrl)")
-        
-        let text = "Check out this link!"
-        if let url = URL(string: "\(faceBookUrl)") {
-            let activityViewController = UIActivityViewController(activityItems: [text, url], applicationActivities: nil)
-            
-            // Exclude unnecessary activities if needed
-            activityViewController.excludedActivityTypes = [.postToWeibo, .print, .assignToContact, .saveToCameraRoll, .addToReadingList, .postToFlickr, .postToVimeo, .postToTencentWeibo, .airDrop]
-            
-            // For iPads, we need to specify a source view to prevent crashes
-            if let popoverPresentationController = activityViewController.popoverPresentationController {
-                popoverPresentationController.sourceView = self.view
-                if let button = sender as? UIView {
-                    popoverPresentationController.sourceRect = button.bounds
-                }
-            }
-            
-            // Present the view controller
-            present(activityViewController, animated: true, completion: nil)
-        } else {
-            let alert = UIAlertController(title: "Error", message: "Invalid URL.", preferredStyle: .alert)
-            alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
-            present(alert, animated: true, completion: nil)
-        }
-    }
-    */
-    
-    func cell(_ cell: NewDetailTBC, instagramUrl: String)
-    {
-        print("SocialMediaUrl-->\(instagramUrl)")
-        let strText = "Check out this link!"
-        //let url = "https://test.fha.nqn.mybluehostin.me?p=10191"
-
-        let url = instagramUrl
-        let encodedText = strText.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? ""
-            let encodedURL = url.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? ""
-
-            // Combine text and URL
-            let urlString = "twitter://post?message=\(encodedText) \(encodedURL)"
-            
-            // Check if Twitter app can be opened
-            if let url = URL(string: urlString), UIApplication.shared.canOpenURL(url) {
-                UIApplication.shared.open(url, options: [:], completionHandler: nil)
-            } else {
-                // Fallback to web-based share
-                let webURLString = "https://twitter.com/intent/tweet?text=\(encodedText)%20\(encodedURL)"
-                if let webURL = URL(string: webURLString) {
-                    UIApplication.shared.open(webURL, options: [:], completionHandler: nil)
-                }
-            }
-    }
-    /*
-    {
-        UIPasteboard.general.string = instagramUrl
-           
-           // Open Instagram
-           let instagramURL = URL(string: "instagram://app")!
-           
-           if UIApplication.shared.canOpenURL(instagramURL) {
-               // Instagram is installed, open the app
-               UIApplication.shared.open(instagramURL, options: [:], completionHandler: nil)
-           } else {
-               // Instagram is not installed, open the App Store page for Instagram
-               let appStoreURL = URL(string: "https://apps.apple.com/us/app/instagram/id389801252")!
-               UIApplication.shared.open(appStoreURL, options: [:], completionHandler: nil)
-           }
-    }
-    */
-    /*{
-        print("instagramUrl-\(instagramUrl)")
-        
-        guard let videoURL = URL(string: "https://test.fha.nqn.mybluehostin.me/?p=11480") else {
-            print("Invalid URL")
-            return
-        }
-        // Example image to share
-        guard let image = UIImage(named: "exampleImage") else {
-            print("Image not found")
-            return
-        }
-        // Save image to photo library
-        UIImageWriteToSavedPhotosAlbum(image, self, #selector(imageSaved(_:didFinishSavingWithError:contextInfo:)), nil)
-        
-    }
-    */
-    
-    func cell(_ cell: NewDetailTBC, tikTokUrl: String) {
-        print("SocialMediaUrl-->\(tikTokUrl)")
+    func cell(_ cell: NewDetailTBC, linkdeInUrl: String) {
+        print("SocialMediaUrl-->\(linkdeInUrl)")
         
         let strText = "Check out this link!"
-        let url = "https://test.fha.nqn.mybluehostin.me?p=10191"
-        
+        let url = linkdeInUrl
+
         let encodedText = strText.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? ""
             let encodedURL = url.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? ""
 
@@ -242,6 +397,114 @@ extension NewsDeatilsVC: NewDetailTBCDelegate
             if let url = URL(string: linkedInURLString) {
                 UIApplication.shared.open(url, options: [:], completionHandler: nil)
             }
+    }
+    func cell(_ cell: NewDetailTBC, btnViewAllTapped: String) {
+        self.navigationController?.popViewController(animated: false)
+    }
+    func cell(_ cell: NewDetailTBC, relatedBlogPostId: String) {
+        print("previousPostId-\(relatedBlogPostId)")
+        postId = relatedBlogPostId
+        self.apiCallGetBlogDetails()
+    }
+    func cell(_ cell: NewDetailTBC, faceBookUrl: String, sender: Any) {
+        print("SocialMediaUrl-->\(faceBookUrl)")
+        let urlString = faceBookUrl
+        let strText = "Check out this link!"
+
+        if let decodedURL = urlString.removingPercentEncoding {
+            print("Decoded URL: \(decodedURL)")
+            
+            guard let url = URL(string: urlString) else {
+                // Handle invalid URL
+                let alert = UIAlertController(title: "Error", message: "Invalid URL.", preferredStyle: .alert)
+                alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+                present(alert, animated: true, completion: nil)
+                return
+            }
+            
+            let encodedText = strText.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? ""
+            let encodedURL = url.absoluteString.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? ""
+            
+            // Check if Facebook app is installed
+            let facebookAppURL = URL(string: "fb://")!
+            if UIApplication.shared.canOpenURL(facebookAppURL) {
+                // Facebook app is installed, use ShareDialog
+                let content = ShareLinkContent()
+                content.contentURL = url
+                content.quote = strText
+                
+                let dialog = ShareDialog(viewController: self, content: content, delegate: nil)
+                dialog.mode = .automatic
+                
+                do {
+                    try dialog.show()
+                } catch {
+                    // If ShareDialog fails, fallback to web browser
+                    openInWebBrowser(encodedText: encodedText, encodedURL: encodedURL)
+                }
+            } else {
+                // Facebook app is not installed, open in web browser
+                openInWebBrowser(encodedText: encodedText, encodedURL: encodedURL)
+            }
+        }
+    }
+
+    func openInWebBrowser(encodedText: String, encodedURL: String) {
+        let webURLString = "https://www.facebook.com/sharer/sharer.php?u=\(encodedURL)&quote=\(encodedText)"
+        if let webURL = URL(string: webURLString) {
+            UIApplication.shared.open(webURL, options: [:], completionHandler: nil)
+        } else {
+            let alert = UIAlertController(title: "Error", message: "Unable to open the URL.", preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+            present(alert, animated: true, completion: nil)
+        }
+    }
+    func cell(_ cell: NewDetailTBC, TwiiterURL: String) {
+        print("SocialMediaUrl --> \(TwiiterURL)")
+
+        // The text you want to share
+        let strText = "Check out this link!"
+        
+        // URL you want to share
+        let url = TwiiterURL
+
+        // URL encode the text and the URL
+        let encodedText = strText.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? ""
+        let encodedURL = url.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? ""
+
+        // Create the URL scheme for Twitter app
+        let urlString = "twitter://post?message=\(encodedText) \(encodedURL)"
+
+        // Check if Twitter app can be opened
+        if let twitterURL = URL(string: urlString), UIApplication.shared.canOpenURL(twitterURL) {
+            // Open Twitter app to post
+            UIApplication.shared.open(twitterURL, options: [:], completionHandler: nil)
+        } else {
+            // Fallback to web-based sharing
+            let webURLString = "https://twitter.com/intent/tweet?text=\(encodedText)%20\(encodedURL)"
+            if let webURL = URL(string: webURLString) {
+                // Open Twitter's web share page
+                UIApplication.shared.open(webURL, options: [:], completionHandler: nil)
+            } else {
+                print("Failed to open URL.")
+            }
+        }
+    }
+    func cell(_ cell: NewDetailTBC, instagramUrl: String)
+    {
+        let urlToShare = instagramUrl
+              InstagramURLSharer.shareURL(urlToShare, in: self)
+    }
+
+    func cell(_ cell: NewDetailTBC, tikTokUrl: String) {
+        // Similar approach for Instagram
+      
+        
+        //Tiktok
+        let urlToShare = tikTokUrl
+                TikTokURLSharer.shareURL(urlToShare, in: self)
+     
+       
     }
     
     func cell(_ cell: NewDetailTBC, nextPostId: String) {

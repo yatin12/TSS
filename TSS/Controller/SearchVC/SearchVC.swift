@@ -14,6 +14,7 @@ class SearchVC: UIViewController {
     var userId: String = ""
     private let objSearchViewModel = SearchViewModel()
     var objsearchResponse: searchResponse?
+    var serachText: String = ""
     
     //  - Outlets - 
     @IBOutlet weak var lblNoData: UILabel!
@@ -78,24 +79,76 @@ extension SearchVC: UITextFieldDelegate
 {
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
         let currentText = textField.text ?? ""
-        let textRange = Range(range, in: currentText)!
+        guard let textRange = Range(range, in: currentText) else {
+            return false
+        }
         let updatedText = currentText.replacingCharacters(in: textRange, with: string)
-        // self.apiCallSearchList(searchText: updatedText)
+        serachText = updatedText.trimmingCharacters(in: .whitespacesAndNewlines)
+        
+        txtSearch.text = currentText
+        
+        // Cancel any previous perform requests to debounce the API call
+        NSObject.cancelPreviousPerformRequests(withTarget: self, selector: #selector(performSearch), object: nil)
         
         if updatedText.count > 3 {
-            self.apiCallSearchList(searchText: updatedText)
+            // Debounce the search to wait for 0.5 seconds after the user stops typing
+            self.perform(#selector(performSearch), with: serachText, afterDelay: 0.5)
         } else {
             self.clearSearchResults()
         }
+
+        return true
+    }
+
+    @objc func performSearch() {
+     //   if let searchText = serachText, !searchText.isEmpty {
+            self.apiCallSearchList(searchText: serachText)
+       // }
+    }
+
+    func clearSearchResults() {
+        // Implement your logic to clear the search results
+        self.objsearchResponse?.data = []
+       // txtSearch.text = ""
+        self.tblSearch.reloadData()
+    }
+
+    
+    /*
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        let currentText = textField.text ?? ""
+        let textRange = Range(range, in: currentText)!
+        let updatedText = currentText.replacingCharacters(in: textRange, with: string)
+        // self.apiCallSearchList(searchText: updatedText)
+        serachText = updatedText.trimmingCharacters(in: .whitespacesAndNewlines)
+        //self.apiCallSearchList(searchText: serachText)
+        /*
+        NSObject.cancelPreviousPerformRequests(withTarget: self, selector: #selector(performSearch), object: nil)
+        self.perform(#selector(performSearch), with: serachText, afterDelay: 0.5)
+        */
+        
+        txtSearch.text = updatedText
+        if updatedText.count > 3 {
+            self.apiCallSearchList(searchText: updatedText)
+            
+        } else {
+            self.clearSearchResults()
+        }
+       
         
         return true
     }
+    @objc func performSearch() {
+        self.apiCallSearchList(searchText: serachText)
+    }
+    
     func clearSearchResults() {
         // Implement your logic to clear or reset search results
         self.objsearchResponse?.data = []
         self.tblSearch.reloadData()
         // You can also display a message or a default state if needed
     }
+    */
 }
 extension SearchVC
 {
@@ -170,17 +223,25 @@ extension SearchVC: UITableViewDelegate, UITableViewDataSource
     }
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "SearchTBC", for: indexPath) as! SearchTBC
-        
+        cell.selectionStyle = .none
         // Extract the title and content
         let strTitle = "\(objsearchResponse?.data?[indexPath.row].title ?? "")"
         let strDesc = "\(objsearchResponse?.data?[indexPath.row].content ?? "")"
         
         // Set the title immediately
-        cell.lblTitle.text = strTitle.htmlToString()
+//        cell.lblTitle.text = strTitle.htmlToString()
+        cell.lblTitle.text = strTitle.decodingHTMLEntities()
+
+        
+        let strBlogUrl = "\(objsearchResponse?.data?[indexPath.row].thumbnail ?? "")"
+        cell.imgSrach.sd_setImage(with: URL(string: strBlogUrl), placeholderImage: UIImage(named: "icn_Placehoder"), options: [.progressiveLoad], context: nil)
+
         
         // Convert the description in the background
         DispatchQueue.global(qos: .userInitiated).async {
-            let convertedDesc = strDesc.htmlToString()
+//            let convertedDesc = strDesc.htmlToString()
+            let convertedDesc = strDesc.decodingHTMLEntities()
+
             
             // Update the label on the main thread
             DispatchQueue.main.async {
@@ -191,7 +252,7 @@ extension SearchVC: UITableViewDelegate, UITableViewDataSource
             }
         }
         
-        cell.selectionStyle = .none
+        
         
         return cell
     }
@@ -214,6 +275,7 @@ extension SearchVC: UITableViewDelegate, UITableViewDataSource
         }
         else
         {
+            strSelectedPostName = "\(objsearchResponse?.data?[indexPath.row].post_type ?? "")"
             NavigationHelper.pushWithPassData(storyboardKey.InnerScreen, viewControllerIdentifier: "VideoDetailsVC", from: navigationController!, data: "\(id)")
         }
     }

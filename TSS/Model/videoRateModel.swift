@@ -16,7 +16,7 @@ struct videoRateRequest: Encodable {
 // MARK: - Welcome
 struct videoRateResponse: Codable {
     let settings: settingsVideoRate?
-    let data: [DataVideoRate]?
+    let data: DataVideoRate?
 }
 
 // MARK: - Datum

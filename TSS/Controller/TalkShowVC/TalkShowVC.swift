@@ -8,16 +8,18 @@
 import UIKit
 import KVSpinnerView
 import WebKit
+import GoogleMobileAds
 
 class TalkShowVC: UIViewController {
     //  - Variables - 
     var objBlogCategoryResponse: blogCategoryResponse?
     var objTalkShowListResponse: talkShowListResponse?
-
+    
     @IBOutlet weak var objWebViewSeason1BTS: WKWebView!
     private let objblogCategoryViewModel = blogCategoryViewModel()
     private let objTalkShowViewModel = talkShowViewModel()
     
+    @IBOutlet weak var bannerView: GADBannerView!
     var userId: String = ""
     var userRole: String = ""
     var selectedIndex: Int = 0
@@ -28,6 +30,11 @@ class TalkShowVC: UIViewController {
     var isLoadingList : Bool = false
     var isValFromUserClick:Bool = false
     
+    let inputFormatter = DateFormatter()
+    let outputFormatter = DateFormatter()
+    
+    
+    @IBOutlet weak var constHeightBannervw: NSLayoutConstraint!
     //  - Outlets - 
     @IBOutlet weak var lblNoData: UILabel!
     @IBOutlet weak var imgLogo: UIImageView!
@@ -42,35 +49,82 @@ extension TalkShowVC
     override func viewDidLoad() {
         super.viewDidLoad()
         self.getUserId()
+
+        self.loadBannerView()
         self.setUpBackButtonView()
         self.setUpHeaderView()
         
         self.registerNib()
         self.setupCollectionview()
         self.setNotificationObserverMethod()
-       // self.apiCallGetBlogCategoryList()
-        self.checkSubscribeUserOrnot()
+        // self.checkSubscribeUserOrnot()
         
     }
-}
-//MARK: General Methods
-extension TalkShowVC
-{
-    func checkSubscribeUserOrnot()
-    {
-        self.apiCallGetBlogCategoryList()
-        /*
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
         isSubscribedUser = AppUserDefaults.object(forKey: "SubscribedUserType") as? String ?? "\(SubscibeUserType.free)"
-        if isSubscribedUser != "\(SubscibeUserType.free)"
+        if isSubscribedUser == "\(SubscibeUserType.premium)" || isSubscribedUser == "\(SubscibeUserType.basic)"
         {
-            self.apiCallGetBlogCategoryList()
+            objWebViewSeason1BTS.isHidden = false
+            tblTalkShow.isHidden = true
+            lblNoData.isHidden = true
+            
+            // self.loadSeason1BTSURL(strURL: season1BTSUrl)
+            
         }
         else
         {
-            AlertUtility.presentSimpleAlert(in: self, title: "", message: "\(AlertMessages.subscribeForTabMsg)")
-
+            selectedIndex = 0
+            pageNo = 1
+            tblTalkShow.isHidden = false
+            lblNoData.isHidden = true
+            objWebViewSeason1BTS.isHidden = true
         }
-        */
+        self.checkSubscribeUserOrnot()
+        self.tabBarController?.tabBar.isHidden = false
+    }
+    
+}
+
+//MARK: General Methods
+extension TalkShowVC
+{
+    func loadBannerView()
+    {
+        if userRole == USERROLE.SignInUser
+        {
+            let isSubscribedUser = AppUserDefaults.object(forKey: "SubscribedUserType") as? String ?? "\(SubscibeUserType.free)"
+            if isSubscribedUser == "\(SubscibeUserType.premium)" || isSubscribedUser == "\(SubscibeUserType.basic)"
+            {
+                constHeightBannervw.constant = 0
+            }
+            else
+            {
+             constHeightBannervw.constant = 50
+                if currentEnvironment == .production
+                {
+                    bannerView.adUnitID = LiveAdmobId
+
+                }
+                else
+                {
+                    bannerView.adUnitID = testAdmobId
+
+                }
+                // bannerView.rootViewController = self
+                bannerView.delegate = self
+                 bannerView.load(GADRequest())
+            }
+        }
+        else
+        {
+            constHeightBannervw.constant = 50
+        }
+    }
+    func checkSubscribeUserOrnot()
+    {
+        self.apiCallGetBlogCategoryList()
     }
     func setNotificationObserverMethod()
     {
@@ -84,6 +138,9 @@ extension TalkShowVC
     }
     func getUserId()
     {
+        inputFormatter.dateFormat = "yyyy-MM-dd"
+        outputFormatter.dateFormat = "MMMM dd, yyyy"
+        
         userId = AppUserDefaults.object(forKey: "USERID") as? String ?? ""
         userRole = AppUserDefaults.object(forKey: "USERROLE") as? String ?? ""
     }
@@ -123,7 +180,7 @@ extension TalkShowVC
     func setUpHeaderView()
     {
         DeviceUtility.setHeaderViewHeight(constHeightHeader)
-
+        
     }
 }
 //MARK: IBAction
@@ -134,7 +191,7 @@ extension TalkShowVC
     }
     @IBAction func btnSettingTapped(_ sender: Any) {
         NavigationHelper.push(storyboardKey.InnerScreen, viewControllerIdentifier: "SettingVC", from: navigationController!, animated: true)
-
+        
     }
     @IBAction func btnSearchTapped(_ sender: Any) {
         if userRole == USERROLE.SignInUser
@@ -169,8 +226,26 @@ extension TalkShowVC: UITableViewDelegate, UITableViewDataSource
         
         let strBlogUrl = "\(objTalkShowListResponse?.data?[indexPath.row].thumbnail ?? "")"
         cell.imgVideo.sd_setImage(with: URL(string: strBlogUrl), placeholderImage: UIImage(named: "icn_Placehoder"), options: [.progressiveLoad], context: nil)
-        cell.lblTitle.text = "\(objTalkShowListResponse?.data?[indexPath.row].title ?? "")"
-        cell.lblDate.text = "\(objTalkShowListResponse?.data?[indexPath.row].date ?? "")"
+       // cell.lblTitle.text = "\(objTalkShowListResponse?.data?[indexPath.row].title ?? "")"
+        
+        cell.lblTitle.text = (objTalkShowListResponse?.data?[indexPath.row].title ?? "").decodingHTMLEntities()
+
+        
+        let dateString = "\(objTalkShowListResponse?.data?[indexPath.row].date ?? "")"
+        
+        if let date = inputFormatter.date(from: dateString) {
+            // Create another DateFormatter to format the Date object
+            
+            
+            // Convert the Date object to the formatted string
+            let formattedDate = outputFormatter.string(from: date)
+            print(formattedDate) // Output: November 26, 2024
+            cell.lblDate.text  = formattedDate
+        } else {
+            print("Invalid date string")
+            cell.lblDate.text = "-"
+        }
+        
         let strDuration = "\(objTalkShowListResponse?.data?[indexPath.row].duration ?? "")"
         cell.lblDuration.text = strDuration == "" ? "0 min" : "\(strDuration) min"
         
@@ -205,31 +280,75 @@ extension TalkShowVC: UICollectionViewDataSource, UICollectionViewDelegateFlowLa
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "NewsCTC",for: indexPath) as! NewsCTC
         
         let htmlString = "\(objBlogCategoryResponse?.data?[indexPath.item].categoryName ?? "")"
-        cell.lblCategory.text = htmlString.htmlToString()
+//        cell.lblCategory.text = htmlString.htmlToString()
+        cell.lblCategory.text = htmlString.decodingHTMLEntities()
+
         
         if indexPath.item == selectedIndex
         {
+            
             cell.vwMain.backgroundColor = UIColor(named: "ThemePinkColor")
             cell.vwMain.borderColor = .clear
             cell.vwMain.borderWidth = 0
+            cell.lblCategory.textColor = UIColor(named: "SystemWhite_Tag")
             
             if indexPath.row == 0
             {
                 categoryId = "\(objBlogCategoryResponse?.data?[0].categoryID ?? 0)"
                 strSelectedBlog = "\(objBlogCategoryResponse?.data?[0].categoryName ?? "")"
-                objCollectionViewCategory.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)
-                self.pageNo = 1
-                self.isLoadingList = false
-                isValFromUserClick = false
-                self.apiCallGetTalkShowList(isFromUserClick: isValFromUserClick)
+                
+//                if strSelectedBlog == "Season1BTS" || categoryId == "291152"
+                if categoryId == "291152"
+                {
+                    KVSpinnerView.dismiss()
+                    
+                    
+                    objWebViewSeason1BTS.isHidden = false
+                    tblTalkShow.isHidden = true
+                    lblNoData.isHidden = true
+                    let season1BTSUrl: String = "\(objBlogCategoryResponse?.data?[indexPath.item].url ?? "")"
+                    
+                    isSubscribedUser = AppUserDefaults.object(forKey: "SubscribedUserType") as? String ?? "\(SubscibeUserType.free)"
+                    if isSubscribedUser == "\(SubscibeUserType.premium)" || isSubscribedUser == "\(SubscibeUserType.basic)"
+                        
+                    {
+                        self.loadSeason1BTSURL(strURL: season1BTSUrl)
+                        
+                    }
+                    else
+                    {
+                        AlertUtility.presentAlert(in: self, title: "", message: "\(AlertMessages.subscribeForTabMsg)", options: "Ok","Cancel") { option in
+                            switch(option) {
+                            case 0:
+                                NavigationHelper.push(storyboardKey.InnerScreen, viewControllerIdentifier: "SubsciberVC", from: self.navigationController!, animated: false)
+                                
+                                break
+                            case 1:
+                                break
+                                
+                            default:
+                                break
+                            }
+                        }
+                    }
+                    
+                }
+                else
+                {
+                    objCollectionViewCategory.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)
+                    self.pageNo = 1
+                    self.isLoadingList = false
+                    isValFromUserClick = false
+                    self.apiCallGetTalkShowList(isFromUserClick: isValFromUserClick)
+                }
             }
         }
         else
         {
-            
             cell.vwMain.backgroundColor = .clear
-            cell.vwMain.borderColor = UIColor.white
+            cell.vwMain.borderColor = UIColor(named: "ThemeFontColorUnselect")
             cell.vwMain.borderWidth = 1
+            cell.lblCategory.textColor = UIColor(named: "ThemeFontColorUnselect")
         }
         return cell
         
@@ -246,7 +365,9 @@ extension TalkShowVC: UICollectionViewDataSource, UICollectionViewDelegateFlowLa
         selectedIndex = indexPath.item
         categoryId = "\(objBlogCategoryResponse?.data?[indexPath.item].categoryID ?? 0)"
         strSelectedBlog = "\(objBlogCategoryResponse?.data?[indexPath.item].categoryName ?? "")"
-        if strSelectedBlog == "Season1BTS"
+//        if strSelectedBlog == "Season1BTS"  || categoryId == "291152"
+        if categoryId == "291152"
+
         {
             objWebViewSeason1BTS.isHidden = false
             tblTalkShow.isHidden = true
@@ -254,18 +375,25 @@ extension TalkShowVC: UICollectionViewDataSource, UICollectionViewDelegateFlowLa
             let season1BTSUrl: String = "\(objBlogCategoryResponse?.data?[indexPath.item].url ?? "")"
             
             isSubscribedUser = AppUserDefaults.object(forKey: "SubscribedUserType") as? String ?? "\(SubscibeUserType.free)"
-            if isSubscribedUser == "\(SubscibeUserType.premium)"
+            if isSubscribedUser == "\(SubscibeUserType.premium)" || isSubscribedUser == "\(SubscibeUserType.basic)"
+                
             {
                 self.loadSeason1BTSURL(strURL: season1BTSUrl)
-
+                objCollectionViewCategory.reloadData()
+                
             }
             else
             {
-                AlertUtility.presentSimpleAlert(in: self, title: "", message: "\(AlertMessages.subscribeForTabMsg)")
-
+               // NavigationHelper.push(storyboardKey.InnerScreen, viewControllerIdentifier: "SubsciberVC", from: navigationController!, animated: false)
+                if userRole == USERROLE.SignInUser
+                {
+                    NavigationHelper.push(storyboardKey.InnerScreen, viewControllerIdentifier: "SubsciberVC", from: navigationController!, animated: true)
+                }
+                else
+                {
+                    AlertUtility.presentSimpleAlert(in: self, title: "", message: AlertMessages.ForceFullyRegister)
+                }
             }
-            
-            
         }
         else
         {
@@ -276,12 +404,14 @@ extension TalkShowVC: UICollectionViewDataSource, UICollectionViewDelegateFlowLa
             self.isLoadingList = false
             isValFromUserClick = true
             self.apiCallGetTalkShowList(isFromUserClick: isValFromUserClick)
+            
+            objCollectionViewCategory.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)
+            
+            objCollectionViewCategory.reloadData()
         }
-        objCollectionViewCategory.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)
+       
         
-        objCollectionViewCategory.reloadData()
-
-      
+        
     }
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         
@@ -302,7 +432,7 @@ extension TalkShowVC: UICollectionViewDataSource, UICollectionViewDelegateFlowLa
             objWebViewSeason1BTS.load(requestObj)
         } else {
             // Handle the case where the URL string is invalid or nil
-           // print("Invalid URL string: \(PrivacyPolicyURL)")
+            // print("Invalid URL string: \(PrivacyPolicyURL)")
         }
     }
 }
@@ -330,17 +460,17 @@ extension TalkShowVC
                 switch result {
                 case .success(let response):
                     print(response)
-//                    KVSpinnerView.dismiss()
+                    //                    KVSpinnerView.dismiss()
                     if response.settings?.success == true
                     {
                         self.setUpUIAfterGettingResponse(response: response)
-
+                        
                     }
                     else
                     {
                         KVSpinnerView.dismiss()
                         AlertUtility.presentSimpleAlert(in: self, title: "", message: "\(response.settings?.message ?? "")")
-
+                        
                     }
                     
                 case .failure(let error):
@@ -361,7 +491,7 @@ extension TalkShowVC
         else
         {
             KVSpinnerView.dismiss()
-             AlertUtility.presentSimpleAlert(in: self, title: "", message: "\(AlertMessages.NoInternetAlertMsg)")
+            AlertUtility.presentSimpleAlert(in: self, title: "", message: "\(AlertMessages.NoInternetAlertMsg)")
         }
     }
     func apiCallGetTalkShowList(isFromUserClick: Bool)
@@ -376,7 +506,7 @@ extension TalkShowVC
                 switch result {
                 case .success(let response):
                     print(response)
-                   
+                    
                     
                     if response.settings?.success == true {
                         let newData = response.data ?? []
@@ -389,7 +519,7 @@ extension TalkShowVC
                                 // If it's not the first page, append data
                                 self.objTalkShowListResponse?.data?.append(contentsOf: newData)
                             }
-
+                            
                             self.isLoadingList = false
                             self.tblTalkShow.isHidden = false
                             self.lblNoData.isHidden = true
@@ -412,35 +542,6 @@ extension TalkShowVC
                         KVSpinnerView.dismiss()
                         AlertUtility.presentSimpleAlert(in: self, title: "", message: "\(response.settings?.message ?? "")")
                     }
-                    
-                    /*
-                    if response.settings?.success == true
-                    {
-                        if response.data?.count ?? 0 > 0
-                        {
-                            self.tblTalkShow.isHidden = false
-                            self.lblNoData.isHidden = true
-                            self.objWebViewSeason1BTS.isHidden = true
-                            
-                            self.objTalkShowListResponse = response
-                            self.tblTalkShow.dataSource = self
-                            self.tblTalkShow.delegate = self
-                            self.tblTalkShow.reloadData()
-                        }
-                        else
-                        {
-                            self.tblTalkShow.isHidden = true
-                            self.lblNoData.isHidden = false
-                            self.objWebViewSeason1BTS.isHidden = true
-                        }
-                    }
-                    else
-                    {
-                        AlertUtility.presentSimpleAlert(in: self, title: "", message: "\(response.settings?.message ?? "")")
-
-                    }
-                    */
-                    
                 case .failure(let error):
                     // Handle failure
                     KVSpinnerView.dismiss()
@@ -459,13 +560,13 @@ extension TalkShowVC
         else
         {
             KVSpinnerView.dismiss()
-             AlertUtility.presentSimpleAlert(in: self, title: "", message: "\(AlertMessages.NoInternetAlertMsg)")
+            AlertUtility.presentSimpleAlert(in: self, title: "", message: "\(AlertMessages.NoInternetAlertMsg)")
         }
-      
+        
     }
 }
-//MARK: UIWebViewDelegate
-extension TalkShowVC : WKUIDelegate, UIWebViewDelegate,WKNavigationDelegate
+//MARK: WKUIDelegate
+extension TalkShowVC : WKUIDelegate, WKNavigationDelegate
 {
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
         KVSpinnerView.dismiss()
@@ -475,5 +576,32 @@ extension TalkShowVC : WKUIDelegate, UIWebViewDelegate,WKNavigationDelegate
     }
     func webView(_ webView: WKWebView, didFail navigation: WKNavigation!, withError error: Error) {
         KVSpinnerView.dismiss()
+    }
+}
+//MARK: - GADBannerViewDelegate
+extension TalkShowVC: GADBannerViewDelegate
+{
+    func bannerViewDidReceiveAd(_ bannerView: GADBannerView) {
+        print("bannerViewDidReceiveAd")
+    }
+    
+    func bannerView(_ bannerView: GADBannerView, didFailToReceiveAdWithError error: Error) {
+        print("bannerView:didFailToReceiveAdWithError: \(error.localizedDescription)")
+    }
+    
+    func bannerViewDidRecordImpression(_ bannerView: GADBannerView) {
+        print("bannerViewDidRecordImpression")
+    }
+    
+    func bannerViewWillPresentScreen(_ bannerView: GADBannerView) {
+        print("bannerViewWillPresentScreen")
+    }
+    
+    func bannerViewWillDismissScreen(_ bannerView: GADBannerView) {
+        print("bannerViewWillDIsmissScreen")
+    }
+    
+    func bannerViewDidDismissScreen(_ bannerView: GADBannerView) {
+        print("bannerViewDidDismissScreen")
     }
 }

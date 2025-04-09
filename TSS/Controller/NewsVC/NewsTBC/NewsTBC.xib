@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="22155" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="32700.99.1234" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_12" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22131"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22685"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -26,23 +26,23 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
         <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="KGk-i7-Jjw" customClass="NewsTBC" customModule="TSS" customModuleProvider="target">
-            <rect key="frame" x="0.0" y="0.0" width="375" height="470"/>
+            <rect key="frame" x="0.0" y="0.0" width="375" height="430"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
-                <rect key="frame" x="0.0" y="0.0" width="375" height="470"/>
+                <rect key="frame" x="0.0" y="0.0" width="375" height="430"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="drO-Qn-qjg">
-                        <rect key="frame" x="23" y="15" width="329" height="440"/>
+                        <rect key="frame" x="23" y="15" width="329" height="400"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillProportionally" translatesAutoresizingMaskIntoConstraints="NO" id="cB2-8M-0Q0">
-                                <rect key="frame" x="0.0" y="0.0" width="329" height="440"/>
+                                <rect key="frame" x="0.0" y="0.0" width="329" height="400"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="keM-Ho-pWh">
-                                        <rect key="frame" x="0.0" y="0.0" width="329" height="200"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="329" height="160"/>
                                         <subviews>
                                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="imgTemp" translatesAutoresizingMaskIntoConstraints="NO" id="zU6-PN-Zue">
-                                                <rect key="frame" x="0.0" y="0.0" width="329" height="200"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="329" height="160"/>
                                             </imageView>
                                         </subviews>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -51,11 +51,11 @@
                                             <constraint firstItem="zU6-PN-Zue" firstAttribute="top" secondItem="keM-Ho-pWh" secondAttribute="top" id="2Y0-CZ-crF"/>
                                             <constraint firstAttribute="trailing" secondItem="zU6-PN-Zue" secondAttribute="trailing" id="KQa-WJ-adm"/>
                                             <constraint firstItem="zU6-PN-Zue" firstAttribute="leading" secondItem="keM-Ho-pWh" secondAttribute="leading" id="Q70-K5-VcQ"/>
-                                            <constraint firstAttribute="height" constant="200" id="ikZ-4r-3Hz"/>
+                                            <constraint firstAttribute="height" constant="160" id="ikZ-4r-3Hz"/>
                                         </constraints>
                                     </view>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="9M1-EQ-LYJ">
-                                        <rect key="frame" x="0.0" y="200" width="329" height="39"/>
+                                        <rect key="frame" x="0.0" y="160" width="329" height="39"/>
                                         <subviews>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="smx-ON-DgJ">
                                                 <rect key="frame" x="0.0" y="7" width="150" height="25"/>
@@ -63,7 +63,7 @@
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Blog Celebrity Gossip" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="E6F-rU-nc3">
                                                         <rect key="frame" x="2" y="2" width="146" height="21"/>
                                                         <fontDescription key="fontDescription" name="Poppins-Medium" family="Poppins" pointSize="12"/>
-                                                        <color key="textColor" name="ThemeFontColor"/>
+                                                        <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                         <nil key="highlightedColor"/>
                                                     </label>
                                                 </subviews>
@@ -91,11 +91,11 @@
                                         </constraints>
                                     </view>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="SBQ-26-oyg">
-                                        <rect key="frame" x="0.0" y="239" width="329" height="70"/>
+                                        <rect key="frame" x="0.0" y="199" width="329" height="70"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Thembi Seete Opens Up about Her Scandalous Role in ‘Adulting’ 2" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="GHq-eb-7F0">
                                                 <rect key="frame" x="0.0" y="0.0" width="329" height="70"/>
-                                                <fontDescription key="fontDescription" name="Poppins-SemiBold" family="Poppins" pointSize="18"/>
+                                                <fontDescription key="fontDescription" name="Poppins-SemiBold" family="Poppins" pointSize="20"/>
                                                 <color key="textColor" name="ThemeFontColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
@@ -109,14 +109,14 @@
                                             <constraint firstItem="GHq-eb-7F0" firstAttribute="top" secondItem="SBQ-26-oyg" secondAttribute="top" id="mHu-Xg-2L1"/>
                                         </constraints>
                                     </view>
-                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Eeo-vd-CNc">
-                                        <rect key="frame" x="0.0" y="309" width="329" height="100"/>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Eeo-vd-CNc" userLabel="View1">
+                                        <rect key="frame" x="0.0" y="269" width="329" height="90"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="5" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="f2m-xL-cgZ">
-                                                <rect key="frame" x="0.0" y="0.0" width="329" height="100"/>
+                                                <rect key="frame" x="0.0" y="-8" width="329" height="98"/>
                                                 <string key="text">Thembi Seete, a luminary in the entertainment industry, has traversed a remarkable journey since her debut with the pioneering kwaito group, Boom Shaka, in 1993. Over the past two decades, she has seamlessly transitioned into a versatile artist, firmly establishing herself in the realm of acting. Her acting odyssey commenced with notable productions like “Hijack,” </string>
-                                                <fontDescription key="fontDescription" name="Poppins-Light" family="Poppins" pointSize="10"/>
-                                                <color key="textColor" name="ThemeFontColor"/>
+                                                <fontDescription key="fontDescription" name="Poppins-Light" family="Poppins" pointSize="15"/>
+                                                <color key="textColor" name="ThemeFontColorUnselect"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                         </subviews>
@@ -125,25 +125,25 @@
                                             <constraint firstItem="f2m-xL-cgZ" firstAttribute="leading" secondItem="Eeo-vd-CNc" secondAttribute="leading" id="1EE-dx-LCa"/>
                                             <constraint firstAttribute="bottom" secondItem="f2m-xL-cgZ" secondAttribute="bottom" id="DXG-sT-yCT"/>
                                             <constraint firstAttribute="trailing" secondItem="f2m-xL-cgZ" secondAttribute="trailing" id="LWl-DF-UZP"/>
-                                            <constraint firstAttribute="height" constant="100" id="P6G-Sj-8NH"/>
-                                            <constraint firstItem="f2m-xL-cgZ" firstAttribute="top" secondItem="Eeo-vd-CNc" secondAttribute="top" id="zZ5-WU-ZZu"/>
+                                            <constraint firstAttribute="height" constant="90" id="P6G-Sj-8NH"/>
+                                            <constraint firstItem="f2m-xL-cgZ" firstAttribute="top" secondItem="Eeo-vd-CNc" secondAttribute="top" constant="-8" id="zZ5-WU-ZZu"/>
                                         </constraints>
                                     </view>
-                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="sSe-3U-ytv">
-                                        <rect key="frame" x="0.0" y="409" width="329" height="31"/>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="sSe-3U-ytv" userLabel="View2">
+                                        <rect key="frame" x="0.0" y="359" width="329" height="41"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="December 320, 20245" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="qvC-5N-Pdr">
-                                                <rect key="frame" x="0.0" y="7" width="130" height="17"/>
+                                                <rect key="frame" x="0.0" y="18.666666666666686" width="160" height="19.666666666666671"/>
                                                 <constraints>
-                                                    <constraint firstAttribute="width" constant="130" id="ECy-Ci-3AU"/>
+                                                    <constraint firstAttribute="width" constant="160" id="ECy-Ci-3AU"/>
                                                 </constraints>
-                                                <fontDescription key="fontDescription" name="Poppins-Regular" family="Poppins" pointSize="12"/>
+                                                <fontDescription key="fontDescription" name="Poppins-Regular" family="Poppins" pointSize="14"/>
                                                 <color key="textColor" name="ThemeFontColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Admin" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="agf-48-Y0H">
-                                                <rect key="frame" x="145" y="7" width="169" height="17"/>
-                                                <fontDescription key="fontDescription" name="Poppins-Regular" family="Poppins" pointSize="12"/>
+                                                <rect key="frame" x="175" y="18.666666666666686" width="139" height="19.666666666666671"/>
+                                                <fontDescription key="fontDescription" name="Poppins-Regular" family="Poppins" pointSize="14"/>
                                                 <color key="textColor" name="ThemeFontColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
@@ -151,15 +151,16 @@
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <constraints>
                                             <constraint firstItem="agf-48-Y0H" firstAttribute="leading" secondItem="qvC-5N-Pdr" secondAttribute="trailing" constant="15" id="FqE-XW-RuR"/>
-                                            <constraint firstItem="agf-48-Y0H" firstAttribute="centerY" secondItem="sSe-3U-ytv" secondAttribute="centerY" id="XkJ-T6-o10"/>
+                                            <constraint firstItem="agf-48-Y0H" firstAttribute="centerY" secondItem="sSe-3U-ytv" secondAttribute="centerY" constant="8" id="XkJ-T6-o10"/>
                                             <constraint firstAttribute="trailing" secondItem="agf-48-Y0H" secondAttribute="trailing" constant="15" id="gcq-E2-0BB"/>
                                             <constraint firstItem="qvC-5N-Pdr" firstAttribute="leading" secondItem="sSe-3U-ytv" secondAttribute="leading" id="gvq-gV-rS2"/>
-                                            <constraint firstItem="qvC-5N-Pdr" firstAttribute="centerY" secondItem="sSe-3U-ytv" secondAttribute="centerY" id="wRm-K7-Bf1"/>
+                                            <constraint firstItem="qvC-5N-Pdr" firstAttribute="centerY" secondItem="sSe-3U-ytv" secondAttribute="centerY" constant="8" id="wRm-K7-Bf1"/>
                                         </constraints>
                                     </view>
                                 </subviews>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
+                                    <constraint firstItem="sSe-3U-ytv" firstAttribute="top" secondItem="Eeo-vd-CNc" secondAttribute="bottom" id="1uj-wf-F84"/>
                                     <constraint firstItem="SBQ-26-oyg" firstAttribute="top" secondItem="9M1-EQ-LYJ" secondAttribute="bottom" id="3TA-St-EIi"/>
                                     <constraint firstItem="SBQ-26-oyg" firstAttribute="leading" secondItem="cB2-8M-0Q0" secondAttribute="leading" id="VXv-kg-FBe"/>
                                     <constraint firstAttribute="trailing" secondItem="keM-Ho-pWh" secondAttribute="trailing" id="WU8-mL-Le4"/>
@@ -207,7 +208,10 @@
     <resources>
         <image name="imgTemp" width="246" height="128"/>
         <namedColor name="ThemeFontColor">
-            <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.17299999296665192" green="0.17299999296665192" blue="0.17299999296665192" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="ThemeFontColorUnselect">
+            <color red="0.3919999897480011" green="0.3919999897480011" blue="0.3919999897480011" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <namedColor name="ThemePinkColor">
             <color red="0.48600000143051147" green="0.10999999940395355" blue="0.63499999046325684" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

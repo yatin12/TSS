@@ -17,9 +17,6 @@ PODS:
     - SDWebImage/Core (= 5.18.11)
   - SDWebImage/Core (5.18.11)
   - TikTokOpenSDK (5.0.15)
-  - TwitterCore (3.2.0)
-  - TwitterKit (3.4.2):
-    - TwitterCore (>= 3.2.0)
 
 DEPENDENCIES:
   - Alamofire
@@ -28,10 +25,9 @@ DEPENDENCIES:
   - FBSDKCoreKit (~> 15.0)
   - FBSDKLoginKit (~> 15.0)
   - FBSDKShareKit (~> 15.0)
-  - KVSpinnerView
+  - KVSpinnerView (~> 1.0.1)
   - SDWebImage
   - TikTokOpenSDK
-  - TwitterKit (~> 3.0)
 
 SPEC REPOS:
   trunk:
@@ -46,8 +42,6 @@ SPEC REPOS:
     - KVSpinnerView
     - SDWebImage
     - TikTokOpenSDK
-    - TwitterCore
-    - TwitterKit
 
 SPEC CHECKSUMS:
   Alamofire: 3ca42e259043ee0dc5c0cdd76c4bc568b8e42af7
@@ -61,9 +55,7 @@ SPEC CHECKSUMS:
   KVSpinnerView: ce89cec80a5776ba4639c312770f01c8a091e80a
   SDWebImage: a3ba0b8faac7228c3c8eadd1a55c9c9fe5e16457
   TikTokOpenSDK: dc1199ba9c6d7815aee0eaca6ec80ad13f7d9c1f
-  TwitterCore: 8cbc9ad34d91c63a0035ea05bfbfc0d7ca72a28c
-  TwitterKit: 5e4f41d70b9abdb41df5467f52d7aa2c0fd26ebb
 
-PODFILE CHECKSUM: 41a0d6426fb4cd707fcd1ff158d0b3abd0401527
+PODFILE CHECKSUM: 0b8aa53bf218892e84ab6ae631588a09525e88e0
 
-COCOAPODS: 1.15.0
+COCOAPODS: 1.15.2

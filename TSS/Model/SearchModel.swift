@@ -22,10 +22,13 @@ struct searchResponse: Codable {
 struct DataSearch: Codable {
     let id, title, content: String?
     let post_type: String?
+    let thumbnail: String?
+    
 
     enum CodingKeys: String, CodingKey {
         case id, title, content
         case post_type
+        case thumbnail
     }
 }
 

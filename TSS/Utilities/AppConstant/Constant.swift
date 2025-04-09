@@ -6,34 +6,57 @@
 //
 
 import UIKit
-import CoreLocation
+
 
 var hasVideoPlayed1 = false
+let inappSharedSecretKey: String = "5cee24ff0c6c4806bd3934db9a0aaee1"
+let testAdmobId: String = "ca-app-pub-3940256099942544/2934735716"
+
+let LiveAdmobId: String = "ca-app-pub-3996099707576962/1670771947"
+//let LiveAdmobId: String = "ca-app-pub-3940256099942544/2934735716"
+
 
 enum AppEnvironment {
     case production
     case beta
 }
+struct inappPurchaseIds {
+    
+    static let Basic_Monthly: String = "com.thesistersshowllc.basicMonthly"
+    static let Premium_Monthly: String  = "com.thesistersshowllc.premiumMonthly"
+    static let Basic_Yearly: String  = "com.thesistersshowllc.basicYearly"
+    static let Premium_Yearly: String  = "com.thesistersshowllc.premiumYearly"
 
+}
 struct SubscibeUserType {
     
     static let free:String = "Free"
     static let basic:String = "Basic"
     static let premium:String = "Premium"
 }
+
+
 var isFromPrivacyViewSetting: Bool = false
 var isFromTermsViewSetting: Bool = false
-
-
+var strPlanType: String = "monthly"
+var isProductPurchased: Bool = false
+var strCancelled: String = "NO"
 let dateFormate = "yyyy-MM-dd"
-let currentEnvironment: AppEnvironment = .beta
+
+let currentEnvironment: AppEnvironment = .production
 let AppUserDefaults = UserDefaults.standard
 var strSelectedBlog: String = ""
 var isFromViewAll: Bool = false
 let highlightColor = UIColor(named: "ThemeHighlightBorderColor")?.cgColor ?? UIColor.clear.cgColor
+let DefaultBorderColor = UIColor(named: "ThemeDefaultBorderColor")?.cgColor ?? UIColor.clear.cgColor
+
+let highlightColor_Lbl = UIColor(named: "ThemeHighlightBorderColor") ?? UIColor.clear
+let DefaultBorderColor_Lbl = UIColor(named: "ThemeFontColor") ?? UIColor.clear
+
 let clearColor = UIColor.clear.cgColor
 var strSelectedPostName: String = ""
-
+let imageSelected = UIImage(named: "icn_Radio_Select")
+let imageUnselected = UIImage(named: "icn_Radio_UnSelect")
 let lightFont = UIFont(name: "Poppins-Light", size: 12) ?? UIFont.boldSystemFont(ofSize: 17)
 let mediumFont = UIFont(name: "Poppins-Medium", size: 12) ?? UIFont.systemFont(ofSize: 17)
 let boldFont = UIFont(name: "Poppins-Bold", size: 26) ?? UIFont.systemFont(ofSize: 26)
@@ -60,6 +83,8 @@ let semiBoldAttributes: [NSAttributedString.Key: Any] = [
 ]
 //EndPoint
 let loginEndpoint = "login"
+let addFCMTokenEndpoint = "fcmtoken"
+
 let registerEndpoint = "register"
 let blog_categoriesEndpoint = "blog_categories"
 let get_blogs_by_categoryEndpoint = "get_blogs_by_category"
@@ -77,12 +102,17 @@ let addWatchlistEndpoint = "add_watchlist"
 let deleteWatchlistEndpoint = "delete_watchlist"
 let sendContactDetailsEndpoint = "contact-form-submit"
 let membershipPlanEndpoint = "membership-plans"
+let subscriptionPurchaseEndpoint = "subscription_purchase_Info"
+let UpcomingEventPurchaseEndpoint = "upcoming-event-payment"
+
 let favVideoEndpoint = "like_unlike"
 let searchEndpoint = "search"
 let HomeEndpoint = "homepage"
 let forgotPasswordEndpoint = "reset-password"
 let deleteAccountEndpoint = "delete-account"
 let logoutEndpoint = "user-logout"
+let liveShowDetailsEndpoint = "get-liveshow-detail"
+let UpcomingEventsEndpoint = "upcoming-event-list"
 
 var strSlectedBlogCatNews: String = ""
 
@@ -91,6 +121,7 @@ var PrivacyPolicyURL: String = ""
 var termsConditionURL: String = ""
 var PodCastURL: String = ""
 var aboutUSURL: String = ""
+var foundationURL: String = ""
 var Season1TBSURL: String = ""
 
 struct subscriptionPlanTime {
@@ -126,7 +157,13 @@ struct storyboardKey {
     static let ProfileScreen:String = "ProfileScreen"
 }
 
-
+class purchaseUtility
+{
+    static func setProductPurchased(_ isPurchased: Bool) {
+        let value = isPurchased ? "YES" : "NO"
+        UserDefaultUtility.saveValueToUserDefaults(value: value, forKey: "isProductPurchased")
+    }
+}
 
 struct AlertMessages {
     static let NoInternetAlertMsg = "Whoops! Internet connection not available!"
@@ -145,6 +182,8 @@ struct AlertMessages {
     static let LogoutMsg:String = "Do you want to logout?"
     static let deleteAccountMsg:String = "Do you want to delete account?"
     static let RateMsg:String = "Please give some rate by pressing a star. Thank you!"
+    static let RateMsg1:String = "Please give some comments. Thank you!"
+
     static let ForceFullyRegister:String = "To access all content, please register."
     static let subscribeMsg: String = "Please subscribe to continue watching."
     static let subscribeForTabMsg: String = "Access to this content is restricted; please subscribe to view it."
@@ -155,31 +194,9 @@ class AppUtility {
         let appVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String
         return "Version \(appVersion ?? "1.0.0")"
     }
-}
-struct locationUtility
-{
-    static func calculateDistanceBetween(coordinateA: CLLocationCoordinate2D, coordinateB: CLLocationCoordinate2D) -> CLLocationDistance {
-        let locationA = CLLocation(latitude: coordinateA.latitude, longitude: coordinateA.longitude)
-        let locationB = CLLocation(latitude: coordinateB.latitude, longitude: coordinateB.longitude)
-        return locationA.distance(from: locationB)
-    }
     
-    static func calculateDistanceBetweenLocationsInMeter(latCurrent: Double, longCurrent: Double, latCustomer: Double, longCustomer: Double) -> Double {
-        // Coordinates of point A
-        let coordinateSource = CLLocationCoordinate2D(latitude: latCurrent, longitude: longCurrent)
-        
-        // Coordinates of point B
-        let coordinateDestination = CLLocationCoordinate2D(latitude: latCustomer, longitude: longCustomer)
-        
-        // Calculate distance between points A and B
-        let locationA = CLLocation(latitude: coordinateSource.latitude, longitude: coordinateSource.longitude)
-        let locationB = CLLocation(latitude: coordinateDestination.latitude, longitude: coordinateDestination.longitude)
-        let distance = locationA.distance(from: locationB)
-        
-        // Convert distance to kilometers
-        return distance
-    }
 }
+
 struct TimeAgoUtility
 {
    static func timeAgoSinceDate(date: Date) -> String {
@@ -378,6 +395,16 @@ struct NavigationHelper {
             
             navigationController.pushViewController(viewController, animated: true)
         }
+        else if let viewController = storyboard.instantiateViewController(withIdentifier: viewControllerIdentifier) as? MeetSisterPageVC {
+            
+            if let selectedPostURL = data as? String {
+                viewController.strSisterUrl = selectedPostURL
+            } else {
+                fatalError("Invalid data type passed to EditProfileVC. Expected GetProfileResponse, received \(String(describing: data))")
+            }
+            
+            navigationController.pushViewController(viewController, animated: true)
+        }
        
         else {
             fatalError("ViewController with identifier \(viewControllerIdentifier) not found or does not conform to EditProfileVC.")
@@ -387,7 +414,33 @@ struct NavigationHelper {
     
     static func pushWithSignaturePassData(_ storyboardName: String, viewControllerIdentifier: String, from navigationController: UINavigationController, data: Any? = nil, data1: Any? = nil)
     {
+        let storyboard = UIStoryboard(name: storyboardName, bundle: nil)
         
+        if let viewController = storyboard.instantiateViewController(withIdentifier: viewControllerIdentifier) as? MembershipLevelVC {
+            
+            if let strJobId = data as? Int {
+                viewController.idx = strJobId
+            }
+            else {
+                fatalError("Invalid data type passed to EditProfileVC. Expected GetProfileResponse, received \(String(describing: data))")
+            }
+            
+            if let strParam = data1 as? membershipPlanResponse {
+                viewController.objMembershipPlanResponse = strParam
+            }
+            else {
+                fatalError("Invalid data type passed to EditProfileVC. Expected GetProfileResponse, received \(String(describing: data))")
+            }
+            
+            
+            
+            navigationController.pushViewController(viewController, animated: true)
+        }
+
+        
+        else {
+            fatalError("ViewController with identifier \(viewControllerIdentifier) not found or does not conform to EditProfileVC.")
+        }
     }
     
 }
@@ -491,5 +544,20 @@ extension String {
     func htmlToString() -> String {
         return htmlToAttributedString()?.string ?? ""
     }
+    func removingHTMLEntities() -> String {
+            return self.replacingOccurrences(of: "&#8217;", with: "'")
+        }
+    func decodingHTMLEntities() -> String? {
+            guard let data = self.data(using: .utf8) else { return nil }
+            
+            let options: [NSAttributedString.DocumentReadingOptionKey: Any] = [
+                .documentType: NSAttributedString.DocumentType.html,
+                .characterEncoding: String.Encoding.utf8.rawValue
+            ]
+            
+            guard let attributedString = try? NSAttributedString(data: data, options: options, documentAttributes: nil) else { return nil }
+            return attributedString.string
+        }
+    
 }
 

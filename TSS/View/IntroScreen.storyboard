@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="22155" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="wgf-Hr-y78">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="32700.99.1234" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="wgf-Hr-y78">
     <device id="retina6_12" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22131"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22685"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
@@ -112,7 +112,7 @@
                                                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Welcome Back!" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Fk0-Bt-BKF">
                                                                                 <rect key="frame" x="85.333333333333329" y="118" width="174.33333333333337" height="31"/>
                                                                                 <fontDescription key="fontDescription" name="Poppins-SemiBold" family="Poppins" pointSize="22"/>
-                                                                                <color key="textColor" name="ThemeFontColor"/>
+                                                                                <color key="textColor" name="ThemePinkColor"/>
                                                                                 <nil key="highlightedColor"/>
                                                                             </label>
                                                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="SNJ-Jv-ZeK">
@@ -120,7 +120,7 @@
                                                                                 <subviews>
                                                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gcF-gO-l5y">
                                                                                         <rect key="frame" x="0.0" y="10" width="141" height="1"/>
-                                                                                        <color key="backgroundColor" white="1" alpha="0.5" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                                        <color key="backgroundColor" name="LabelHoriColor"/>
                                                                                         <constraints>
                                                                                             <constraint firstAttribute="width" constant="141" id="Km0-dg-tBQ"/>
                                                                                             <constraint firstAttribute="height" constant="1" id="TBt-MT-vpF"/>
@@ -137,7 +137,7 @@
                                                                                     </label>
                                                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7Hc-xf-vnC">
                                                                                         <rect key="frame" x="172" y="10" width="141" height="1"/>
-                                                                                        <color key="backgroundColor" white="1" alpha="0.5" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                                        <color key="backgroundColor" name="LabelHoriColor"/>
                                                                                         <constraints>
                                                                                             <constraint firstAttribute="width" constant="141" id="SRv-8Y-L8c"/>
                                                                                             <constraint firstAttribute="height" constant="1" id="aQv-6c-jWT"/>
@@ -187,7 +187,7 @@
                                                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Email  or  Username " textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="BKX-8p-TA2" userLabel="Email  or  Username">
                                                                                         <rect key="frame" x="0.0" y="0.0" width="144.66666666666666" height="19.666666666666668"/>
                                                                                         <fontDescription key="fontDescription" name="Poppins-SemiBold" family="Poppins" pointSize="14"/>
-                                                                                        <color key="textColor" name="ThemeFontColor"/>
+                                                                                        <color key="textColor" name="ThemePinkColor"/>
                                                                                         <nil key="highlightedColor"/>
                                                                                     </label>
                                                                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="yV5-In-c07">
@@ -203,7 +203,7 @@
                                                                                                 </connections>
                                                                                             </textField>
                                                                                         </subviews>
-                                                                                        <color key="backgroundColor" name="ThemeTextfiledFillColor"/>
+                                                                                        <color key="backgroundColor" name="SystemWhite"/>
                                                                                         <constraints>
                                                                                             <constraint firstItem="vnB-Yk-HTX" firstAttribute="top" secondItem="yV5-In-c07" secondAttribute="top" constant="2" id="1Hd-2W-xZw"/>
                                                                                             <constraint firstAttribute="trailing" secondItem="vnB-Yk-HTX" secondAttribute="trailing" constant="8" id="EhG-cq-7TU"/>
@@ -297,7 +297,7 @@
                                                                                                 </constraints>
                                                                                             </view>
                                                                                         </subviews>
-                                                                                        <color key="backgroundColor" name="ThemeTextfiledFillColor"/>
+                                                                                        <color key="backgroundColor" name="SystemWhite"/>
                                                                                         <constraints>
                                                                                             <constraint firstAttribute="bottom" secondItem="Jh4-NN-JF7" secondAttribute="bottom" constant="2" id="1bH-wP-Yc1"/>
                                                                                             <constraint firstItem="wcN-h4-Waw" firstAttribute="leading" secondItem="Jh4-NN-JF7" secondAttribute="trailing" id="DlZ-iD-dgD"/>
@@ -310,6 +310,12 @@
                                                                                         <userDefinedRuntimeAttributes>
                                                                                             <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
                                                                                                 <real key="value" value="10"/>
+                                                                                            </userDefinedRuntimeAttribute>
+                                                                                            <userDefinedRuntimeAttribute type="color" keyPath="borderColor">
+                                                                                                <color key="value" name="ThemeDefaultBorderColor"/>
+                                                                                            </userDefinedRuntimeAttribute>
+                                                                                            <userDefinedRuntimeAttribute type="number" keyPath="borderWidth">
+                                                                                                <real key="value" value="1"/>
                                                                                             </userDefinedRuntimeAttribute>
                                                                                         </userDefinedRuntimeAttributes>
                                                                                     </view>
@@ -361,6 +367,17 @@
                                                                                                     <constraint firstAttribute="width" constant="15" id="l4i-sl-rbz"/>
                                                                                                     <constraint firstItem="eD3-59-QbW" firstAttribute="centerY" secondItem="azx-t1-Drh" secondAttribute="centerY" id="rFP-4a-yqg"/>
                                                                                                 </constraints>
+                                                                                                <userDefinedRuntimeAttributes>
+                                                                                                    <userDefinedRuntimeAttribute type="number" keyPath="borderWidth">
+                                                                                                        <real key="value" value="1"/>
+                                                                                                    </userDefinedRuntimeAttribute>
+                                                                                                    <userDefinedRuntimeAttribute type="color" keyPath="borderColor">
+                                                                                                        <color key="value" name="ThemeDefaultBorderColor"/>
+                                                                                                    </userDefinedRuntimeAttribute>
+                                                                                                    <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                                                                                        <real key="value" value="3"/>
+                                                                                                    </userDefinedRuntimeAttribute>
+                                                                                                </userDefinedRuntimeAttributes>
                                                                                             </view>
                                                                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Remember me" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="oLS-eQ-4Qs">
                                                                                                 <rect key="frame" x="20.000000000000007" y="10.000000000000002" width="105.66666666666669" height="19.666666666666671"/>
@@ -396,7 +413,7 @@
                                                                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Lost your password?" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="DeA-fy-nDp">
                                                                                                 <rect key="frame" x="0.33333333333334281" y="10.000000000000002" width="143.66666666666666" height="19.666666666666671"/>
                                                                                                 <fontDescription key="fontDescription" name="Poppins-Medium" family="Poppins" pointSize="14"/>
-                                                                                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                                                <color key="textColor" name="ThemeFontColor"/>
                                                                                                 <nil key="highlightedColor"/>
                                                                                             </label>
                                                                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="U5q-bW-0ak">
@@ -609,7 +626,9 @@
                         <outlet property="btnRememberOutlt" destination="lyP-B3-lPu" id="0Al-wx-6Ch"/>
                         <outlet property="imgPassVisibility" destination="o6s-gT-Xod" id="1ge-XZ-2pv"/>
                         <outlet property="imgRemember" destination="eD3-59-QbW" id="fsR-Ew-MJY"/>
+                        <outlet property="lblEmail" destination="BKX-8p-TA2" id="OlV-6H-7Au"/>
                         <outlet property="lblLowerDeclaration" destination="K7A-Lh-tYK" id="8cy-7G-GNQ"/>
+                        <outlet property="lblPassword" destination="EBI-Q1-Vih" id="ScF-dp-4hu"/>
                         <outlet property="lblRegister" destination="eo2-u7-WcG" id="C2B-8T-J1b"/>
                         <outlet property="txtEmail" destination="vnB-Yk-HTX" id="wr1-i9-ZAl"/>
                         <outlet property="txtPassword" destination="Jh4-NN-JF7" id="Hk1-FN-fDV"/>
@@ -671,7 +690,7 @@
                                                                                 <subviews>
                                                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Vom-sq-q5j">
                                                                                         <rect key="frame" x="0.0" y="10" width="141" height="1"/>
-                                                                                        <color key="backgroundColor" white="1" alpha="0.5" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                                        <color key="backgroundColor" name="LabelHoriColor"/>
                                                                                         <constraints>
                                                                                             <constraint firstAttribute="height" constant="1" id="l36-Nb-wBW"/>
                                                                                             <constraint firstAttribute="width" constant="141" id="o5g-A7-GwO"/>
@@ -688,7 +707,7 @@
                                                                                     </label>
                                                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TWN-iS-PPV">
                                                                                         <rect key="frame" x="172" y="10" width="141" height="1"/>
-                                                                                        <color key="backgroundColor" white="1" alpha="0.5" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                                        <color key="backgroundColor" name="LabelHoriColor"/>
                                                                                         <constraints>
                                                                                             <constraint firstAttribute="height" constant="1" id="LqN-I6-UJL"/>
                                                                                             <constraint firstAttribute="width" constant="141" id="c4u-Yy-Tem"/>
@@ -740,7 +759,7 @@
                                                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="First Name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jtm-sa-NjQ" userLabel="Email  or  Username">
                                                                                         <rect key="frame" x="0.0" y="0.0" width="76.666666666666671" height="19.666666666666668"/>
                                                                                         <fontDescription key="fontDescription" name="Poppins-SemiBold" family="Poppins" pointSize="14"/>
-                                                                                        <color key="textColor" name="ThemeFontColor"/>
+                                                                                        <color key="textColor" name="ThemePinkColor"/>
                                                                                         <nil key="highlightedColor"/>
                                                                                     </label>
                                                                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="pWq-YB-mcO">
@@ -756,7 +775,7 @@
                                                                                                 </connections>
                                                                                             </textField>
                                                                                         </subviews>
-                                                                                        <color key="backgroundColor" name="ThemeTextfiledFillColor"/>
+                                                                                        <color key="backgroundColor" name="SystemWhite"/>
                                                                                         <constraints>
                                                                                             <constraint firstItem="4fe-Eg-ZgW" firstAttribute="leading" secondItem="pWq-YB-mcO" secondAttribute="leading" constant="8" id="1gP-6f-IIe"/>
                                                                                             <constraint firstItem="4fe-Eg-ZgW" firstAttribute="top" secondItem="pWq-YB-mcO" secondAttribute="top" constant="2" id="RHf-Df-fbb"/>
@@ -821,7 +840,7 @@
                                                                                                 </connections>
                                                                                             </textField>
                                                                                         </subviews>
-                                                                                        <color key="backgroundColor" name="ThemeTextfiledFillColor"/>
+                                                                                        <color key="backgroundColor" name="SystemWhite"/>
                                                                                         <constraints>
                                                                                             <constraint firstAttribute="trailing" secondItem="2gz-aW-zu8" secondAttribute="trailing" constant="8" id="fdf-tu-aZh"/>
                                                                                             <constraint firstItem="2gz-aW-zu8" firstAttribute="leading" secondItem="A53-hf-ttR" secondAttribute="leading" constant="8" id="laB-C6-fXG"/>
@@ -833,7 +852,10 @@
                                                                                                 <real key="value" value="10"/>
                                                                                             </userDefinedRuntimeAttribute>
                                                                                             <userDefinedRuntimeAttribute type="number" keyPath="borderWidth">
-                                                                                                <real key="value" value="0.0"/>
+                                                                                                <real key="value" value="1"/>
+                                                                                            </userDefinedRuntimeAttribute>
+                                                                                            <userDefinedRuntimeAttribute type="color" keyPath="borderColor">
+                                                                                                <color key="value" name="ThemeDefaultBorderColor"/>
                                                                                             </userDefinedRuntimeAttribute>
                                                                                         </userDefinedRuntimeAttributes>
                                                                                     </view>
@@ -883,7 +905,7 @@
                                                                                                 </connections>
                                                                                             </textField>
                                                                                         </subviews>
-                                                                                        <color key="backgroundColor" name="ThemeTextfiledFillColor"/>
+                                                                                        <color key="backgroundColor" name="SystemWhite"/>
                                                                                         <constraints>
                                                                                             <constraint firstAttribute="bottom" secondItem="pgF-9d-23C" secondAttribute="bottom" constant="2" id="bjI-rX-8ak"/>
                                                                                             <constraint firstItem="pgF-9d-23C" firstAttribute="top" secondItem="fI2-QF-ZsK" secondAttribute="top" constant="2" id="ftJ-pS-UeF"/>
@@ -895,7 +917,10 @@
                                                                                                 <real key="value" value="10"/>
                                                                                             </userDefinedRuntimeAttribute>
                                                                                             <userDefinedRuntimeAttribute type="number" keyPath="borderWidth">
-                                                                                                <real key="value" value="0.0"/>
+                                                                                                <real key="value" value="1"/>
+                                                                                            </userDefinedRuntimeAttribute>
+                                                                                            <userDefinedRuntimeAttribute type="color" keyPath="borderColor">
+                                                                                                <color key="value" name="ThemeDefaultBorderColor"/>
                                                                                             </userDefinedRuntimeAttribute>
                                                                                         </userDefinedRuntimeAttributes>
                                                                                     </view>
@@ -945,7 +970,7 @@
                                                                                                 </connections>
                                                                                             </textField>
                                                                                         </subviews>
-                                                                                        <color key="backgroundColor" name="ThemeTextfiledFillColor"/>
+                                                                                        <color key="backgroundColor" name="SystemWhite"/>
                                                                                         <constraints>
                                                                                             <constraint firstAttribute="trailing" secondItem="Nxk-aX-iYE" secondAttribute="trailing" constant="8" id="CqV-TT-wBv"/>
                                                                                             <constraint firstItem="Nxk-aX-iYE" firstAttribute="top" secondItem="uFr-fo-Oa6" secondAttribute="top" constant="2" id="J0h-TX-DxB"/>
@@ -957,7 +982,10 @@
                                                                                                 <real key="value" value="10"/>
                                                                                             </userDefinedRuntimeAttribute>
                                                                                             <userDefinedRuntimeAttribute type="number" keyPath="borderWidth">
-                                                                                                <real key="value" value="0.0"/>
+                                                                                                <real key="value" value="1"/>
+                                                                                            </userDefinedRuntimeAttribute>
+                                                                                            <userDefinedRuntimeAttribute type="color" keyPath="borderColor">
+                                                                                                <color key="value" name="ThemeDefaultBorderColor"/>
                                                                                             </userDefinedRuntimeAttribute>
                                                                                         </userDefinedRuntimeAttributes>
                                                                                     </view>
@@ -1036,7 +1064,7 @@
                                                                                                 </connections>
                                                                                             </textField>
                                                                                         </subviews>
-                                                                                        <color key="backgroundColor" name="ThemeTextfiledFillColor"/>
+                                                                                        <color key="backgroundColor" name="SystemWhite"/>
                                                                                         <constraints>
                                                                                             <constraint firstAttribute="bottom" secondItem="gYc-BV-fyL" secondAttribute="bottom" constant="2" id="GUK-gs-bCG"/>
                                                                                             <constraint firstItem="aOz-O6-rGS" firstAttribute="top" secondItem="yVp-OM-Ng5" secondAttribute="top" id="Gbz-AJ-LVI"/>
@@ -1049,6 +1077,12 @@
                                                                                         <userDefinedRuntimeAttributes>
                                                                                             <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
                                                                                                 <real key="value" value="10"/>
+                                                                                            </userDefinedRuntimeAttribute>
+                                                                                            <userDefinedRuntimeAttribute type="number" keyPath="borderWidth">
+                                                                                                <real key="value" value="1"/>
+                                                                                            </userDefinedRuntimeAttribute>
+                                                                                            <userDefinedRuntimeAttribute type="color" keyPath="borderColor">
+                                                                                                <color key="value" name="ThemeDefaultBorderColor"/>
                                                                                             </userDefinedRuntimeAttribute>
                                                                                         </userDefinedRuntimeAttributes>
                                                                                     </view>
@@ -1127,7 +1161,7 @@
                                                                                                 </constraints>
                                                                                             </view>
                                                                                         </subviews>
-                                                                                        <color key="backgroundColor" name="ThemeTextfiledFillColor"/>
+                                                                                        <color key="backgroundColor" name="SystemWhite"/>
                                                                                         <constraints>
                                                                                             <constraint firstAttribute="trailing" secondItem="pU6-Lp-10e" secondAttribute="trailing" id="2R0-Lm-SPn"/>
                                                                                             <constraint firstItem="mVe-o9-pb9" firstAttribute="top" secondItem="03s-kl-9Ys" secondAttribute="top" constant="2" id="9rS-Ic-6CD"/>
@@ -1140,6 +1174,12 @@
                                                                                         <userDefinedRuntimeAttributes>
                                                                                             <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
                                                                                                 <real key="value" value="10"/>
+                                                                                            </userDefinedRuntimeAttribute>
+                                                                                            <userDefinedRuntimeAttribute type="number" keyPath="borderWidth">
+                                                                                                <real key="value" value="1"/>
+                                                                                            </userDefinedRuntimeAttribute>
+                                                                                            <userDefinedRuntimeAttribute type="color" keyPath="borderColor">
+                                                                                                <color key="value" name="ThemeDefaultBorderColor"/>
                                                                                             </userDefinedRuntimeAttribute>
                                                                                         </userDefinedRuntimeAttributes>
                                                                                     </view>
@@ -1272,7 +1312,7 @@
                                                                                                                 </connections>
                                                                                                             </button>
                                                                                                         </subviews>
-                                                                                                        <color key="backgroundColor" name="ThemeTextfiledFillColor"/>
+                                                                                                        <color key="backgroundColor" name="SystemWhite"/>
                                                                                                         <constraints>
                                                                                                             <constraint firstAttribute="trailing" secondItem="4pW-sF-WfP" secondAttribute="trailing" id="4ax-vi-suL"/>
                                                                                                             <constraint firstItem="4pW-sF-WfP" firstAttribute="leading" secondItem="EsW-48-Zns" secondAttribute="leading" id="GYI-Nv-yBZ"/>
@@ -1286,6 +1326,12 @@
                                                                                                         <userDefinedRuntimeAttributes>
                                                                                                             <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
                                                                                                                 <real key="value" value="10"/>
+                                                                                                            </userDefinedRuntimeAttribute>
+                                                                                                            <userDefinedRuntimeAttribute type="number" keyPath="borderWidth">
+                                                                                                                <real key="value" value="1"/>
+                                                                                                            </userDefinedRuntimeAttribute>
+                                                                                                            <userDefinedRuntimeAttribute type="color" keyPath="borderColor">
+                                                                                                                <color key="value" name="ThemeDefaultBorderColor"/>
                                                                                                             </userDefinedRuntimeAttribute>
                                                                                                         </userDefinedRuntimeAttributes>
                                                                                                     </view>
@@ -1342,7 +1388,7 @@
                                                                                                                 </connections>
                                                                                                             </button>
                                                                                                         </subviews>
-                                                                                                        <color key="backgroundColor" name="ThemeTextfiledFillColor"/>
+                                                                                                        <color key="backgroundColor" name="SystemWhite"/>
                                                                                                         <constraints>
                                                                                                             <constraint firstAttribute="trailing" secondItem="1PG-1D-nkQ" secondAttribute="trailing" id="7Ev-Fa-b7E"/>
                                                                                                             <constraint firstAttribute="bottom" secondItem="1PG-1D-nkQ" secondAttribute="bottom" id="BaS-yb-wdc"/>
@@ -1356,6 +1402,12 @@
                                                                                                         <userDefinedRuntimeAttributes>
                                                                                                             <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
                                                                                                                 <real key="value" value="10"/>
+                                                                                                            </userDefinedRuntimeAttribute>
+                                                                                                            <userDefinedRuntimeAttribute type="number" keyPath="borderWidth">
+                                                                                                                <real key="value" value="1"/>
+                                                                                                            </userDefinedRuntimeAttribute>
+                                                                                                            <userDefinedRuntimeAttribute type="color" keyPath="borderColor">
+                                                                                                                <color key="value" name="ThemeDefaultBorderColor"/>
                                                                                                             </userDefinedRuntimeAttribute>
                                                                                                         </userDefinedRuntimeAttributes>
                                                                                                     </view>
@@ -1539,8 +1591,16 @@
                     <connections>
                         <outlet property="imgEyeConfPass" destination="VYg-cC-Xqa" id="uSz-jB-iLp"/>
                         <outlet property="imgEyePass" destination="X2j-oc-vsS" id="AjU-I2-G6O"/>
+                        <outlet property="lblConfPassword" destination="QF8-X8-pQq" id="IOu-MD-YQi"/>
+                        <outlet property="lblCountry" destination="y0Z-LZ-Led" id="aet-I9-YeW"/>
+                        <outlet property="lblEmail" destination="F6L-71-Q3G" id="9Np-yu-eEA"/>
+                        <outlet property="lblFirstNm" destination="jtm-sa-NjQ" id="yuO-eb-zVU"/>
+                        <outlet property="lblGender" destination="Unu-4J-xTD" id="7o1-zV-1Ob"/>
+                        <outlet property="lblLastNm" destination="OB1-hz-dsu" id="dAr-Lq-fKv"/>
                         <outlet property="lblLogin" destination="s4j-EU-WxF" id="yTw-6c-1qU"/>
                         <outlet property="lblLowerDeclaration" destination="ErI-W2-2Rm" id="qe8-V9-iw8"/>
+                        <outlet property="lblPassword" destination="ik9-eq-gZy" id="BX9-Ap-FV3"/>
+                        <outlet property="lblUserNm" destination="Yp9-8X-La0" id="Qma-W4-xV5"/>
                         <outlet property="txtBirthday" destination="293-gU-WJX" id="zS7-zk-Exo"/>
                         <outlet property="txtConfPassword" destination="mVe-o9-pb9" id="VU4-mv-PZm"/>
                         <outlet property="txtCountry" destination="DCY-u6-k6L" id="ngc-lO-5An"/>
@@ -1713,7 +1773,7 @@
                                                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Welcome Back!" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lNq-W0-gQ6">
                                                                                 <rect key="frame" x="85.333333333333329" y="118" width="174.33333333333337" height="31"/>
                                                                                 <fontDescription key="fontDescription" name="Poppins-SemiBold" family="Poppins" pointSize="22"/>
-                                                                                <color key="textColor" name="ThemeFontColor"/>
+                                                                                <color key="textColor" name="ThemePinkColor"/>
                                                                                 <nil key="highlightedColor"/>
                                                                             </label>
                                                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="87j-ts-hEq">
@@ -1721,7 +1781,7 @@
                                                                                 <subviews>
                                                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0hE-Ru-fM5">
                                                                                         <rect key="frame" x="0.0" y="10" width="141" height="1"/>
-                                                                                        <color key="backgroundColor" white="1" alpha="0.5" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                                        <color key="backgroundColor" name="LabelHoriColor"/>
                                                                                         <constraints>
                                                                                             <constraint firstAttribute="height" constant="1" id="eQb-if-cgf"/>
                                                                                             <constraint firstAttribute="width" constant="141" id="wjR-iG-jnL"/>
@@ -1738,7 +1798,7 @@
                                                                                     </label>
                                                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="JdT-Cl-1nP">
                                                                                         <rect key="frame" x="172" y="10" width="141" height="1"/>
-                                                                                        <color key="backgroundColor" white="1" alpha="0.5" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                                        <color key="backgroundColor" name="LabelHoriColor"/>
                                                                                         <constraints>
                                                                                             <constraint firstAttribute="width" constant="141" id="Nve-Iw-uey"/>
                                                                                             <constraint firstAttribute="height" constant="1" id="rJh-47-Qvc"/>
@@ -1816,7 +1876,7 @@
                                                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Email" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="YNk-Ib-2iO" userLabel="Email  or  Username">
                                                                                         <rect key="frame" x="0.0" y="0.0" width="39.666666666666664" height="19.666666666666668"/>
                                                                                         <fontDescription key="fontDescription" name="Poppins-SemiBold" family="Poppins" pointSize="14"/>
-                                                                                        <color key="textColor" name="ThemeFontColor"/>
+                                                                                        <color key="textColor" name="ThemePinkColor"/>
                                                                                         <nil key="highlightedColor"/>
                                                                                     </label>
                                                                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="xyf-DL-z5u">
@@ -1829,7 +1889,7 @@
                                                                                                 <textInputTraits key="textInputTraits" keyboardType="emailAddress"/>
                                                                                             </textField>
                                                                                         </subviews>
-                                                                                        <color key="backgroundColor" name="ThemeTextfiledFillColor"/>
+                                                                                        <color key="backgroundColor" name="SystemWhite"/>
                                                                                         <constraints>
                                                                                             <constraint firstItem="GSF-cp-kdd" firstAttribute="top" secondItem="xyf-DL-z5u" secondAttribute="top" constant="2" id="98F-tL-l7r"/>
                                                                                             <constraint firstItem="GSF-cp-kdd" firstAttribute="leading" secondItem="xyf-DL-z5u" secondAttribute="leading" constant="8" id="sLl-Wd-Wj5"/>
@@ -2006,14 +2066,26 @@
         <image name="Logo" width="268" height="270.66665649414062"/>
         <image name="icn_Eye" width="92" height="92"/>
         <image name="icn_tick" width="66.666664123535156" height="66.666664123535156"/>
-        <namedColor name="ThemeFontColor">
+        <namedColor name="LabelHoriColor">
+            <color red="0.50999999046325684" green="0.50999999046325684" blue="0.50999999046325684" alpha="0.5" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="SystemWhite">
             <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="ThemeDefaultBorderColor">
+            <color red="0.0" green="0.012000000104308128" blue="0.10999999940395355" alpha="0.21400000154972076" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="ThemeFontColor">
+            <color red="0.17299999296665192" green="0.17299999296665192" blue="0.17299999296665192" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <namedColor name="ThemeHighlightBorderColor">
             <color red="0.48600000143051147" green="0.10999999940395355" blue="0.63499999046325684" alpha="0.93000000715255737" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <namedColor name="ThemeMainColor">
-            <color red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="ThemePinkColor">
+            <color red="0.48600000143051147" green="0.10999999940395355" blue="0.63499999046325684" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <namedColor name="ThemeTextfiledFillColor">
             <color red="0.097999997437000275" green="0.10999999940395355" blue="0.20000000298023224" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

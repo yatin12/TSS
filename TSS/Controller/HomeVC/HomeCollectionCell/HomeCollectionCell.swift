@@ -10,7 +10,8 @@ import UIKit
 class HomeCollectionCell: UICollectionViewCell {
     @IBOutlet weak var imgBlog: UIImageView!
     
-  
+    @IBOutlet weak var constHeightImg: NSLayoutConstraint!
+    
     @IBOutlet weak var vwRestHeader: UIView!
    // @IBOutlet weak var vwSeason1TBS: UIView!
     @IBOutlet weak var lblDesc: UILabel!

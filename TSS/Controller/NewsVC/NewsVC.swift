@@ -7,6 +7,7 @@
 
 import UIKit
 import KVSpinnerView
+import GoogleMobileAds
 
 class NewsVC: UIViewController {
     //  - Variables - 
@@ -23,7 +24,9 @@ class NewsVC: UIViewController {
     private let objblogCategoryViewModel = blogCategoryViewModel()
     private let objblogByCategoryViewModel = blogByCategoryViewModel()
     
+    @IBOutlet weak var constHeightBannervw: NSLayoutConstraint!
     //  - Outlets - 
+    @IBOutlet weak var bannerView: GADBannerView!
     @IBOutlet weak var lblNoDataFound: UILabel!
     @IBOutlet weak var tblNews: UITableView!
     @IBOutlet weak var imgLogo: UIImageView!
@@ -38,6 +41,8 @@ extension NewsVC
         super.viewDidLoad()
         lblNoDataFound.isHidden = true
         self.getUserId()
+
+        self.loadBannerView()
         self.setUpBackButtonView()
         self.setUpHeaderView()
         self.registerNib()
@@ -50,6 +55,38 @@ extension NewsVC
 //MARK: General Methods
 extension NewsVC
 {
+    func loadBannerView()
+    {
+        if userRole == USERROLE.SignInUser
+        {
+            let isSubscribedUser = AppUserDefaults.object(forKey: "SubscribedUserType") as? String ?? "\(SubscibeUserType.free)"
+            if isSubscribedUser == "\(SubscibeUserType.premium)" || isSubscribedUser == "\(SubscibeUserType.basic)"
+            {
+                constHeightBannervw.constant = 0
+            }
+            else
+            {
+                constHeightBannervw.constant = 50
+                if currentEnvironment == .production
+                {
+                    bannerView.adUnitID = LiveAdmobId
+
+                }
+                else
+                {
+                    bannerView.adUnitID = testAdmobId
+
+                }
+                // bannerView.rootViewController = self
+                bannerView.delegate = self
+                 bannerView.load(GADRequest())
+            }
+        }
+        else
+        {
+            constHeightBannervw.constant = 50
+        }
+    }
     func setNotificationObserverMethod()
     {
         NotificationCenter.default.removeObserver(self)
@@ -141,7 +178,7 @@ extension NewsVC: UITableViewDelegate, UITableViewDataSource
         return cell
     }
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 470
+        return 430
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -170,13 +207,16 @@ extension NewsVC: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "NewsCTC",for: indexPath) as! NewsCTC
         
         let htmlString = "\(objBlogCategoryResponse?.data?[indexPath.item].categoryName ?? "")"
-        cell.lblCategory.text = htmlString.htmlToString()
+//        cell.lblCategory.text = htmlString.htmlToString()
+        cell.lblCategory.text = htmlString.decodingHTMLEntities()
+
         
         if indexPath.item == selectedIndex
         {
             cell.vwMain.backgroundColor = UIColor(named: "ThemePinkColor")
             cell.vwMain.borderColor = .clear
             cell.vwMain.borderWidth = 0
+            cell.lblCategory.textColor = UIColor(named: "SystemWhite_Tag")
             if indexPath.item == 0
             {
                 categoryId = "\(objBlogCategoryResponse?.data?[0].categoryID ?? 0)"
@@ -190,8 +230,9 @@ extension NewsVC: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout
         else
         {
             cell.vwMain.backgroundColor = .clear
-            cell.vwMain.borderColor = UIColor.white
+            cell.vwMain.borderColor = UIColor(named: "ThemeFontColorUnselect")
             cell.vwMain.borderWidth = 1
+            cell.lblCategory.textColor = UIColor(named: "ThemeFontColorUnselect")
         }
         return cell
         
@@ -342,70 +383,31 @@ extension NewsVC
             AlertUtility.presentSimpleAlert(in: self, title: "", message: "\(AlertMessages.NoInternetAlertMsg)")
         }
     }
-
-
-    /*
-    func apiCallGetNewsListByCategory()
-    {
-        if Reachability.isConnectedToNetwork()
-        {
-            KVSpinnerView.show()
-            objblogByCategoryViewModel.getNewsListByCategory(category_id: categoryId, userId: userId, pagination_number: "\(pageNo)") { result in
-                switch result {
-                case .success(let response):
-                    KVSpinnerView.dismiss()
-                    print(response)
-
-                    if response.settings?.success == true
-                    {
-                        if response.data?.count ?? 0 > 0
-                        {
-                            self.isLoadingList = false
-                            self.tblNews.isHidden = false
-                            self.lblNoDataFound.isHidden = true
-                            
-                           // self.objBlogByCategoryResponse = response
-                            self.objBlogByCategoryResponse?.data?.append(response.data)
-                            self.tblNews.dataSource = self
-                            self.tblNews.delegate = self
-                            self.tblNews.reloadData()
-                        }
-                        else
-                        {
-                            self.objBlogByCategoryResponse = response
-                            self.tblNews.isHidden = true
-                            self.lblNoDataFound.isHidden = false
-                        }
-                    }
-                    else
-                    {
-                        AlertUtility.presentSimpleAlert(in: self, title: "", message: "\(response.settings?.message ?? "")")
-
-                    }
-                    
-                    
-                    
-                case .failure(let error):
-                    // Handle failure
-                    KVSpinnerView.dismiss()
-                    
-                    if let apiError = error as? APIError {
-                        ErrorHandlingUtility.handleAPIError(apiError, in: self)
-                    } else {
-                        // Handle other types of errors
-                        //print("Unexpected error: \(error)")
-                        AlertUtility.presentSimpleAlert(in: self, title: "", message: "\(error.localizedDescription)")
-                        
-                    }
-                }
-            }
-        }
-        else
-        {
-            KVSpinnerView.dismiss()
-             AlertUtility.presentSimpleAlert(in: self, title: "", message: "\(AlertMessages.NoInternetAlertMsg)")
-        }
-        
+}
+//MARK: - GADBannerViewDelegate
+extension NewsVC: GADBannerViewDelegate
+{
+    func bannerViewDidReceiveAd(_ bannerView: GADBannerView) {
+      print("bannerViewDidReceiveAd")
     }
-    */
+
+    func bannerView(_ bannerView: GADBannerView, didFailToReceiveAdWithError error: Error) {
+      print("bannerView:didFailToReceiveAdWithError: \(error.localizedDescription)")
+    }
+
+    func bannerViewDidRecordImpression(_ bannerView: GADBannerView) {
+      print("bannerViewDidRecordImpression")
+    }
+
+    func bannerViewWillPresentScreen(_ bannerView: GADBannerView) {
+      print("bannerViewWillPresentScreen")
+    }
+
+    func bannerViewWillDismissScreen(_ bannerView: GADBannerView) {
+      print("bannerViewWillDIsmissScreen")
+    }
+
+    func bannerViewDidDismissScreen(_ bannerView: GADBannerView) {
+      print("bannerViewDidDismissScreen")
+    }
 }

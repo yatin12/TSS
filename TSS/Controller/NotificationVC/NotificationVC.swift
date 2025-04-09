@@ -22,7 +22,7 @@ extension NotificationVC
         super.viewDidLoad()
         self.setUpHeaderView()
         self.setupNodatFound()
-        self.registerNib()
+      //  self.registerNib()
     }
 }
 //MARK: General Methods
@@ -30,8 +30,8 @@ extension NotificationVC
 {
     func setupNodatFound()
     {
-        tblNotification.isHidden = false
-        lblNoDataFound.isHidden = true
+        tblNotification.isHidden = true
+        lblNoDataFound.isHidden = false
     }
     func setUpHeaderView()
     {

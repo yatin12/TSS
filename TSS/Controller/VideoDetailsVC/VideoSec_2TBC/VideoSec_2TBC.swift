@@ -12,10 +12,13 @@ class VideoSec_2TBC: UITableViewCell {
     @IBOutlet weak var lblTimeAgo: UILabel!
     @IBOutlet weak var lblViewsCnt: UILabel!
     @IBOutlet weak var lblUpNextTitle: UILabel!
+    @IBOutlet weak var lblDot: UILabel!
     @IBOutlet weak var imgUpNextBlog: UIImageView!
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
+        lblDot.layer.cornerRadius = lblDot.frame.size.width / 2
+        lblDot.clipsToBounds = true
     }
     
     override func setSelected(_ selected: Bool, animated: Bool) {

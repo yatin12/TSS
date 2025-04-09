@@ -217,6 +217,7 @@ extension FavouriteListVC
                     }
                     else
                     {
+                        
                         AlertUtility.presentSimpleAlert(in: self, title: "", message: "\(response.settings?.message ?? "")")
 
                     }

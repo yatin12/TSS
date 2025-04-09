@@ -11,8 +11,14 @@ protocol NewDetailTBCDelegate: AnyObject {
     func cell(_ cell: NewDetailTBC, faceBookUrl: String, sender: Any)
     func cell(_ cell: NewDetailTBC, instagramUrl: String)
     func cell(_ cell: NewDetailTBC, tikTokUrl: String)
+    func cell(_ cell: NewDetailTBC, linkdeInUrl: String)
+    func cell(_ cell: NewDetailTBC, TwiiterURL: String)
+
+
     func cell(_ cell: NewDetailTBC, nextPostId: String)
     func cell(_ cell: NewDetailTBC, previousPostId: String)
+    func cell(_ cell: NewDetailTBC, relatedBlogPostId: String)
+    func cell(_ cell: NewDetailTBC, btnViewAllTapped: String)
 
 
    //func cell(_ cell: InverterTBC, isViewZoomClicked: Bool)
@@ -24,10 +30,17 @@ class NewDetailTBC: UITableViewCell {
 
     
    
+    @IBAction func btnViewAllTapped(_ sender: Any) {
+        delegate?.cell(self, btnViewAllTapped: "YES")
+
+    }
+    
+    @IBOutlet weak var btnViewAllOutlt: UIButton!
+ 
     @IBOutlet weak var objCollectionRelatedBlog: UICollectionView!
     @IBOutlet weak var btnNextPostOutlt: UIButton!
     @IBOutlet weak var btnPreviousPostOutlt: UIButton!
-    @IBOutlet weak var btnTiktokOutlt: UIButton!
+   // @IBOutlet weak var btnTiktokOutlt: UIButton!
     @IBOutlet weak var btnInstOutlt: UIButton!
     @IBOutlet weak var btnFaceBookOutlt: UIButton!
     @IBOutlet weak var objCollectionTags: UICollectionView!
@@ -55,12 +68,25 @@ class NewDetailTBC: UITableViewCell {
         objBlogDetailsResponse = response
         
         lblTitle.text = "\(response?.data?.title ?? "")"
-        lblBlogCategory.text = strSelectedBlog.htmlToString()
+//        lblBlogCategory.text = strSelectedBlog.htmlToString()
+        lblBlogCategory.text = strSelectedBlog.decodingHTMLEntities()
+
+        
 //        let htmlString = "\(response?.data?.description ?? "")"
 //        lblDesc.text = htmlString.htmlToString()
 
         let strDesc = "\(response?.data?.description ?? "")"
-        lblDesc.text = strDesc.htmlToString()
+        if strDesc == ""
+        {
+            lblDesc.text = "N/A"
+        }
+        else
+        {
+//            lblDesc.text = strDesc.htmlToString()
+            lblDesc.text = strDesc.decodingHTMLEntities()
+        }
+        
+       
        
         
         let strBlogUrl = "\(response?.data?.thumbnail ?? "")"
@@ -76,14 +102,24 @@ class NewDetailTBC: UITableViewCell {
         
     }
     @IBAction func btnTikTokTapped(_ sender: UIButton) {
-        let tiktokUrl: String = "\(objBlogDetailsResponse?.data?.linkedin_url ?? "")"
+        let tiktokUrl: String = "\(objBlogDetailsResponse?.data?.facebookURL ?? "")"
         delegate?.cell(self, tikTokUrl: tiktokUrl)
     }
+    
+    @IBAction func btnTwitterTapped(_ sender: UIButton) {
+        let twiterURL: String = "\(objBlogDetailsResponse?.data?.twitter_url ?? "")"
+        delegate?.cell(self, TwiiterURL: twiterURL)
+    }
     @IBAction func btnInstaTapped(_ sender: UIButton) {
-        let instaURL: String = "\(objBlogDetailsResponse?.data?.twitter_url ?? "")"
+        let instaURL: String = "\(objBlogDetailsResponse?.data?.facebookURL ?? "")"
         delegate?.cell(self, instagramUrl: instaURL)
     }
-    
+   
+    @IBAction func btnLinkdinTapped(_ sender: Any) {
+        let tiktokUrl: String = "\(objBlogDetailsResponse?.data?.linkedin_url ?? "")"
+        delegate?.cell(self, linkdeInUrl: tiktokUrl)
+
+    }
     @IBAction func btnFacebookTapped(_ sender: UIButton) {
         let faceBookURL: String = "\(objBlogDetailsResponse?.data?.facebookURL ?? "")"
         delegate?.cell(self, faceBookUrl: faceBookURL, sender: sender)
@@ -131,21 +167,32 @@ extension NewDetailTBC: UICollectionViewDataSource, UICollectionViewDelegateFlow
             cellToReturn.vwMain.borderWidth = 0
             cellToReturn.vwMain.cornerRadius = 3
             
+            cellToReturn.lblCategory.textColor = .white
             
             cell = cellToReturn
         }
         else
         {
             let cellToReturn = collectionView.dequeueReusableCell(withReuseIdentifier: "HomeCollectionCell",for: indexPath) as! HomeCollectionCell
-
+          //  cellToReturn.constHeightImg.constant = 140
             
             let strTitle = "\(objBlogDetailsResponse?.data?.relatedBlogs?[indexPath.item].title ?? "")"
-            cellToReturn.lblTitle.text  = strTitle.htmlToString()
-            let strDesc = "\(objBlogDetailsResponse?.data?.relatedBlogs?[indexPath.item].description ?? "")"
-            cellToReturn.lblDesc.text = strDesc.htmlToString()
+//            cellToReturn.lblTitle.text  = strTitle.htmlToString()
+            cellToReturn.lblTitle.text  = strTitle.decodingHTMLEntities()
 
-         //   cellToReturn.lblTitle.text = "\(objBlogDetailsResponse?.data?.relatedBlogs?[indexPath.item].title ?? "")"
-            cellToReturn.imgBlog.contentMode = .scaleAspectFit
+            
+            let strDesc = "\(objBlogDetailsResponse?.data?.relatedBlogs?[indexPath.item].description ?? "")"
+            if strDesc == ""
+            {
+                cellToReturn.lblDesc.text = "N/A"
+            }
+            else
+            {
+//                cellToReturn.lblDesc.text = strDesc.htmlToString()
+                cellToReturn.lblDesc.text = strDesc.decodingHTMLEntities()
+            }
+
+            cellToReturn.imgBlog.contentMode = .scaleAspectFill
             let strBlogUrl = "\(objBlogDetailsResponse?.data?.relatedBlogs?[indexPath.item].thumbnail ?? "")"
             cellToReturn.imgBlog.sd_setImage(with: URL(string: strBlogUrl), placeholderImage: UIImage(named: "icn_Placehoder"), options: [.progressiveLoad], context: nil)
             
@@ -175,5 +222,9 @@ extension NewDetailTBC: UICollectionViewDataSource, UICollectionViewDelegateFlow
         }
        
         return CGSize(width: width, height: height)
+    }
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let strPostId = "\(objBlogDetailsResponse?.data?.relatedBlogs?[indexPath.item].id ?? "")"
+        delegate?.cell(self, relatedBlogPostId: strPostId)
     }
 }

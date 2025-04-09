@@ -81,8 +81,8 @@ extension TermsConditionVC
 
     }
 }
-//MARK: UIWebViewDelegate
-extension TermsConditionVC : WKUIDelegate, UIWebViewDelegate,WKNavigationDelegate
+//MARK: WKUIDelegate
+extension TermsConditionVC : WKUIDelegate, WKNavigationDelegate
 {
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
         KVSpinnerView.dismiss()

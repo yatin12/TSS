@@ -80,8 +80,8 @@ extension PrivacyPolicyVC
 
     }
 }
-//MARK: UIWebViewDelegate
-extension PrivacyPolicyVC : WKUIDelegate, UIWebViewDelegate,WKNavigationDelegate
+//MARK: WKUIDelegate
+extension PrivacyPolicyVC : WKUIDelegate, WKNavigationDelegate
 {
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
         KVSpinnerView.dismiss()

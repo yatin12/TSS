@@ -58,17 +58,6 @@ extension EVideoVC
     func checkSubscribeUserOrnot()
     {
         self.apiCallGetBlogCategoryList()
-        /*
-        isSubscribedUser = AppUserDefaults.object(forKey: "SubscribedUserType") as? String ?? "\(SubscibeUserType.free)"
-        if isSubscribedUser != "\(SubscibeUserType.free)"
-        {
-            self.apiCallGetBlogCategoryList()
-        }
-        else
-        {
-            AlertUtility.presentSimpleAlert(in: self, title: "", message: "\(AlertMessages.subscribeForTabMsg)")
-        }
-        */
     }
     func setNotificationObserverMethod()
     {
@@ -198,13 +187,19 @@ extension EVideoVC: UICollectionViewDataSource, UICollectionViewDelegateFlowLayo
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "NewsCTC",for: indexPath) as! NewsCTC
         
         let htmlString = "\(objBlogCategoryResponse?.data?[indexPath.item].categoryName ?? "")"
-        cell.lblCategory.text = htmlString.htmlToString()
+//        cell.lblCategory.text = htmlString.htmlToString()
+        cell.lblCategory.text = htmlString.decodingHTMLEntities()
+
         
         if indexPath.item == selectedIndex
         {
+//            cell.vwMain.backgroundColor = UIColor(named: "ThemePinkColor")
+//            cell.vwMain.borderColor = .clear
+//            cell.vwMain.borderWidth = 0
             cell.vwMain.backgroundColor = UIColor(named: "ThemePinkColor")
             cell.vwMain.borderColor = .clear
             cell.vwMain.borderWidth = 0
+            cell.lblCategory.textColor = UIColor(named: "SystemWhite_Tag")
             
             if indexPath.row == 0
             {
@@ -220,9 +215,13 @@ extension EVideoVC: UICollectionViewDataSource, UICollectionViewDelegateFlowLayo
         else
         {
            
+//            cell.vwMain.backgroundColor = .clear
+//            cell.vwMain.borderColor = UIColor.white
+//            cell.vwMain.borderWidth = 1
             cell.vwMain.backgroundColor = .clear
-            cell.vwMain.borderColor = UIColor.white
+            cell.vwMain.borderColor = UIColor(named: "ThemeFontColorUnselect")
             cell.vwMain.borderWidth = 1
+            cell.lblCategory.textColor = UIColor(named: "ThemeFontColorUnselect")
         }
         return cell
         

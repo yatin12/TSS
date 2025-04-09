@@ -10,7 +10,10 @@ import KVSpinnerView
 
 class SettingVC: UIViewController {
     //  - Variables - 
-    let arr = ["Notifications", "Subscriber", "Account Setting", "App Preferences", "Favourites", "Upcoming Events", "Help & Feedback", "About Us", "Privacy Policy", "Term & Condition", "Contact Us", "Logout", "Delete Account"]
+//    let arr = ["Notifications", "Subscriber", "Account Setting", "App Preferences", "Favourites", "Upcoming Events", "Help & Feedback", "About Us", "Privacy Policy", "Term & Condition", "Contact Us", "Logout", "Delete Account"]
+    
+    let arr = ["Notifications", "Subscriber", "Account Setting", "App Preferences", "Favourites", "Help & Feedback", "About Us", "Privacy Policy", "Term & Condition", "Contact Us", "Logout", "Delete Account"]
+
     var userRole: String = ""
     var userId: String = ""
     var isSubscribedUser: String = ""
@@ -98,7 +101,32 @@ extension SettingVC: UITableViewDelegate, UITableViewDataSource
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "SettingTBC", for: indexPath) as! SettingTBC
         cell.selectionStyle = .none
-        cell.lblCategory.text = "\(arr[indexPath.row])"
+        
+        let strCellNm = "\(arr[indexPath.row])"
+        if userRole == USERROLE.GuestUser
+        {
+            if strCellNm == "Logout"
+            {
+                cell.lblCategory.text = "Login"
+                cell.imgCategory.image = UIImage(named: "icn_Login")
+            }
+            else
+            {
+                cell.lblCategory.text = "\(arr[indexPath.row])"
+                let underscored = cell.lblCategory.text?.replacingOccurrences(of: " ", with: "_")
+                cell.imgCategory.image = UIImage(named: "\("icn_" + (underscored ?? ""))")
+
+            }
+        }
+        else
+        {
+            cell.lblCategory.text = "\(arr[indexPath.row])"
+            let underscored = cell.lblCategory.text?.replacingOccurrences(of: " ", with: "_")
+            cell.imgCategory.image = UIImage(named: "\("icn_" + (underscored ?? ""))")
+
+        }
+        
+
         
         cell.swtNotificationOutlt.addTarget(self, action: #selector(switchValueChanged(_:)), for: .valueChanged)
         
@@ -130,8 +158,6 @@ extension SettingVC: UITableViewDelegate, UITableViewDataSource
             cell.swtNotificationOutlt.isHidden = true
         }
         
-        let underscored = cell.lblCategory.text?.replacingOccurrences(of: " ", with: "_")
-        cell.imgCategory.image = UIImage(named: "\("icn_" + (underscored ?? ""))")
         
         return cell
     }
@@ -169,7 +195,10 @@ extension SettingVC: UITableViewDelegate, UITableViewDataSource
             //App Preferences
             if userRole == USERROLE.SignInUser
             {
-                NavigationHelper.push(storyboardKey.InnerScreen, viewControllerIdentifier: "LiveShowVC", from: navigationController!, animated: true)
+                
+               NavigationHelper.push(storyboardKey.InnerScreen, viewControllerIdentifier: "ApperanceVC", from: navigationController!, animated: true)
+
+               // NavigationHelper.push(storyboardKey.InnerScreen, viewControllerIdentifier: "LiveShowVC", from: navigationController!, animated: true)
             }
             else
             {
@@ -188,30 +217,8 @@ extension SettingVC: UITableViewDelegate, UITableViewDataSource
             }
             
             break
+
         case 5:
-            //Upcoming events
-            if userRole == USERROLE.SignInUser
-            {
-                isSubscribedUser = AppUserDefaults.object(forKey: "SubscribedUserType") as? String ?? "\(SubscibeUserType.free)"
-                if isSubscribedUser == "\(SubscibeUserType.premium)"
-                {
-                    NavigationHelper.push(storyboardKey.InnerScreen, viewControllerIdentifier: "UpComingEventVC", from: navigationController!, animated: true)
-
-                }
-                else
-                {
-                    AlertUtility.presentSimpleAlert(in: self, title: "", message: "\(AlertMessages.subscribeForTabMsg)")
-
-                }
-                
-            }
-            else
-            {
-                AlertUtility.presentSimpleAlert(in: self, title: "", message: AlertMessages.ForceFullyRegister)
-            }
-            
-            break
-        case 6:
             // Help & Feedback
             if userRole == USERROLE.SignInUser
             {
@@ -222,22 +229,22 @@ extension SettingVC: UITableViewDelegate, UITableViewDataSource
                 AlertUtility.presentSimpleAlert(in: self, title: "", message: AlertMessages.ForceFullyRegister)
             }
             break
-        case 7:
+        case 6:
             // About Us
             
             NavigationHelper.push(storyboardKey.InnerScreen, viewControllerIdentifier: "AboutUsVC", from: navigationController!, animated: true)
             break
-        case 8:
+        case 7:
             // Privacy Policy
             isFromPrivacyViewSetting = true
             NavigationHelper.push(storyboardKey.InnerScreen, viewControllerIdentifier: "PrivacyPolicyVC", from: navigationController!, animated: true)
             break
-        case 9:
+        case 8:
             // Term & Condition
             isFromTermsViewSetting = true
             NavigationHelper.push(storyboardKey.InnerScreen, viewControllerIdentifier: "TermsConditionVC", from: navigationController!, animated: true)
             break
-        case 10:
+        case 9:
             // Contact Us
             if userRole == USERROLE.SignInUser
             {
@@ -249,44 +256,60 @@ extension SettingVC: UITableViewDelegate, UITableViewDataSource
             }
             break
             
-        case 11:
+        case 10:
             // Logout
             
-            
-            AlertUtility.presentAlert(in: self, title: "", message: "\(AlertMessages.LogoutMsg)", options: "Yes", "No") { option in
-                switch(option) {
-                case 0:
-                    self.apiCallLogout()
-                    /*
-                    self.clearParamInLocal()
-                    NavigationHelper.push(storyboardKey.IntroScreen, viewControllerIdentifier: "SplashScreenVC", from: self.navigationController!, animated: false)
-                    */
-                    break
-                    
-                case 1:
-                    break
-                default:
-                    break
+            if userRole == USERROLE.SignInUser
+            {
+                AlertUtility.presentAlert(in: self, title: "", message: "\(AlertMessages.LogoutMsg)", options: "Yes", "No") { option in
+                    switch(option) {
+                    case 0:
+                        self.apiCallLogout()
+                        /*
+                         self.clearParamInLocal()
+                         NavigationHelper.push(storyboardKey.IntroScreen, viewControllerIdentifier: "SplashScreenVC", from: self.navigationController!, animated: false)
+                         */
+                        break
+                        
+                    case 1:
+                        break
+                    default:
+                        break
+                    }
                 }
             }
+            else
+            {
+                self.clearParamInLocal()
+                NavigationHelper.push(storyboardKey.IntroScreen, viewControllerIdentifier: "SplashScreenVC", from: self.navigationController!, animated: false)
+            }
             
-        case 12:
+            break
+            
+        case 11:
             // Delete Account
-            
-            
-            AlertUtility.presentAlert(in: self, title: "", message: "\(AlertMessages.deleteAccountMsg)", options: "Yes", "No") { option in
-                switch(option) {
-                case 0:
-                    self.apiCallDeleteAccount()
-                    
-                    break
-                    
-                case 1:
-                    break
-                default:
-                    break
+            if userRole == USERROLE.SignInUser
+            {
+                AlertUtility.presentAlert(in: self, title: "", message: "\(AlertMessages.deleteAccountMsg)", options: "Yes", "No") { option in
+                    switch(option) {
+                    case 0:
+                        self.apiCallDeleteAccount()
+                        
+                        break
+                        
+                    case 1:
+                        break
+                    default:
+                        break
+                    }
                 }
             }
+            else
+            {
+                AlertUtility.presentSimpleAlert(in: self, title: "", message: AlertMessages.ForceFullyRegister)
+            }
+            
+
             
         default:
             break
@@ -372,7 +395,7 @@ extension SettingVC
                         AlertUtility.presentSimpleAlert(in: self, title: "", message: "\(loginResponse.settings?.message ?? "")")
                     }
                     
-                    // self.apiCallAddFCMToken()
+                   
                     
                 case .failure(let error):
                     // Handle failure

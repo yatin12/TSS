@@ -41,6 +41,7 @@ struct Season1BT: Codable {
 struct MeetTheSister: Codable {
     let id, name, description: String?
     let thumbnail: String?
+    let url: String?
 }
 
 // MARK: - RecommendedEpisode

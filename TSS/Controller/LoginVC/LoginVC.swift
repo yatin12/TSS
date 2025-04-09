@@ -13,9 +13,12 @@ class LoginVC: UIViewController {
     
     var isRememberMeOn: Bool = false
     private let objLoginViewModel = LoginViewModel()
+    private let objAddFCMTokenViewModel = AddFCMTokenViewModel()
 
     //  - Outlets - 
     
+    @IBOutlet weak var lblPassword: UILabel!
+    @IBOutlet weak var lblEmail: UILabel!
     @IBOutlet weak var imgPassVisibility: UIImageView!
     @IBOutlet weak var btnRememberOutlt: UIButton!
     @IBOutlet weak var lblLowerDeclaration: TappableLabel!
@@ -67,9 +70,9 @@ extension LoginVC
         let termsRange = (text as NSString).range(of: "Terms of Use")
         let privacyRange = (text as NSString).range(of: "Privacy Policy")
         
-        attributedString.addAttribute(.foregroundColor, value: UIColor.white, range: termsRange)
-        attributedString.addAttribute(.foregroundColor, value: UIColor.white, range: privacyRange)
-        
+        attributedString.addAttribute(.foregroundColor, value: UIColor(named: "ThemeFontColor") ?? .black, range: termsRange)
+        attributedString.addAttribute(.foregroundColor, value: UIColor(named: "ThemeFontColor") ?? .black, range: privacyRange)
+       
         lblLowerDeclaration.attributedText = attributedString
         
         lblLowerDeclaration.onTap = { range, text in
@@ -111,18 +114,18 @@ extension LoginVC
     }
     private func updateBorder(for textField: UITextField, isEditing: Bool) {
         if textField == txtEmail {
-            vwEmail.layer.borderColor = isEditing ? highlightColor : clearColor
-            vwEmail.layer.borderWidth = isEditing ? 1.0 : 0.0
+            vwEmail.layer.borderColor = isEditing ? highlightColor : DefaultBorderColor
+            lblEmail.textColor = isEditing ? highlightColor_Lbl : DefaultBorderColor_Lbl
             
-            vwPassword.layer.borderColor = isEditing ? clearColor : highlightColor
-            vwPassword.layer.borderWidth = isEditing ? 0.0 : 1.0
+            vwPassword.layer.borderColor = isEditing ? DefaultBorderColor : highlightColor
+            lblPassword.textColor = isEditing ? DefaultBorderColor_Lbl : highlightColor_Lbl
 
         } else if textField == txtPassword {
-            vwPassword.layer.borderColor = isEditing ? highlightColor : clearColor
-            vwPassword.layer.borderWidth = isEditing ? 1.0 : 0.0
-            
-            vwEmail.layer.borderColor = isEditing ? clearColor : highlightColor
-            vwEmail.layer.borderWidth = isEditing ? 0.0 : 1.0
+            vwPassword.layer.borderColor = isEditing ? highlightColor : DefaultBorderColor
+            lblPassword.textColor = isEditing ? highlightColor_Lbl : DefaultBorderColor_Lbl
+
+            vwEmail.layer.borderColor = isEditing ? DefaultBorderColor : highlightColor
+            lblEmail.textColor = isEditing ? DefaultBorderColor_Lbl : highlightColor_Lbl
 
         }
     }
@@ -175,7 +178,7 @@ extension LoginVC
         UserDefaultUtility.saveValueToUserDefaults(value: "YES", forKey: "isUserLoggedIn")
         UserDefaultUtility.saveValueToUserDefaults(value: "GuestUser", forKey: "USERROLE")
         UserDefaultUtility.saveValueToUserDefaults(value: "", forKey: "USERID")
-        UserDefaultUtility.saveValueToUserDefaults(value: "Basic YWRtaW46SmNteHoyMTY0OTAj", forKey: "AUTHTOKEN")
+        UserDefaultUtility.saveValueToUserDefaults(value: "Guest YWRtaW46OTIpbSleenBndjJ0RkVVc3hES3FXVXVw", forKey: "AUTHTOKEN")
         
         NavigationHelper.push(storyboardKey.InnerScreen, viewControllerIdentifier: "HomeNev", from: self.navigationController!, animated: true)
     }
@@ -242,7 +245,7 @@ extension LoginVC
         {
             KVSpinnerView.show()
             objLoginViewModel.loginUser(email: txtEmail.text ?? "", password: txtPassword.text ?? "", device_token: deviceId) { result in
-                KVSpinnerView.dismiss()
+               
                 switch result {
                 case .success(let loginResponse):
                     // Handle successful
@@ -257,38 +260,36 @@ extension LoginVC
                         }
                         
                         let strSubscriptionName = loginResponse.data?.membershipLevel?.name ?? "\(SubscibeUserType.free)"
-                        if strSubscriptionName == "Free" {
+                        if strSubscriptionName == SubscibeUserType.free {
                             UserDefaultUtility.saveValueToUserDefaults(value: "\(SubscibeUserType.free)", forKey: "SubscribedUserType")
                         }
-                        else if strSubscriptionName == "Basic" {
+                        else if strSubscriptionName == SubscibeUserType.basic {
                             UserDefaultUtility.saveValueToUserDefaults(value: "\(SubscibeUserType.basic)", forKey: "SubscribedUserType")
                         }
-                        else if strSubscriptionName == "Premium" {
+                        else if strSubscriptionName == SubscibeUserType.premium {
                             UserDefaultUtility.saveValueToUserDefaults(value: "\(SubscibeUserType.premium)", forKey: "SubscribedUserType")
                         }
-                        
-                        UserDefaultUtility.saveValueToUserDefaults(value: "YES", forKey: "isUserLoggedIn")
-                        
-                        UserDefaultUtility.saveValueToUserDefaults(value: "SignInUser", forKey: "USERROLE")
+                        UserDefaultUtility.saveValueToUserDefaults(value: "\(loginResponse.data?.userNicename ?? "")", forKey: "UserName")
+                        UserDefaultUtility.saveValueToUserDefaults(value: "\(loginResponse.data?.userEmail ?? "")", forKey: "UserEmail")
+
 
                         
                         UserDefaultUtility.saveValueToUserDefaults(value: "\(loginResponse.data?.id ?? "0")", forKey: "USERID")
                         
                         
                         UserDefaultUtility.saveValueToUserDefaults(value: "\(loginResponse.settings?.authorization ?? "")", forKey: "AUTHTOKEN")
-                        
-                        
-                        NavigationHelper.push(storyboardKey.InnerScreen, viewControllerIdentifier: "HomeNev", from: self.navigationController!, animated: true)
+                      
+                        self.apiCallAddFCMToken()
                     }
                     else
                     {
+                        KVSpinnerView.dismiss()
                         AlertUtility.presentSimpleAlert(in: self, title: "", message: "\(loginResponse.settings?.message ?? "")")
                         
                     }
                     
-                    // self.apiCallAddFCMToken()
-                    
                 case .failure(let error):
+                    KVSpinnerView.dismiss()
                     // Handle failure
                     if let apiError = error as? APIError {
                         ErrorHandlingUtility.handleAPIError(apiError, in: self)
@@ -306,6 +307,57 @@ extension LoginVC
             KVSpinnerView.dismiss()
             AlertUtility.presentSimpleAlert(in: self, title: "", message: "\(AlertMessages.NoInternetAlertMsg)")
             
+        }
+    }
+    func apiCallAddFCMToken()
+    {
+        var deviceId: String = AppUserDefaults.object(forKey: "DEVICETOKEN") as? String ?? ""
+        if deviceId == ""
+        {
+            deviceId = "111"
+        }
+        var fcmToken: String = AppUserDefaults.object(forKey: "FCMTOKEN") as? String ?? ""
+        if fcmToken == ""
+        {
+            fcmToken = "222"
+        }
+        let userId = AppUserDefaults.object(forKey: "USERID") as? String ?? ""
+        
+        if Reachability.isConnectedToNetwork()
+        {
+           // KVSpinnerView.show()
+            objAddFCMTokenViewModel.addFCMToken(deviceId: deviceId, fcmToken: fcmToken, userId: userId) { result in
+                KVSpinnerView.dismiss()
+                switch result {
+                case .success(_):
+                    // Handle successful
+                    
+                    print("done")
+                    
+                    
+                    UserDefaultUtility.saveValueToUserDefaults(value: "YES", forKey: "isUserLoggedIn")
+                    
+                    UserDefaultUtility.saveValueToUserDefaults(value: "SignInUser", forKey: "USERROLE")
+                    
+                    NavigationHelper.push(storyboardKey.InnerScreen, viewControllerIdentifier: "HomeNev", from: self.navigationController!, animated: true)
+                    
+                case .failure(let error):
+                    // Handle failure
+                    if let apiError = error as? APIError {
+                        ErrorHandlingUtility.handleAPIError(apiError, in: self)
+                    } else {
+                        // Handle other types of errors
+                       // print("Unexpected error: \(error)")
+                        AlertUtility.presentSimpleAlert(in: self, title: "", message: "\(error.localizedDescription)")
+
+                    }
+                }
+            }
+        }
+        else
+        {
+            AlertUtility.presentSimpleAlert(in: self, title: "", message: "\(AlertMessages.NoInternetAlertMsg)")
+
         }
     }
 }

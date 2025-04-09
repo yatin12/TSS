@@ -15,7 +15,6 @@ extension SplashScreenVC
     override func viewDidLoad() {
         super.viewDidLoad()
         self.navigateToNextViewAfterDelay()
-        
     }
 }
 //MARK: General Methods
@@ -23,7 +22,6 @@ extension SplashScreenVC
 {
     func navigateToNextViewAfterDelay() {
         let delayInSeconds: Double = 2.0 // Adjust the delay as needed
-        
         DispatchQueue.main.asyncAfter(deadline: .now() + delayInSeconds) {
             // Perform your navigation here
             self.userState()

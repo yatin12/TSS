@@ -26,7 +26,7 @@ class SubsciberVC: UIViewController {
     var userId: String = ""
     //  - Outlets - 
 }
-//MARK: UIViewLifeCycle Methods
+//MARK: - UIViewLifeCycle Methods
 extension SubsciberVC
 {
     override func viewDidLoad() {
@@ -35,11 +35,15 @@ extension SubsciberVC
         self.registerNib()
         self.setUpScriberSwitch()
         self.setUpHeaderView()
-        self.apiCallGetMembershipDetails()
+       
         
     }
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.apiCallGetMembershipDetails()
+    }
 }
-//MARK: General Methods
+//MARK: - General Methods
 extension SubsciberVC
 {
     func setUpNoData()
@@ -63,6 +67,7 @@ extension SubsciberVC
             swtSubscriber.setOn(false, animated: false)
             planType = "Month"
         }
+        apiCallGetMembershipDetails()
     }
     func getUserId()
     {
@@ -75,9 +80,9 @@ extension SubsciberVC
     }
     func registerNib()
     {
-        GenericFunction.registerNibs(for: ["SubsciberTBC"], withNibNames: ["SubsciberTBC"], tbl: tblSubscriber)
+        GenericFunction.registerNibs(for: ["SubsciberNewTBC"], withNibNames: ["SubsciberNewTBC"], tbl: tblSubscriber)
         tblSubscriber.estimatedRowHeight = UITableView.automaticDimension
-        tblSubscriber.rowHeight = 275.0
+        tblSubscriber.rowHeight = 200.0
         
     }
 }
@@ -104,12 +109,14 @@ extension SubsciberVC
             print("Switch is ON")
             planType = "Year"
             print("planType=>\(planType)")
+            strPlanType = "yearly"
             //view.backgroundColor = UIColor.systemGreen
             UserDefaultUtility.saveValueToUserDefaults(value: "YES", forKey: "isNotificationOnSubscriber")
         } else {
             print("Switch is OFF")
             planType = "Month"
             print("planType=>\(planType)")
+            strPlanType = "monthly"
             //view.backgroundColor = UIColor.systemRed
             UserDefaultUtility.saveValueToUserDefaults(value: "NO", forKey: "isNotificationOnSubscriber")
         }
@@ -118,12 +125,22 @@ extension SubsciberVC
 }
 extension SubsciberVC
 {
+    func sortMembershipPlans() {
+            objMembershipPlanResponse?.data?.sort { (plan1, plan2) -> Bool in
+                let order = ["Free", "Basic Monthly", "Premium Monthly", "Basic Yearly", "Premium Yearly"]
+                guard let index1 = order.firstIndex(of: plan1.name ?? ""),
+                      let index2 = order.firstIndex(of: plan2.name ?? "") else {
+                    return false
+                }
+                return index1 < index2
+            }
+        }
     func apiCallGetMembershipDetails()
     {
         if Reachability.isConnectedToNetwork()
         {
             KVSpinnerView.show()
-            objMembershipViewModel.getMembershipPlan(userId: userId, planType: "\(subscriptionPlanTime.Year)") { result in
+            objMembershipViewModel.getMembershipPlan(userId: userId, planType: "\(planType)") { result in
                 switch result {
                 case .success(let response):
                     KVSpinnerView.dismiss()
@@ -135,10 +152,14 @@ extension SubsciberVC
                         if response.data?.count ?? 0 > 0
                         {
                             self.objMembershipPlanResponse = response
+                            
+                            self.sortMembershipPlans()
+                            
                             self.tblSubscriber.dataSource = self
                             self.tblSubscriber.delegate = self
                             self.tblSubscriber.reloadData()
-                            
+                            self.tblSubscriber.layoutIfNeeded()
+
                             self.lblNoData.isHidden = true
                             self.tblSubscriber.isHidden = false
                         }
@@ -177,81 +198,39 @@ extension SubsciberVC
     }
 }
 //MARK: UITableViewDelegate, UITableViewDataSource
-extension SubsciberVC: UITableViewDelegate, UITableViewDataSource, SubsciberTBCDelegate
+extension SubsciberVC: UITableViewDelegate, UITableViewDataSource, SubsciberNewTBCDelegate
 {
-    func cell(_ cell: SubsciberTBC, idx: Int) {
-        NavigationHelper.push(storyboardKey.InnerScreen, viewControllerIdentifier: "MembershipLevelVC", from: navigationController!, animated: true)
+    
+    
+    func cell(_ cell: SubsciberNewTBC, idx: Int, planName: String) {
+        print("planName-->\(planName)")
+        NavigationHelper.pushWithSignaturePassData(storyboardKey.InnerScreen, viewControllerIdentifier: "MembershipLevelVC", from: navigationController!, data: idx, data1: self.objMembershipPlanResponse)
 
     }
     
-    func didTapLearnMore(for cell: SubsciberTBC) {
-        guard let indexPath = tblSubscriber.indexPath(for: cell) else { return }
-        expandCell(at: indexPath)
-    }
-    func expandCell(at indexPath: IndexPath) {
-        if expandedCells.contains(indexPath) {
-            expandedCells.remove(indexPath)
-        } else {
-            expandedCells.insert(indexPath)
-        }
-        tblSubscriber.reloadRows(at: [indexPath], with: .automatic)
-        
-//        tblSubscriber.performBatchUpdates({
-//               self.tblSubscriber.reloadRows(at: [indexPath], with: .automatic)
-//           }, completion: nil)
-        
-    }
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return objMembershipPlanResponse?.data?.count ?? 0
     }
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "SubsciberTBC", for: indexPath) as! SubsciberTBC
+        let cell = tableView.dequeueReusableCell(withIdentifier: "SubsciberNewTBC", for: indexPath) as! SubsciberNewTBC
         cell.delegate = self
         cell.idx = indexPath.row
         cell.selectionStyle = .none
         var cnt: Int = 0
-        if indexPath.row == 0 {
-            let strFreeContent = "Free Videos, Empowerment, News"
-            let arr = strFreeContent.components(separatedBy: ",")
-            cnt = arr.count
-            
-        }
-        else  if indexPath.row == 1 {
-            let strFreeContent = "Free Videos, Empowerment, Evideos, Tops and News"
-            let arr = strFreeContent.components(separatedBy: ",")
-            cnt = arr.count
-            
-        }
-        else  if indexPath.row == 2 {
-            let strFreeContent = "Free Videos"
-            let arr = strFreeContent.components(separatedBy: ",")
-            cnt = arr.count
-            
-        }
         
-        cell.configureViews(for: cnt, withResponse: objMembershipPlanResponse, andIndex: indexPath.row, planType: planType)
-        
+        let strFreeContent = "\(objMembershipPlanResponse?.data?[indexPath.row].description ?? "")"
+
+        let arr = strFreeContent.components(separatedBy: "|")
+
+        cnt = arr.count
+        cell.configureViews(for: cnt, withResponse: objMembershipPlanResponse, andIndex: indexPath.row, planType: planType, arrFreeContent: arr)
+
         
         return cell
     }
-    
-    
+   
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        
-        let baseHeight: CGFloat = 275.0 // Minimum height for collapsed cells
-            let expandedExtraHeight: CGFloat = 150.0 // Additional height when expanded
-            
-            if expandedCells.contains(indexPath) {
-                return max(UITableView.automaticDimension, baseHeight + expandedExtraHeight)
-            } else {
-                return UITableView.automaticDimension
-            }
-        
-//       //  return UITableView.automaticDimension
-//        return expandedCells.contains(indexPath) ? 500 : 275.0 // Adjust these values as needed
-//      //  return expandedCells.contains(indexPath) ? (UITableView.automaticDimension + 100) : 375.0 // Adjust these values as needed
-
-        
+        return UITableView.automaticDimension
     }
     func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
         return UITableView.automaticDimension

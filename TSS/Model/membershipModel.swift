@@ -13,17 +13,19 @@ struct membershipRequest: Encodable {
 // MARK: - Welcome
 struct membershipPlanResponse: Codable {
     let settings: SettingsMememberShip?
-    let data: [DataMemberShip]?
+    var data: [DataMemberShip]?
 }
 
 // MARK: - Datum
 struct DataMemberShip: Codable {
+    let productId: String?
     let id, name, description, initialPayment: String?
     let billingAmount, cycleNumber, cyclePeriod, billingLimit: String?
     let trialAmount, trialLimit, expirationNumber, expirationPeriod: String?
     let isActive: Bool?
 
     enum CodingKeys: String, CodingKey {
+        case productId
         case id, name, description
         case initialPayment = "initial_payment"
         case billingAmount = "billing_amount"

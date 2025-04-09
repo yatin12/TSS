@@ -46,8 +46,8 @@ extension Season1TBSVC
         }
     }
 }
-//MARK: UIWebViewDelegate
-extension Season1TBSVC : WKUIDelegate, UIWebViewDelegate,WKNavigationDelegate
+//MARK: WKUIDelegate
+extension Season1TBSVC : WKUIDelegate, WKNavigationDelegate
 {
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
         KVSpinnerView.dismiss()

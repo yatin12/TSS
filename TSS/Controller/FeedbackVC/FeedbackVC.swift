@@ -15,6 +15,7 @@ class FeedbackVC: UIViewController {
     private let objSendContactViewModel = sendContactViewModel()
 
     //  - Outlets - 
+    @IBOutlet weak var lblMsg: UILabel!
     @IBOutlet weak var txtvwMsg: UITextView!
     @IBOutlet weak var vwMsg: UIView!
     @IBOutlet weak var txtEmail: UITextField!
@@ -47,6 +48,9 @@ extension FeedbackVC
     func getUserId()
     {
         userId = AppUserDefaults.object(forKey: "USERID") as? String ?? ""
+        txtName.text = AppUserDefaults.object(forKey: "UserName") as? String ?? ""
+        txtEmail.text = AppUserDefaults.object(forKey: "UserEmail") as? String ?? ""
+
     }
     func setupTextView()
     {
@@ -84,41 +88,41 @@ extension FeedbackVC
         
         
         if textField == txtName {
-            vwName.layer.borderColor = isEditing ? highlightColor : clearColor
-            vwName.layer.borderWidth = isEditing ? 1.0 : 0.0
+            vwName.layer.borderColor = isEditing ? highlightColor : DefaultBorderColor
+           // vwName.layer.borderWidth = isEditing ? 1.0 : 0.0
             
-            vwEmail.layer.borderColor = isEditing ? clearColor : highlightColor
-            vwEmail.layer.borderWidth = isEditing ? 0.0 : 1.0
+            vwEmail.layer.borderColor = isEditing ? DefaultBorderColor : highlightColor
+           // vwEmail.layer.borderWidth = isEditing ? 0.0 : 1.0
             
-            vwMsg.layer.borderColor = isEditing ? clearColor : highlightColor
-            vwMsg.layer.borderWidth = isEditing ? 0.0 : 1.0
+            vwMsg.layer.borderColor = isEditing ? DefaultBorderColor : highlightColor
+           // vwMsg.layer.borderWidth = isEditing ? 0.0 : 1.0
             
             
         } else if textField == txtEmail {
-            vwEmail.layer.borderColor = isEditing ? highlightColor : clearColor
-            vwEmail.layer.borderWidth = isEditing ? 1.0 : 0.0
+            vwEmail.layer.borderColor = isEditing ? highlightColor : DefaultBorderColor
+           // vwEmail.layer.borderWidth = isEditing ? 1.0 : 0.0
             
-            vwName.layer.borderColor = isEditing ? clearColor : highlightColor
-            vwName.layer.borderWidth = isEditing ? 0.0 : 1.0
+            vwName.layer.borderColor = isEditing ? DefaultBorderColor : highlightColor
+           // vwName.layer.borderWidth = isEditing ? 0.0 : 1.0
             
-            vwMsg.layer.borderColor = isEditing ? clearColor : highlightColor
-            vwMsg.layer.borderWidth = isEditing ? 0.0 : 1.0
+            vwMsg.layer.borderColor = isEditing ? DefaultBorderColor : highlightColor
+            //vwMsg.layer.borderWidth = isEditing ? 0.0 : 1.0
             
-          
+            
         }
     }
     private func updateBorderTextView(for textview: UITextView, isEditing: Bool) {
         
         
         if textview == txtvwMsg {
-            vwMsg.layer.borderColor = isEditing ? highlightColor : clearColor
-            vwMsg.layer.borderWidth = isEditing ? 1.0 : 0.0
+            vwMsg.layer.borderColor = isEditing ? highlightColor : DefaultBorderColor
+           // vwMsg.layer.borderWidth = isEditing ? 1.0 : 0.0
             
-            vwEmail.layer.borderColor = isEditing ? clearColor : highlightColor
-            vwEmail.layer.borderWidth = isEditing ? 0.0 : 1.0
+            vwEmail.layer.borderColor = isEditing ? DefaultBorderColor : highlightColor
+            //vwEmail.layer.borderWidth = isEditing ? 0.0 : 1.0
             
-            vwName.layer.borderColor = isEditing ? clearColor : highlightColor
-            vwName.layer.borderWidth = isEditing ? 0.0 : 1.0
+            vwName.layer.borderColor = isEditing ? DefaultBorderColor : highlightColor
+           // vwName.layer.borderWidth = isEditing ? 0.0 : 1.0
           
         }
     }
@@ -179,7 +183,9 @@ extension FeedbackVC: UITextViewDelegate {
         }
         
         else if textView.textColor == UIColor.lightGray && !text.isEmpty {
-            textView.textColor = AppColors.ThemeFontColor
+           // textView.textColor = AppColors.ThemeFontColor
+            textView.textColor = UIColor(named: "ThemeFontColor")
+
             textView.text = text
         }
         
@@ -195,7 +201,9 @@ extension FeedbackVC: UITextViewDelegate {
         
         if textView.text == placeholderText {
             textView.text = ""
-            textView.textColor = AppColors.ThemeFontColor
+           // textView.textColor = AppColors.ThemeFontColor
+            textView.textColor = UIColor(named: "ThemeFontColor")
+
         }
     }
     

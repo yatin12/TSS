@@ -62,6 +62,30 @@ class CustomeTabbarVC: UITabBarController {
             
         }
         if(item.tag == 1) {
+            //Talk Show
+            isFromViewAll = false
+            strSelectedPostName = "talk_shows"
+            NotificationCenter.default.post(name: Notification.Name("APICall_TalkShow"), object: nil, userInfo: nil)
+            NotificationCenter.default.post(name: Notification.Name("APIcallforVideoStop"), object: nil, userInfo: nil)
+
+
+        }
+        if(item.tag == 2) {
+            //PodCast
+            isFromViewAll = false
+            
+            NotificationCenter.default.post(name: Notification.Name("APIcall_PodCast"), object: nil, userInfo: nil)
+            NotificationCenter.default.post(name: Notification.Name("APIcallforVideoStop"), object: nil, userInfo: nil)
+            
+        }
+        if(item.tag == 3) {
+//            //E video
+//            isFromViewAll = false
+//            strSelectedPostName = "evideos"
+//            NotificationCenter.default.post(name: Notification.Name("APICall_Evideo"), object: nil, userInfo: nil)
+//            NotificationCenter.default.post(name: Notification.Name("APIcallforVideoStop"), object: nil, userInfo: nil)
+            
+            
             //News
            // print("Code for item 1")
             isFromViewAll = false
@@ -69,28 +93,11 @@ class CustomeTabbarVC: UITabBarController {
             NotificationCenter.default.post(name: Notification.Name("APIcallforVideoStop"), object: nil, userInfo: nil)
 
         }
-        if(item.tag == 2) {
-            //Talk Show
-            isFromViewAll = false
-            strSelectedPostName = "talk_shows"
-            NotificationCenter.default.post(name: Notification.Name("APICall_TalkShow"), object: nil, userInfo: nil)
-            NotificationCenter.default.post(name: Notification.Name("APIcallforVideoStop"), object: nil, userInfo: nil)
-
-            
-        }
-        if(item.tag == 3) {
-            //E video
-            isFromViewAll = false
-            strSelectedPostName = "evideos"
-            NotificationCenter.default.post(name: Notification.Name("APICall_Evideo"), object: nil, userInfo: nil)
-            NotificationCenter.default.post(name: Notification.Name("APIcallforVideoStop"), object: nil, userInfo: nil)
-
-        }
         if(item.tag == 4) {
             //PodCast
             isFromViewAll = false
             
-            NotificationCenter.default.post(name: Notification.Name("APIcall_PodCast"), object: nil, userInfo: nil)
+           // NotificationCenter.default.post(name: Notification.Name("APIcall_Explore"), object: nil, userInfo: nil)
             NotificationCenter.default.post(name: Notification.Name("APIcallforVideoStop"), object: nil, userInfo: nil)
 
         }

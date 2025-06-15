@@ -224,6 +224,11 @@
 		<string>Poppins-Thin.ttf</string>
 		<string>Poppins-ThinItalic.ttf</string>
 	</array>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>fetch</string>
+		<string>remote-notification</string>
+	</array>
 	<key>aboutUSURL</key>
 	<string>https://thesistersshow.com/about/</string>
 </dict>

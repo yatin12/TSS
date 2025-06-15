@@ -747,41 +747,7 @@ class APIManager {
                 }
             }
     }
-    /*
-    func postSubscriptionInfo<T: Decodable>(request: subscriptionPurchaseRequest, responseModelType: T.Type, completion: @escaping (Result<T, APIError>) -> Void) {
-        
-        let authToken: String = AppUserDefaults.object(forKey: "AUTHTOKEN") as? String ?? ""
-        
-        let customHeaders: HTTPHeaders = [
-            "Authorization": authToken
-        ]
-        
-        let URLstr: String = "\(APIConfig.baseURL+subscriptionPurchaseEndpoint)"
-        
-        
-        Logger.logRequest(url: URLstr, method: "POST", headers: customHeaders, body: nil)
-        
-        AF.request(URLstr, method: .post, parameters: request, encoder: URLEncodedFormParameterEncoder.default, headers: customHeaders)
-            .validate()
-            .responseDecodable(of: T.self) { response in
-                Logger.logResponse(url: URLstr, response: response)
-                
-                if let data = response.data {
-                    print(String(data: data, encoding: .utf8) ?? "Unable to print data")
-                }
-                
-                do {
-                    let result = try response.result.get() // This line will throw an error if the decoding fails
-                    completion(.success(result))
-                } catch {
-                    // Handle decoding error here
-                    print("Error decoding data: \(error)")
-                    self.handleFailureResponse(response, completion: completion)
-                }
-                
-            }
-    }
-    */
+   
     func VideoFavUnFav<T: Decodable>(request: LikeVideoRequest, responseModelType: T.Type, completion: @escaping (Result<T, APIError>) -> Void) {
         
         let authToken: String = AppUserDefaults.object(forKey: "AUTHTOKEN") as? String ?? ""

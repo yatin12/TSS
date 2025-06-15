@@ -51,7 +51,33 @@ class CustomeTabbarVC: UITabBarController {
         super.viewDidLayoutSubviews()
       
     }
+    // In CustomeTabbarVC.swift
+    private func stopAllVideos() {
+        // Post notification to stop videos
+        NotificationCenter.default.post(name: Notification.Name("APIcallforVideoStop"), object: nil)
+        
+        // Find HomeVC in navigation stack and directly call stopAllVideos
+        if let navController = self.viewControllers?[0] as? UINavigationController,
+           let homeVC = navController.viewControllers.first as? HomeVC {
+            homeVC.stopAllVideos()
+        }
+    }
+    /*
+    private func stopAllVideos() {
+           // Post notification to stop videos
+           NotificationCenter.default.post(name: Notification.Name("APIcallforVideoStop"), object: nil)
+           
+           // Also directly stop any playing video in HomeVC if it's in the view hierarchy
+           if let navController = self.viewControllers?[0] as? UINavigationController,
+              let homeVC = navController.viewControllers.first as? HomeVC {
+               homeVC.stopAllVideos()
+           }
+       }
+    */
     override func tabBar(_ tabBar: UITabBar, didSelect item: UITabBarItem) {
+        
+        // Stop all videos first
+             stopAllVideos()
         
         if(item.tag == 0) {
             //Home
@@ -79,13 +105,6 @@ class CustomeTabbarVC: UITabBarController {
             
         }
         if(item.tag == 3) {
-//            //E video
-//            isFromViewAll = false
-//            strSelectedPostName = "evideos"
-//            NotificationCenter.default.post(name: Notification.Name("APICall_Evideo"), object: nil, userInfo: nil)
-//            NotificationCenter.default.post(name: Notification.Name("APIcallforVideoStop"), object: nil, userInfo: nil)
-            
-            
             //News
            // print("Code for item 1")
             isFromViewAll = false
@@ -97,7 +116,6 @@ class CustomeTabbarVC: UITabBarController {
             //PodCast
             isFromViewAll = false
             
-           // NotificationCenter.default.post(name: Notification.Name("APIcall_Explore"), object: nil, userInfo: nil)
             NotificationCenter.default.post(name: Notification.Name("APIcallforVideoStop"), object: nil, userInfo: nil)
 
         }

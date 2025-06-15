@@ -193,14 +193,27 @@
 		B41978FD2D040539001E47F1 /* GoogleMobileAds in Frameworks */ = {isa = PBXBuildFile; productRef = B41978FC2D040539001E47F1 /* GoogleMobileAds */; };
 		B43063D12C7F788100F175F7 /* getLiveShowDetailsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B43063D02C7F788100F175F7 /* getLiveShowDetailsModel.swift */; };
 		B43063D32C7F789900F175F7 /* getLiveShowDetailsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B43063D22C7F789900F175F7 /* getLiveShowDetailsViewModel.swift */; };
+		B447309D2DCF2FF300F11C71 /* ApplePayHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = B447309C2DCF2FF300F11C71 /* ApplePayHandler.swift */; };
+		B45FC0EC2DE1AAA300A715F3 /* RelationshipDataSubmitModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B45FC0EB2DE1AAA300A715F3 /* RelationshipDataSubmitModel.swift */; };
+		B45FC0EE2DE1AC3300A715F3 /* RelationshipDataSubmitViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B45FC0ED2DE1AC3300A715F3 /* RelationshipDataSubmitViewModel.swift */; };
+		B45FC0F22DE1BD6E00A715F3 /* WellnessDataSubmitModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B45FC0F12DE1BD6E00A715F3 /* WellnessDataSubmitModel.swift */; };
+		B45FC0F42DE1BDB100A715F3 /* WellnessDataSubmitViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B45FC0F32DE1BDB100A715F3 /* WellnessDataSubmitViewModel.swift */; };
+		B45FC0F62DE1CC0A00A715F3 /* GetPaypalTokenModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B45FC0F52DE1CC0A00A715F3 /* GetPaypalTokenModel.swift */; };
+		B45FC0F82DE1CC4700A715F3 /* GetPaypalTokenViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B45FC0F72DE1CC4700A715F3 /* GetPaypalTokenViewModel.swift */; };
 		B471D2A92C8B534600E07C84 /* upcomingEventModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B471D2A82C8B534600E07C84 /* upcomingEventModel.swift */; };
 		B471D2AB2C8B535500E07C84 /* upcomingEventViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B471D2AA2C8B535500E07C84 /* upcomingEventViewModel.swift */; };
 		B471ED262C9FE96500CEBDAA /* MembershipLevelNewTBC.swift in Sources */ = {isa = PBXBuildFile; fileRef = B471ED242C9FE96500CEBDAA /* MembershipLevelNewTBC.swift */; };
 		B471ED272C9FE96500CEBDAA /* MembershipLevelNewTBC.xib in Resources */ = {isa = PBXBuildFile; fileRef = B471ED252C9FE96500CEBDAA /* MembershipLevelNewTBC.xib */; };
+		B48400772DD0B26800134750 /* BraintreeApplePay in Frameworks */ = {isa = PBXBuildFile; productRef = B48400762DD0B26800134750 /* BraintreeApplePay */; };
+		B48400792DD0B26800134750 /* BraintreeCard in Frameworks */ = {isa = PBXBuildFile; productRef = B48400782DD0B26800134750 /* BraintreeCard */; };
+		B484007B2DD0B26800134750 /* BraintreeCore in Frameworks */ = {isa = PBXBuildFile; productRef = B484007A2DD0B26800134750 /* BraintreeCore */; };
+		B484007D2DD0B26800134750 /* BraintreePayPal in Frameworks */ = {isa = PBXBuildFile; productRef = B484007C2DD0B26800134750 /* BraintreePayPal */; };
 		B4880C812CA1B9660097C48B /* SwiftyStoreKit in Frameworks */ = {isa = PBXBuildFile; productRef = B4880C802CA1B9660097C48B /* SwiftyStoreKit */; };
 		B4880C832CA1BB6F0097C48B /* subscriptionPurchaseViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4880C822CA1BB6F0097C48B /* subscriptionPurchaseViewModel.swift */; };
 		B4880C852CA1BBCD0097C48B /* subscriptionPurchaseModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4880C842CA1BBCD0097C48B /* subscriptionPurchaseModel.swift */; };
 		B4880C872CA1BD450097C48B /* NetworkActivityIndicatorManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4880C862CA1BD450097C48B /* NetworkActivityIndicatorManager.swift */; };
+		B48B1E582DA6978C009211DE /* WellnessProgView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B48B1E572DA6978C009211DE /* WellnessProgView.swift */; };
+		B48B1E5A2DA698AA009211DE /* RelationshipCoachingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B48B1E592DA698AA009211DE /* RelationshipCoachingView.swift */; };
 		B4924C012C9EB17F003B8756 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = B4924C002C9EB17F003B8756 /* GoogleService-Info.plist */; };
 		B4924C082C9EC7F9003B8756 /* SubsciberNewTBC.xib in Resources */ = {isa = PBXBuildFile; fileRef = B4924C072C9EC7F9003B8756 /* SubsciberNewTBC.xib */; };
 		B4924C092C9EC7F9003B8756 /* SubsciberNewTBC.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4924C062C9EC7F9003B8756 /* SubsciberNewTBC.swift */; };
@@ -208,6 +221,11 @@
 		B4CBADEB2CFF2A1C001519B4 /* ApperanceVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4CBADEA2CFF2A1C001519B4 /* ApperanceVC.swift */; };
 		B4CBADEF2CFF2B4D001519B4 /* ReportTBC.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4CBADEC2CFF2B4D001519B4 /* ReportTBC.swift */; };
 		B4CBADF02CFF2B4D001519B4 /* ReportTBC.xib in Resources */ = {isa = PBXBuildFile; fileRef = B4CBADED2CFF2B4D001519B4 /* ReportTBC.xib */; };
+		B4DFE2A22DAA678C002521F5 /* APIHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4DFE2A12DAA678C002521F5 /* APIHandler.swift */; };
+		B4DFE2A42DAA6890002521F5 /* PackageModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4DFE2A32DAA6890002521F5 /* PackageModel.swift */; };
+		B4DFE2A62DAA6939002521F5 /* PackageViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4DFE2A52DAA6939002521F5 /* PackageViewModel.swift */; };
+		B4E621062DFED360008B26F6 /* paypalNonceSubmitModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4E621052DFED360008B26F6 /* paypalNonceSubmitModel.swift */; };
+		B4E621082DFED393008B26F6 /* paypalNonceSubmitViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4E621072DFED393008B26F6 /* paypalNonceSubmitViewModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -373,6 +391,13 @@
 		B41978F92D03EE8A001E47F1 /* upcomingEventPurchaseInfoModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = upcomingEventPurchaseInfoModel.swift; sourceTree = "<group>"; };
 		B43063D02C7F788100F175F7 /* getLiveShowDetailsModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = getLiveShowDetailsModel.swift; sourceTree = "<group>"; };
 		B43063D22C7F789900F175F7 /* getLiveShowDetailsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = getLiveShowDetailsViewModel.swift; sourceTree = "<group>"; };
+		B447309C2DCF2FF300F11C71 /* ApplePayHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApplePayHandler.swift; sourceTree = "<group>"; };
+		B45FC0EB2DE1AAA300A715F3 /* RelationshipDataSubmitModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RelationshipDataSubmitModel.swift; sourceTree = "<group>"; };
+		B45FC0ED2DE1AC3300A715F3 /* RelationshipDataSubmitViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RelationshipDataSubmitViewModel.swift; sourceTree = "<group>"; };
+		B45FC0F12DE1BD6E00A715F3 /* WellnessDataSubmitModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WellnessDataSubmitModel.swift; sourceTree = "<group>"; };
+		B45FC0F32DE1BDB100A715F3 /* WellnessDataSubmitViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WellnessDataSubmitViewModel.swift; sourceTree = "<group>"; };
+		B45FC0F52DE1CC0A00A715F3 /* GetPaypalTokenModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetPaypalTokenModel.swift; sourceTree = "<group>"; };
+		B45FC0F72DE1CC4700A715F3 /* GetPaypalTokenViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetPaypalTokenViewModel.swift; sourceTree = "<group>"; };
 		B471D2A82C8B534600E07C84 /* upcomingEventModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = upcomingEventModel.swift; sourceTree = "<group>"; };
 		B471D2AA2C8B535500E07C84 /* upcomingEventViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = upcomingEventViewModel.swift; sourceTree = "<group>"; };
 		B471ED242C9FE96500CEBDAA /* MembershipLevelNewTBC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MembershipLevelNewTBC.swift; sourceTree = "<group>"; };
@@ -380,6 +405,8 @@
 		B4880C822CA1BB6F0097C48B /* subscriptionPurchaseViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = subscriptionPurchaseViewModel.swift; sourceTree = "<group>"; };
 		B4880C842CA1BBCD0097C48B /* subscriptionPurchaseModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = subscriptionPurchaseModel.swift; sourceTree = "<group>"; };
 		B4880C862CA1BD450097C48B /* NetworkActivityIndicatorManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NetworkActivityIndicatorManager.swift; sourceTree = "<group>"; };
+		B48B1E572DA6978C009211DE /* WellnessProgView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WellnessProgView.swift; sourceTree = "<group>"; };
+		B48B1E592DA698AA009211DE /* RelationshipCoachingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RelationshipCoachingView.swift; sourceTree = "<group>"; };
 		B4924C002C9EB17F003B8756 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		B4924C062C9EC7F9003B8756 /* SubsciberNewTBC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubsciberNewTBC.swift; sourceTree = "<group>"; };
 		B4924C072C9EC7F9003B8756 /* SubsciberNewTBC.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SubsciberNewTBC.xib; sourceTree = "<group>"; };
@@ -387,6 +414,11 @@
 		B4CBADEA2CFF2A1C001519B4 /* ApperanceVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApperanceVC.swift; sourceTree = "<group>"; };
 		B4CBADEC2CFF2B4D001519B4 /* ReportTBC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReportTBC.swift; sourceTree = "<group>"; };
 		B4CBADED2CFF2B4D001519B4 /* ReportTBC.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ReportTBC.xib; sourceTree = "<group>"; };
+		B4DFE2A12DAA678C002521F5 /* APIHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIHandler.swift; sourceTree = "<group>"; };
+		B4DFE2A32DAA6890002521F5 /* PackageModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PackageModel.swift; sourceTree = "<group>"; };
+		B4DFE2A52DAA6939002521F5 /* PackageViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PackageViewModel.swift; sourceTree = "<group>"; };
+		B4E621052DFED360008B26F6 /* paypalNonceSubmitModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = paypalNonceSubmitModel.swift; sourceTree = "<group>"; };
+		B4E621072DFED393008B26F6 /* paypalNonceSubmitViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = paypalNonceSubmitViewModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -403,12 +435,15 @@
 				185A26F62C345152000C32C5 /* FirebaseFunctions in Frameworks */,
 				7B086EC596841BE41FD0A423 /* Pods_TSS.framework in Frameworks */,
 				185A26DE2C34500B000C32C5 /* FirebaseAnalyticsWithoutAdIdSupport in Frameworks */,
+				B48400772DD0B26800134750 /* BraintreeApplePay in Frameworks */,
 				187185772C2FFD8500D3107E /* IQKeyboardManagerSwift in Frameworks */,
 				185A26F22C345132000C32C5 /* FirebaseFirestore in Frameworks */,
+				B484007D2DD0B26800134750 /* BraintreePayPal in Frameworks */,
 				185A26D82C34500B000C32C5 /* FirebaseAnalytics in Frameworks */,
 				185A26E42C3450C9000C32C5 /* FirebaseAuth in Frameworks */,
 				185A26E82C3450EE000C32C5 /* FirebaseFirestoreCombine-Community in Frameworks */,
 				185A26FE2C34516F000C32C5 /* FirebaseInstallations in Frameworks */,
+				B484007B2DD0B26800134750 /* BraintreeCore in Frameworks */,
 				185A26F82C345152000C32C5 /* FirebaseFunctionsCombine-Community in Frameworks */,
 				185A26E02C34500B000C32C5 /* FirebaseAppCheck in Frameworks */,
 				185A26DA2C34500B000C32C5 /* FirebaseAnalyticsOnDeviceConversion in Frameworks */,
@@ -420,6 +455,7 @@
 				185A26E22C3450B9000C32C5 /* FirebaseAppDistribution-Beta in Frameworks */,
 				185A26E62C3450DC000C32C5 /* FirebaseAuthCombine-Community in Frameworks */,
 				185A27062C34519A000C32C5 /* FirebaseRemoteConfig in Frameworks */,
+				B48400792DD0B26800134750 /* BraintreeCard in Frameworks */,
 				B41978FD2D040539001E47F1 /* GoogleMobileAds in Frameworks */,
 				185A270A2C3451A7000C32C5 /* FirebaseStorage in Frameworks */,
 				185A26F02C34511F000C32C5 /* FirebaseDynamicLinks in Frameworks */,
@@ -594,6 +630,7 @@
 				185A27172C345519000C32C5 /* Logger.swift */,
 				185A27142C3454A3000C32C5 /* APIConfig.swift */,
 				185A27132C3454A3000C32C5 /* ApiManager.swift */,
+				B4DFE2A12DAA678C002521F5 /* APIHandler.swift */,
 			);
 			path = Network;
 			sourceTree = "<group>";
@@ -918,6 +955,11 @@
 				B471D2A82C8B534600E07C84 /* upcomingEventModel.swift */,
 				B4880C842CA1BBCD0097C48B /* subscriptionPurchaseModel.swift */,
 				B41978F92D03EE8A001E47F1 /* upcomingEventPurchaseInfoModel.swift */,
+				B4DFE2A32DAA6890002521F5 /* PackageModel.swift */,
+				B45FC0EB2DE1AAA300A715F3 /* RelationshipDataSubmitModel.swift */,
+				B45FC0F12DE1BD6E00A715F3 /* WellnessDataSubmitModel.swift */,
+				B4E621052DFED360008B26F6 /* paypalNonceSubmitModel.swift */,
+				B45FC0F52DE1CC0A00A715F3 /* GetPaypalTokenModel.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -954,6 +996,11 @@
 				B43063D22C7F789900F175F7 /* getLiveShowDetailsViewModel.swift */,
 				B471D2AA2C8B535500E07C84 /* upcomingEventViewModel.swift */,
 				B4880C822CA1BB6F0097C48B /* subscriptionPurchaseViewModel.swift */,
+				B4DFE2A52DAA6939002521F5 /* PackageViewModel.swift */,
+				B45FC0ED2DE1AC3300A715F3 /* RelationshipDataSubmitViewModel.swift */,
+				B45FC0F32DE1BDB100A715F3 /* WellnessDataSubmitViewModel.swift */,
+				B4E621072DFED393008B26F6 /* paypalNonceSubmitViewModel.swift */,
+				B45FC0F72DE1CC4700A715F3 /* GetPaypalTokenViewModel.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -961,8 +1008,9 @@
 		18F3C7B42C2FCAB9008944E7 /* Controller */ = {
 			isa = PBXGroup;
 			children = (
-				B4CBADE92CFF29FF001519B4 /* ApperanceVC */,
+				B48B1E562DA69764009211DE /* SwiftUI */,
 				B41343782CFDC38E0079D330 /* MentorMatchVC */,
+				B4CBADE92CFF29FF001519B4 /* ApperanceVC */,
 				B41193A82CF9F5A700AEC583 /* FoundationsVC */,
 				B41193A52CF9F39800AEC583 /* ExploreVC */,
 				B4A29F052C8321F400DD4FA9 /* MeetSisterPageVC */,
@@ -1139,6 +1187,16 @@
 			path = MentorMatchVC;
 			sourceTree = "<group>";
 		};
+		B48B1E562DA69764009211DE /* SwiftUI */ = {
+			isa = PBXGroup;
+			children = (
+				B48B1E572DA6978C009211DE /* WellnessProgView.swift */,
+				B48B1E592DA698AA009211DE /* RelationshipCoachingView.swift */,
+				B447309C2DCF2FF300F11C71 /* ApplePayHandler.swift */,
+			);
+			path = SwiftUI;
+			sourceTree = "<group>";
+		};
 		B4A29F052C8321F400DD4FA9 /* MeetSisterPageVC */ = {
 			isa = PBXGroup;
 			children = (
@@ -1214,6 +1272,10 @@
 				185A270B2C3451A7000C32C5 /* FirebaseStorageCombine-Community */,
 				B4880C802CA1B9660097C48B /* SwiftyStoreKit */,
 				B41978FC2D040539001E47F1 /* GoogleMobileAds */,
+				B48400762DD0B26800134750 /* BraintreeApplePay */,
+				B48400782DD0B26800134750 /* BraintreeCard */,
+				B484007A2DD0B26800134750 /* BraintreeCore */,
+				B484007C2DD0B26800134750 /* BraintreePayPal */,
 			);
 			productName = TSS;
 			productReference = 18F3C79B2C2FCA79008944E7 /* TSS.app */;
@@ -1248,6 +1310,7 @@
 				185A26D62C34500B000C32C5 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
 				B4880C7F2CA1B9660097C48B /* XCRemoteSwiftPackageReference "SwiftyStoreKit" */,
 				B41978FB2D040539001E47F1 /* XCRemoteSwiftPackageReference "swift-package-manager-google-mobile-ads" */,
+				B48400752DD0B26800134750 /* XCRemoteSwiftPackageReference "braintree_ios" */,
 			);
 			productRefGroup = 18F3C79C2C2FCA79008944E7 /* Products */;
 			projectDirPath = "";
@@ -1366,14 +1429,17 @@
 				18822F622C3124F0002B65D0 /* ImagePickerManager.swift in Sources */,
 				180988C22C3C46220091C3EF /* videoDetailModel.swift in Sources */,
 				182413362C3CF23E00C8DEAB /* GetProfileViewModel.swift in Sources */,
+				B4DFE2A62DAA6939002521F5 /* PackageViewModel.swift in Sources */,
 				187237372C3016EC00F8416F /* SettingVC.swift in Sources */,
 				18822F652C31257F002B65D0 /* OpenDatePickerVC.swift in Sources */,
+				B4DFE2A22DAA678C002521F5 /* APIHandler.swift in Sources */,
 				B4880C872CA1BD450097C48B /* NetworkActivityIndicatorManager.swift in Sources */,
 				189CB1BB2C396BE600DCC880 /* VideoSec_2TBC.swift in Sources */,
 				1824133E2C3D04F400C8DEAB /* countryListModel.swift in Sources */,
 				18F5CBAC2C36D12D009D505F /* ForgotPasswordVC.swift in Sources */,
 				B4A29F072C83221200DD4FA9 /* MeetSisterPageVC.swift in Sources */,
 				185A26D22C344C1F000C32C5 /* loginModel.swift in Sources */,
+				B45FC0F42DE1BDB100A715F3 /* WellnessDataSubmitViewModel.swift in Sources */,
 				B4CBADEF2CFF2B4D001519B4 /* ReportTBC.swift in Sources */,
 				1824133C2C3CFE6000C8DEAB /* updateProfileViewModel.swift in Sources */,
 				187237342C3016D300F8416F /* PodCastVC.swift in Sources */,
@@ -1391,8 +1457,11 @@
 				B4880C852CA1BBCD0097C48B /* subscriptionPurchaseModel.swift in Sources */,
 				B43063D32C7F789900F175F7 /* getLiveShowDetailsViewModel.swift in Sources */,
 				18F3C7BC2C2FCB6F008944E7 /* AppFonts.swift in Sources */,
+				B447309D2DCF2FF300F11C71 /* ApplePayHandler.swift in Sources */,
 				185A27232C346900000C32C5 /* TalkShowTBC.swift in Sources */,
+				B4DFE2A42DAA6890002521F5 /* PackageModel.swift in Sources */,
 				18C87DE62C42752400CC6C0E /* UpComingEventVC.swift in Sources */,
+				B48B1E5A2DA698AA009211DE /* RelationshipCoachingView.swift in Sources */,
 				18F3C7BB2C2FCB6F008944E7 /* AppColors.swift in Sources */,
 				1872373A2C30170200F8416F /* NotificationVC.swift in Sources */,
 				18AF1C482C63D74000524129 /* deleteAccountViewModel.swift in Sources */,
@@ -1430,6 +1499,7 @@
 				B471D2A92C8B534600E07C84 /* upcomingEventModel.swift in Sources */,
 				189CB1A72C395C3F00DCC880 /* VideoDetailsVC.swift in Sources */,
 				18A81AC42C301CE900BEC6BC /* SettingTBC.swift in Sources */,
+				B45FC0F62DE1CC0A00A715F3 /* GetPaypalTokenModel.swift in Sources */,
 				1846A19C2C3FF070003E3A66 /* deleteWatchListModel.swift in Sources */,
 				182413402C3D053A00C8DEAB /* countryListViewModel.swift in Sources */,
 				18950C512C3814EB003BC3B8 /* blogByCategoryModel.swift in Sources */,
@@ -1456,6 +1526,7 @@
 				B413437A2CFDC3A60079D330 /* MentorMatchVC.swift in Sources */,
 				182413432C3D180600C8DEAB /* CountryListVC.swift in Sources */,
 				180988C02C3C3A1B0091C3EF /* videoListViewModel.swift in Sources */,
+				B45FC0F82DE1CC4700A715F3 /* GetPaypalTokenViewModel.swift in Sources */,
 				18950C5B2C381EB4003BC3B8 /* FavouriteListViewModel.swift in Sources */,
 				18AF1C402C63C87C00524129 /* Season1TBSVC.swift in Sources */,
 				1821D9BC2C3135550080D508 /* ContactUSVC.swift in Sources */,
@@ -1469,20 +1540,26 @@
 				182413342C3CEEA900C8DEAB /* GetProfileModel.swift in Sources */,
 				187185742C2FF46E00D3107E /* TappedLabel.swift in Sources */,
 				187237282C30166B00F8416F /* HomeVC.swift in Sources */,
+				B45FC0EC2DE1AAA300A715F3 /* RelationshipDataSubmitModel.swift in Sources */,
 				18950C572C3818C3003BC3B8 /* blogDetailsModel.swift in Sources */,
 				B406DDF72CC015A100E06AA7 /* AddFCMTokenModel.swift in Sources */,
+				B45FC0EE2DE1AC3300A715F3 /* RelationshipDataSubmitViewModel.swift in Sources */,
+				B48B1E582DA6978C009211DE /* WellnessProgView.swift in Sources */,
+				B4E621082DFED393008B26F6 /* paypalNonceSubmitViewModel.swift in Sources */,
 				188B11A42C482601000CB4AE /* LikeVideoModel.swift in Sources */,
 				18950C5D2C3820A1003BC3B8 /* watchListModel.swift in Sources */,
 				B41193A72CF9F3B700AEC583 /* ExploreVC.swift in Sources */,
 				180988C42C3C462E0091C3EF /* videoDetailViewModel.swift in Sources */,
 				187237252C3013DA00F8416F /* CustomeTabbarVC.swift in Sources */,
 				1846A1A22C3FFB90003E3A66 /* sendContactViewModel.swift in Sources */,
+				B4E621062DFED360008B26F6 /* paypalNonceSubmitModel.swift in Sources */,
 				18950C4F2C380B50003BC3B8 /* blogCategoryViewModel.swift in Sources */,
 				1837472B2C49815E0073F60B /* SearchModel.swift in Sources */,
 				188B11A62C4826D8000CB4AE /* LikeVideoViewModel.swift in Sources */,
 				182413502C3D6FF100C8DEAB /* talkShowViewModel.swift in Sources */,
 				18C87DEA2C42786100CC6C0E /* UpComingTBC.swift in Sources */,
 				1872372E2C3016A400F8416F /* TalkShowVC.swift in Sources */,
+				B45FC0F22DE1BD6E00A715F3 /* WellnessDataSubmitModel.swift in Sources */,
 				181B20EA2C66429700B0FA04 /* Season1TBSCTC.swift in Sources */,
 				185A271E2C345C2C000C32C5 /* NewsCTC.swift in Sources */,
 			);
@@ -1647,7 +1724,7 @@
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationPortrait";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UIUserInterfaceStyle = Light;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.6;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1691,7 +1768,7 @@
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationPortrait";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UIUserInterfaceStyle = Light;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.6;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1755,6 +1832,14 @@
 			requirement = {
 				kind = upToNextMajorVersion;
 				minimumVersion = 11.13.0;
+			};
+		};
+		B48400752DD0B26800134750 /* XCRemoteSwiftPackageReference "braintree_ios" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/braintree/braintree_ios";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 6.32.0;
 			};
 		};
 		B4880C7F2CA1B9660097C48B /* XCRemoteSwiftPackageReference "SwiftyStoreKit" */ = {
@@ -1912,6 +1997,26 @@
 			isa = XCSwiftPackageProductDependency;
 			package = B41978FB2D040539001E47F1 /* XCRemoteSwiftPackageReference "swift-package-manager-google-mobile-ads" */;
 			productName = GoogleMobileAds;
+		};
+		B48400762DD0B26800134750 /* BraintreeApplePay */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = B48400752DD0B26800134750 /* XCRemoteSwiftPackageReference "braintree_ios" */;
+			productName = BraintreeApplePay;
+		};
+		B48400782DD0B26800134750 /* BraintreeCard */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = B48400752DD0B26800134750 /* XCRemoteSwiftPackageReference "braintree_ios" */;
+			productName = BraintreeCard;
+		};
+		B484007A2DD0B26800134750 /* BraintreeCore */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = B48400752DD0B26800134750 /* XCRemoteSwiftPackageReference "braintree_ios" */;
+			productName = BraintreeCore;
+		};
+		B484007C2DD0B26800134750 /* BraintreePayPal */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = B48400752DD0B26800134750 /* XCRemoteSwiftPackageReference "braintree_ios" */;
+			productName = BraintreePayPal;
 		};
 		B4880C802CA1B9660097C48B /* SwiftyStoreKit */ = {
 			isa = XCSwiftPackageProductDependency;

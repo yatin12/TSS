@@ -211,6 +211,11 @@ class videoCollectionCell: UICollectionViewCell {
     }
     deinit {
         NotificationCenter.default.removeObserver(self)
+                if let timeObserver = timeObserver {
+                    player?.removeTimeObserver(timeObserver)
+                }
+                player?.pause()
+                player = nil
     }
     @objc private func playerItemReadyToPlay() {
         // Stop the activity indicator when the video is ready to play
@@ -271,49 +276,34 @@ class videoCollectionCell: UICollectionViewCell {
         
         self.lblCurrentTime.text = "\(currentTimeFormatted) / \(totalTimeFormatted)"
     }
-    private func updatePlayerTime1()
-    {
-        guard let currentTime = self.player?.currentTime() else { return }
+   
+    func stop() {
+        print("Stopping video at index: \(indexPathNew?.row ?? -1)")
         
-        guard let duration = self.player?.currentItem?.duration else {return}
-        
-        let currentTimeInSecond = CMTimeGetSeconds(currentTime)
-        let durationTimeInSecond = CMTimeGetSeconds(duration)
-        
-        if self.isThumbSeek == false
-        {
-            self.seekSlider.value = Float(currentTimeInSecond / durationTimeInSecond)
+        // Remove any observers first to prevent callbacks
+        if let timeObserver = timeObserver {
+            player?.removeTimeObserver(timeObserver)
+            self.timeObserver = nil
         }
         
+        // Force pause the player
+        player?.pause()
+        player?.rate = 0.0
         
-        let value = Float64(self.seekSlider.value) * CMTimeGetSeconds(duration)
+        // Try to reset player item
+        player?.replaceCurrentItem(with: nil)
         
-        var hours = value / 3600
-        var mins =  (value / 60).truncatingRemainder(dividingBy: 60)
-        var secs = value.truncatingRemainder(dividingBy: 60)
-        var timeformatter = NumberFormatter()
-        timeformatter.minimumIntegerDigits = 2
-        timeformatter.minimumFractionDigits = 0
-        timeformatter.roundingMode = .down
-        guard let hoursStr = timeformatter.string(from: NSNumber(value: hours)), let minsStr = timeformatter.string(from: NSNumber(value: mins)), let secsStr = timeformatter.string(from: NSNumber(value: secs)) else {
-            return
+        // Reset UI
+        currentTime = nil
+        isVideoFinished = true
+        imgPlay.image = UIImage(named: "icn_play1")
+        
+        // Print player status to debug
+        if let status = player?.timeControlStatus {
+            print("Player status after stop: \(status.rawValue)")
         }
-        let strCurreTime = "\(hoursStr):\(minsStr):\(secsStr)"
-        
-        hours = durationTimeInSecond / 3600
-        mins = (durationTimeInSecond / 60).truncatingRemainder(dividingBy: 60)
-        secs = durationTimeInSecond.truncatingRemainder(dividingBy: 60)
-        timeformatter = NumberFormatter()
-        timeformatter.minimumIntegerDigits = 2
-        timeformatter.minimumFractionDigits = 0
-        timeformatter.roundingMode = .down
-        guard let hoursStr = timeformatter.string(from: NSNumber(value: hours)), let minsStr = timeformatter.string(from: NSNumber(value: mins)), let secsStr = timeformatter.string(from: NSNumber(value: secs)) else {
-            return
-        }
-        let strTotalTime = "\(hoursStr):\(minsStr):\(secsStr)"
-        self.lblCurrentTime.text = "\(strCurreTime) / \(strTotalTime)"
-        
     }
+    /*
     func stop() {
         print("Stopping video at index: \(indexPathNew?.row ?? -1)")
         
@@ -323,6 +313,7 @@ class videoCollectionCell: UICollectionViewCell {
         //        player?.pause()
         //        player?.seek(to: CMTime(seconds: 0, preferredTimescale: 1))
     }
+    */
     func play(fromTime: CMTime? = nil) {
         if let time = fromTime ?? currentTime {
             player?.seek(to: time)
@@ -441,10 +432,66 @@ extension HomeVC
     }
     
     override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
         let appdelegate = UIApplication.shared.delegate as! AppDelegate
         appdelegate.restrictRotation = false
+        
+        print("HomeVC - viewWillDisappear")
         stopAllVideos()
+        
+        // Post notification as a backup
+        NotificationCenter.default.post(name: Notification.Name("APIcallforVideoStop"), object: nil)
+        
+        // Double-check all players are stopped
+        DispatchQueue.main.async { [weak self] in
+            self?.stopAllVideos()
+        }
     }
+    
+//    override func viewWillDisappear(_ animated: Bool) {
+//        super.viewWillDisappear(animated)
+//        let appdelegate = UIApplication.shared.delegate as! AppDelegate
+//        appdelegate.restrictRotation = false
+//        stopAllVideos() // Make sure this is called
+//    }
+    func stopAllVideos() {
+        print("HomeVC - stopAllVideos called")
+        
+        // Force stop any playing video for the current page
+        if currPage < arrVideos.count {
+            print("Stopping current page: \(currPage)")
+            if let cell = self.objCollNewSeaction1.cellForItem(at: IndexPath(row: currPage, section: 0)) as? videoCollectionCell {
+                cell.stop()
+            }
+        }
+        
+        // Stop all videos in collection view
+        for i in 0..<objCollNewSeaction1.numberOfItems(inSection: 0) {
+            print("Checking cell at index: \(i)")
+            if let cell = objCollNewSeaction1.cellForItem(at: IndexPath(row: i, section: 0)) as? videoCollectionCell {
+                print("Found cell at index: \(i)")
+                cell.stop()
+                // Double check player state
+                if let player = cell.player, player.timeControlStatus == .playing {
+                    print("Warning: Player still playing after stop at index: \(i)")
+                    player.pause()
+                    player.replaceCurrentItem(with: nil)
+                }
+            }
+        }
+        
+        // Reset stored times
+        videoCurrentTimes.removeAll()
+        
+        // Check all visible cells again (belt and suspenders approach)
+        for (index, cell) in objCollNewSeaction1.visibleCells.enumerated() {
+            if let videoCell = cell as? videoCollectionCell {
+                print("Stopping visible cell at index: \(index)")
+                videoCell.stop()
+            }
+        }
+    }
+    /*
     func stopAllVideos() {
         for cell in self.objCollNewSeaction1.visibleCells {
             if let videoCell = cell as? videoCollectionCell {
@@ -452,7 +499,7 @@ extension HomeVC
             }
         }
     }
-    
+    */
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
@@ -594,6 +641,13 @@ extension HomeVC
     @objc func videoPlayStop(notification: Notification) {
         DispatchQueue.main.async { [weak self] in
             guard let self = self else { return }
+            self.stopAllVideos()
+        }
+    }
+    /*
+    @objc func videoPlayStop(notification: Notification) {
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
             
             for cell in self.objCollNewSeaction1.visibleCells {
                 if let videoCell = cell as? videoCollectionCell {
@@ -602,6 +656,7 @@ extension HomeVC
             }
         }
     }
+    */
     
     @objc func apicallHomeTab(notification: Notification)
     {
@@ -1163,14 +1218,13 @@ extension HomeVC: UIScrollViewDelegate {
     }
 }
 /*
- extension HomeVC: UIScrollViewDelegate {
- func scrollViewDidScroll(_ scrollView: UIScrollView) {
- let pageWidth = scrollView.frame.size.width
- let page_ = Int(floor((scrollView.contentOffset.x - pageWidth / 2) / pageWidth) + 1)
- self.objPgControlNew.currentPage = page_
- self.currPage = page_
- 
- playVideoForCurrentPage()
- }
- }
- */
+extension HomeVC {
+    func stopAllVideos() {
+        for cell in self.objCollNewSeaction1.visibleCells {
+            if let videoCell = cell as? videoCollectionCell {
+                videoCell.stop()
+            }
+        }
+    }
+}
+*/

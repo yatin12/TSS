@@ -1,5 +1,5 @@
 {
-  "originHash" : "e47537aef821e95495e7f4baa2275ff22e0887e2dc30de2cd30e135d36d17dec",
+  "originHash" : "6bab8dc4a607636c16140b97608e207d0920aa1aa461912d8b0586de9fb3cb16",
   "pins" : [
     {
       "identity" : "abseil-cpp-binary",
@@ -17,6 +17,15 @@
       "state" : {
         "revision" : "3b62f154d00019ae29a71e9738800bb6f18b236d",
         "version" : "10.19.2"
+      }
+    },
+    {
+      "identity" : "braintree_ios",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/braintree/braintree_ios",
+      "state" : {
+        "revision" : "d93137acc868491aafa9e9673c6dc7f07ab8f38f",
+        "version" : "6.32.0"
       }
     },
     {

@@ -8,9 +8,11 @@
 import UIKit
 import WebKit
 import GoogleMobileAds
+import SwiftUI
 
 class ExploreVC: UIViewController {
     
+  
     @IBOutlet weak var constHeightBannervw: NSLayoutConstraint!
     @IBOutlet weak var bannerView: GADBannerView!
     var userRole: String = ""
@@ -69,8 +71,18 @@ extension ExploreVC
 //MARK: IBAction
 extension ExploreVC
 {
+    @IBAction func btnRelationshipCotchingTapped(_ sender: Any) {
+        let relationShipView = RelationshipCoachingView()
+        let hostingController = UIHostingController(rootView: relationShipView)
+        navigationController?.pushViewController(hostingController, animated: true)
+    }
+    @IBAction func btnWellnessProgTapped(_ sender: Any) {
+        let wellnessView = WellnessProgView()
+        let hostingController = UIHostingController(rootView: wellnessView)
+        navigationController?.pushViewController(hostingController, animated: true)
+    }
     @IBAction func btnSettingTapped(_ sender: Any) {
-        NavigationHelper.push(storyboardKey.InnerScreen, viewControllerIdentifier: "SettingVC", from: navigationController!, animated: true)
+        NavigationHelper.push(storyboardKey.InnerScreen, viewControllerIdentifier: "SettingVC", from: navigationController!, animated: false)
 
     }
     @IBAction func btnSearchTapped(_ sender: Any) {

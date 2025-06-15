@@ -35,7 +35,10 @@ struct SubscibeUserType {
     static let premium:String = "Premium"
 }
 
-
+struct dynamicPackageType {
+    static let relationshipCoaching:String = "relationship-coaching"
+    static let wellnessProgram:String = "wellness-program"
+}
 var isFromPrivacyViewSetting: Bool = false
 var isFromTermsViewSetting: Bool = false
 var strPlanType: String = "monthly"
@@ -113,6 +116,11 @@ let deleteAccountEndpoint = "delete-account"
 let logoutEndpoint = "user-logout"
 let liveShowDetailsEndpoint = "get-liveshow-detail"
 let UpcomingEventsEndpoint = "upcoming-event-list"
+let packageEndpoint = "package"
+let relationshipDataSubmitEndpoint = "relationship_coaching"
+let wellnessDataSubmitEndpoint = "wellness_submit"
+let paypalTokenEndpoint = "paypal_token"
+let paypalNonceEndpoint = "paypalNonce_submit"
 
 var strSlectedBlogCatNews: String = ""
 
@@ -260,6 +268,16 @@ struct AlertUtility {
             let okAction = UIAlertAction(title: "Ok", style: .default)
             alertController.addAction(okAction)
             viewController.present(alertController, animated: true, completion: nil)
+        }
+    }
+    static func showAlert(message: String) {
+        let alert = UIAlertController(title: "Error", message: message, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .default))
+        
+        if let scene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+           let window = scene.windows.first,
+           let rootVC = window.rootViewController {
+            rootVC.present(alert, animated: true)
         }
     }
 }

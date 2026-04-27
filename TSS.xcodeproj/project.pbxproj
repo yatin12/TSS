@@ -204,6 +204,7 @@
 		B471D2AB2C8B535500E07C84 /* upcomingEventViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B471D2AA2C8B535500E07C84 /* upcomingEventViewModel.swift */; };
 		B471ED262C9FE96500CEBDAA /* MembershipLevelNewTBC.swift in Sources */ = {isa = PBXBuildFile; fileRef = B471ED242C9FE96500CEBDAA /* MembershipLevelNewTBC.swift */; };
 		B471ED272C9FE96500CEBDAA /* MembershipLevelNewTBC.xib in Resources */ = {isa = PBXBuildFile; fileRef = B471ED252C9FE96500CEBDAA /* MembershipLevelNewTBC.xib */; };
+		B476388D2F9F871F00485DB7 /* WellnessProgView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B476388C2F9F871F00485DB7 /* WellnessProgView.swift */; };
 		B48400772DD0B26800134750 /* BraintreeApplePay in Frameworks */ = {isa = PBXBuildFile; productRef = B48400762DD0B26800134750 /* BraintreeApplePay */; };
 		B48400792DD0B26800134750 /* BraintreeCard in Frameworks */ = {isa = PBXBuildFile; productRef = B48400782DD0B26800134750 /* BraintreeCard */; };
 		B484007B2DD0B26800134750 /* BraintreeCore in Frameworks */ = {isa = PBXBuildFile; productRef = B484007A2DD0B26800134750 /* BraintreeCore */; };
@@ -212,7 +213,7 @@
 		B4880C832CA1BB6F0097C48B /* subscriptionPurchaseViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4880C822CA1BB6F0097C48B /* subscriptionPurchaseViewModel.swift */; };
 		B4880C852CA1BBCD0097C48B /* subscriptionPurchaseModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4880C842CA1BBCD0097C48B /* subscriptionPurchaseModel.swift */; };
 		B4880C872CA1BD450097C48B /* NetworkActivityIndicatorManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4880C862CA1BD450097C48B /* NetworkActivityIndicatorManager.swift */; };
-		B48B1E582DA6978C009211DE /* WellnessProgView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B48B1E572DA6978C009211DE /* WellnessProgView.swift */; };
+		B48B1E582DA6978C009211DE /* WellnessProgView1.swift in Sources */ = {isa = PBXBuildFile; fileRef = B48B1E572DA6978C009211DE /* WellnessProgView1.swift */; };
 		B48B1E5A2DA698AA009211DE /* RelationshipCoachingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B48B1E592DA698AA009211DE /* RelationshipCoachingView.swift */; };
 		B4924C012C9EB17F003B8756 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = B4924C002C9EB17F003B8756 /* GoogleService-Info.plist */; };
 		B4924C082C9EC7F9003B8756 /* SubsciberNewTBC.xib in Resources */ = {isa = PBXBuildFile; fileRef = B4924C072C9EC7F9003B8756 /* SubsciberNewTBC.xib */; };
@@ -402,10 +403,11 @@
 		B471D2AA2C8B535500E07C84 /* upcomingEventViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = upcomingEventViewModel.swift; sourceTree = "<group>"; };
 		B471ED242C9FE96500CEBDAA /* MembershipLevelNewTBC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MembershipLevelNewTBC.swift; sourceTree = "<group>"; };
 		B471ED252C9FE96500CEBDAA /* MembershipLevelNewTBC.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MembershipLevelNewTBC.xib; sourceTree = "<group>"; };
+		B476388C2F9F871F00485DB7 /* WellnessProgView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WellnessProgView.swift; sourceTree = "<group>"; };
 		B4880C822CA1BB6F0097C48B /* subscriptionPurchaseViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = subscriptionPurchaseViewModel.swift; sourceTree = "<group>"; };
 		B4880C842CA1BBCD0097C48B /* subscriptionPurchaseModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = subscriptionPurchaseModel.swift; sourceTree = "<group>"; };
 		B4880C862CA1BD450097C48B /* NetworkActivityIndicatorManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NetworkActivityIndicatorManager.swift; sourceTree = "<group>"; };
-		B48B1E572DA6978C009211DE /* WellnessProgView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WellnessProgView.swift; sourceTree = "<group>"; };
+		B48B1E572DA6978C009211DE /* WellnessProgView1.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WellnessProgView1.swift; sourceTree = "<group>"; };
 		B48B1E592DA698AA009211DE /* RelationshipCoachingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RelationshipCoachingView.swift; sourceTree = "<group>"; };
 		B4924C002C9EB17F003B8756 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		B4924C062C9EC7F9003B8756 /* SubsciberNewTBC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubsciberNewTBC.swift; sourceTree = "<group>"; };
@@ -1190,7 +1192,8 @@
 		B48B1E562DA69764009211DE /* SwiftUI */ = {
 			isa = PBXGroup;
 			children = (
-				B48B1E572DA6978C009211DE /* WellnessProgView.swift */,
+				B48B1E572DA6978C009211DE /* WellnessProgView1.swift */,
+				B476388C2F9F871F00485DB7 /* WellnessProgView.swift */,
 				B48B1E592DA698AA009211DE /* RelationshipCoachingView.swift */,
 				B447309C2DCF2FF300F11C71 /* ApplePayHandler.swift */,
 			);
@@ -1511,6 +1514,7 @@
 				18127D6F2C31B6B100578ED6 /* HomeCollectionCell.swift in Sources */,
 				18F1BEFA2C3305AB00E7716D /* MeetSisterCTC.swift in Sources */,
 				1837F4342C3FC34700A5404C /* AddWatchListViewModel.swift in Sources */,
+				B476388D2F9F871F00485DB7 /* WellnessProgView.swift in Sources */,
 				180988BE2C3C38290091C3EF /* videoListModel.swift in Sources */,
 				18950C5F2C3820AC003BC3B8 /* watchListViewModel.swift in Sources */,
 				1872373D2C30172300F8416F /* SearchVC.swift in Sources */,
@@ -1544,7 +1548,7 @@
 				18950C572C3818C3003BC3B8 /* blogDetailsModel.swift in Sources */,
 				B406DDF72CC015A100E06AA7 /* AddFCMTokenModel.swift in Sources */,
 				B45FC0EE2DE1AC3300A715F3 /* RelationshipDataSubmitViewModel.swift in Sources */,
-				B48B1E582DA6978C009211DE /* WellnessProgView.swift in Sources */,
+				B48B1E582DA6978C009211DE /* WellnessProgView1.swift in Sources */,
 				B4E621082DFED393008B26F6 /* paypalNonceSubmitViewModel.swift in Sources */,
 				188B11A42C482601000CB4AE /* LikeVideoModel.swift in Sources */,
 				18950C5D2C3820A1003BC3B8 /* watchListModel.swift in Sources */,
@@ -1707,7 +1711,7 @@
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CODE_SIGN_ENTITLEMENTS = TSS/TSS.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 7;
 				DEVELOPMENT_TEAM = PA239L6TG4;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
@@ -1729,7 +1733,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.thesistersshowllc.thesistershow;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -1751,7 +1755,7 @@
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CODE_SIGN_ENTITLEMENTS = TSS/TSS.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 7;
 				DEVELOPMENT_TEAM = PA239L6TG4;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
@@ -1773,7 +1777,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.thesistersshowllc.thesistershow;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";

@@ -6,6 +6,9 @@ import BraintreeApplePay
 
 // MARK: - Main View
 struct RelationshipCoachingView: View {
+    @State private var showTermsConditionView = false
+
+    
     @State private var showSuccessAlert = false
     @State private var showErrorAlert = false
     @State private var applePayHandler: ApplePayHandler?
@@ -102,17 +105,7 @@ struct RelationshipCoachingView: View {
         
         if let controller = PKPaymentAuthorizationViewController(paymentRequest: paymentRequest),
            let braintreeClient = BTAPIClient(authorization: clientToken) {
-            
-            /*
-            let handler = ApplePayHandler(braintreeClient: braintreeClient) { success in
-                if success {
-                    showSuccessAlert = true
-                } else {
-                    paymentErrorMessage = "Unable to complete payment."
-                    showErrorAlert = true
-                }
-            }
-            */
+           
             let handler = ApplePayHandler(
                 braintreeClient: braintreeClient,
                 nonceHandler: { nonce in
@@ -288,31 +281,53 @@ extension RelationshipCoachingView {
             }
         }
     }
-    
     private var termsAndConditionsSection: some View {
         VStack(spacing: 0) {
             Divider()
                 .background(Color.gray.opacity(0.3))
                 .padding(.horizontal)
-            
+
             HStack {
                 Button(action: { agreedToTerms.toggle() }) {
-                    HStack(spacing: 10) {
+                    HStack(alignment: .center, spacing: 10) {
                         Image(systemName: agreedToTerms ? "checkmark.square.fill" : "square")
                             .font(.system(size: 22))
                             .foregroundColor(Color("ThemePinkColor"))
-                        
-                        Text("I agree to Terms and Conditions")
-                            .font(.custom("Poppins-SemiBold", size: 12))
-                            .foregroundColor(Color("ThemePinkColor"))
+
+                        // Split text so only "Terms and Conditions" is underlined & tappable
+                        HStack(spacing: 0) {
+                            Text("I agree to ")
+                                .font(.custom(AppFontName.Poppins_SemiBold.rawValue, size: 12.0))
+                                .foregroundColor(Color("ThemePinkColor"))
+
+                            Text("Terms and Conditions")
+                                .font(.custom(AppFontName.Poppins_SemiBold.rawValue, size: 12.0))
+                                .foregroundColor(Color("ThemePinkColor"))
+                                .underline()
+                                .onTapGesture {
+                                    showTermsConditionView = true
+                                }
+                        }
                     }
                 }
+                .buttonStyle(PlainButtonStyle())
+
                 Spacer()
             }
             .padding(.vertical)
-            .padding(.horizontal)
+           // .padding(.horizontal)
+
+            // Hidden NavigationLink triggered by showTermsConditionView
+            NavigationLink(
+                destination: TermsConditionWellnessView(),
+                isActive: $showTermsConditionView
+            ) {
+                EmptyView()
+            }
+            .hidden()
         }
     }
+    
     
     private var totalAndPaymentSection: some View {
         VStack(spacing: 20) {
@@ -544,7 +559,7 @@ extension RelationshipCoachingView {
                    print(response.settings?.success ?? "No success flag")
                    
                    if response.settings?.success == true {
-                       print("Wellness data submitted successfully")
+                       print("Nonce data submitted successfully")
                        AlertUtility.showAlert(message: "Data submitted successfully")
 
                    } else {

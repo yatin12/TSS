@@ -10,9 +10,8 @@ import KVSpinnerView
 
 class SettingVC: UIViewController {
     //  - Variables - 
-//    let arr = ["Notifications", "Subscriber", "Account Setting", "App Preferences", "Favourites", "Upcoming Events", "Help & Feedback", "About Us", "Privacy Policy", "Term & Condition", "Contact Us", "Logout", "Delete Account"]
     
-    let arr = ["Notifications", "Subscriber", "Account Setting", "App Preferences", "Favourites", "Help & Feedback", "About Us", "Privacy Policy", "Term & Condition", "Contact Us", "Logout", "Delete Account"]
+    let arr = ["Notifications", "Subscriber", "Account Setting", "App Preferences", "Favorites", "Help & Feedback", "About Us", "Privacy Policy", "Term & Condition", "Contact Us", "Logout", "Delete Account"]
 
     var userRole: String = ""
     var userId: String = ""

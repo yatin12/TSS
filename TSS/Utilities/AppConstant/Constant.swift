@@ -6,6 +6,7 @@
 //
 
 import UIKit
+let currentEnvironment: AppEnvironment = .production
 
 
 var hasVideoPlayed1 = false
@@ -46,7 +47,6 @@ var isProductPurchased: Bool = false
 var strCancelled: String = "NO"
 let dateFormate = "yyyy-MM-dd"
 
-let currentEnvironment: AppEnvironment = .production
 let AppUserDefaults = UserDefaults.standard
 var strSelectedBlog: String = ""
 var isFromViewAll: Bool = false

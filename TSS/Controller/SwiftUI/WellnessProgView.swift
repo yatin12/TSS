@@ -1,10 +1,15 @@
 import SwiftUI
+import WebKit
 import KVSpinnerView
 import PassKit
 import BraintreeCore
 import BraintreeApplePay
 
 struct WellnessProgView: View {
+    @State private var showTermsConditionView = false
+    @State private var showTermsConditionViewCoach = false
+
+    
     @Environment(\.dismiss) var dismiss
     @State private var userId = ""
     @State private var userRole = ""
@@ -44,8 +49,11 @@ struct WellnessProgView: View {
     
     // Terms and conditions
     @State private var agreeToTerms: Bool = false
+    @State private var agreeToTermsCoach: Bool = false
+
     @State private var showTermsAlert = false
-    
+    @State private var showTermsAlertCoach = false
+
     //  var totalPrice: Int = 300
     @StateObject private var objWellnessDataSubmitViewModel = WellnessDataSubmitViewModel()
     @StateObject private var objGetPaypalTokenViewModel = GetPaypalTokenViewModel()
@@ -85,13 +93,16 @@ struct WellnessProgView: View {
                         headerView
                         wellnessProgramSection
                         contactDetailsSection
-                        medicalInformationSection
-                        surgicalInformationSection
+                        //medicalInformationSection
+                       // surgicalInformationSection
                         foodSection
                         packageSection
                         emergencyConsultationSection
                         maternalCareSection
-                        termsAndTotalSection
+                        VStack(spacing: -20) {
+                            termsAndTotalSection
+                            termsAndConditionForCoatching
+                        }
                         totalAndPaymentSection
                     }
                     .padding()
@@ -101,6 +112,12 @@ struct WellnessProgView: View {
         .onAppear {
             getUserId()
             apiCallToFetchPackage()
+        }
+        .alert("Payment Success", isPresented: $showSuccessAlert) {
+            Button("OK", role: .cancel) { }
+        }
+        .alert(isPresented: $showErrorAlert) {
+            Alert(title: Text("Payment Failed"), message: Text(paymentErrorMessage), dismissButton: .default(Text("OK")))
         }
     }
     
@@ -191,15 +208,23 @@ struct WellnessProgView: View {
             
             // Address
             VStack(alignment: .leading) {
-                Text("Address")
+                Text("Country")
                     .foregroundColor(Color("ThemePinkColor"))
                     .font(.custom("\(AppFontName.Poppins_SemiBold.rawValue)", size: 14.0))
                 
+                TextField("", text: $address)
+                    .font(.custom(AppFontName.Poppins_Regular.rawValue, size: 14.0))
+                    .padding()
+                    .background(RoundedRectangle(cornerRadius: 5).stroke(Color("ThemeDefaultBorderColor")))
+                    .keyboardType(.default)
+                
+                /*
                 TextEditor(text: $address)
                     .font(.custom(AppFontName.Poppins_Regular.rawValue, size: 14.0))
                     .frame(height: 100)
                     .padding(5)
                     .overlay(RoundedRectangle(cornerRadius: 5).stroke(Color("ThemeDefaultBorderColor")))
+                */
             }
         }
     }
@@ -473,28 +498,90 @@ struct WellnessProgView: View {
             Divider()
                 .background(Color.gray.opacity(0.3))
                 .padding(.horizontal)
-            
+
             HStack {
                 Button(action: { agreeToTerms.toggle() }) {
                     HStack(alignment: .center, spacing: 10) {
                         Image(systemName: agreeToTerms ? "checkmark.square.fill" : "square")
                             .font(.system(size: 22))
                             .foregroundColor(Color("ThemePinkColor"))
-                        
-                        Text("I agree to Terms and Conditions")
-                            .font(.custom(AppFontName.Poppins_SemiBold.rawValue, size: 12.0))
-                            .foregroundColor(Color("ThemePinkColor"))
+
+                        // Split text so only "Terms and Conditions" is underlined & tappable
+                        HStack(spacing: 0) {
+                            Text("I agree to ")
+                                .font(.custom(AppFontName.Poppins_SemiBold.rawValue, size: 12.0))
+                                .foregroundColor(Color("ThemePinkColor"))
+
+                            Text("Terms and Conditions")
+                                .font(.custom(AppFontName.Poppins_SemiBold.rawValue, size: 12.0))
+                                .foregroundColor(Color("ThemePinkColor"))
+                                .underline()
+                                .onTapGesture {
+                                    showTermsConditionView = true
+                                }
+                        }
                     }
                 }
                 .buttonStyle(PlainButtonStyle())
-                
+
                 Spacer()
             }
             .padding(.vertical)
-            .padding(.horizontal)
+           // .padding(.horizontal)
+
+            // Hidden NavigationLink triggered by showTermsConditionView
+            NavigationLink(
+                destination: TermsConditionWellnessView(),
+                isActive: $showTermsConditionView
+            ) {
+                EmptyView()
+            }
+            .hidden()
         }
     }
-    private var totalAndPaymentSection: some View {
+    private var termsAndConditionForCoatching: some View {
+        VStack(spacing: 0) {
+            HStack(alignment: .top, spacing: 10) {
+                // Checkbox toggles agreeToTermsCoach
+                Button(action: { agreeToTermsCoach.toggle() }) {
+                    Image(systemName: agreeToTermsCoach ? "checkmark.square.fill" : "square")
+                        .font(.system(size: 22))
+                        .foregroundColor(Color("ThemePinkColor"))
+                }
+                .buttonStyle(PlainButtonStyle())
+
+                // Text wraps freely; only "coaching agreement" is tappable
+                (
+                    Text("I understand this is coaching (not medical care) and I agree to the ")
+                        .font(.custom(AppFontName.Poppins_SemiBold.rawValue, size: 12.0))
+                        .foregroundColor(Color("ThemePinkColor"))
+                    +
+                    Text("coaching agreement")
+                        .font(.custom(AppFontName.Poppins_SemiBold.rawValue, size: 12.0))
+                        .foregroundColor(Color("ThemePinkColor"))
+                        .underline()
+                )
+                .fixedSize(horizontal: false, vertical: true)
+                .onTapGesture {
+                    showTermsConditionViewCoach = true
+                }
+
+                Spacer()
+            }
+            .padding(.vertical)
+           // .padding(.horizontal)
+
+            // Hidden NavigationLink triggered by showTermsConditionViewCoach
+            NavigationLink(
+                destination: TermsConditionCoachingWellnessView(),
+                isActive: $showTermsConditionViewCoach
+            ) {
+                EmptyView()
+            }
+            .hidden()
+        }
+    }
+        private var totalAndPaymentSection: some View {
         VStack(spacing: 20) {
             HStack {
                 Text("TOTAL")
@@ -511,7 +598,10 @@ struct WellnessProgView: View {
             Button(action: {
                 if !agreeToTerms {
                     showTermsAlert = true
-                } else {
+                } else   if !agreeToTermsCoach {
+                    showTermsAlertCoach = true
+                }
+                else {
                     if phoneNumber.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
                         showBlankPhoneNumAlert = true
                     } else if address.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
@@ -535,6 +625,12 @@ struct WellnessProgView: View {
             } message: {
                 Text("Please check the Terms and Conditions to proceed with payment.")
             }
+            .alert("Coaching agreement Required", isPresented: $showTermsAlertCoach) {
+                Button("OK", role: .cancel) { }
+            } message: {
+                Text("Please check the Coaching agreement to proceed with payment.")
+            }
+            
         }
         .padding(.top)
         .onChange(of: selectedPackage) { _ in
@@ -775,16 +871,6 @@ extension WellnessProgView {
         if let controller = PKPaymentAuthorizationViewController(paymentRequest: paymentRequest),
            let braintreeClient = BTAPIClient(authorization: clientToken) {
             
-            /*
-            let handler = ApplePayHandler(braintreeClient: braintreeClient) { success in
-                if success {
-                    showSuccessAlert = true
-                } else {
-                    paymentErrorMessage = "Unable to complete payment."
-                    showErrorAlert = true
-                }
-            }
-            */
             let handler = ApplePayHandler(
                 braintreeClient: braintreeClient,
                 nonceHandler: { nonce in
@@ -833,7 +919,7 @@ extension WellnessProgView {
                    print(response.settings?.success ?? "No success flag")
                    
                    if response.settings?.success == true {
-                       print("Wellness data submitted successfully")
+                       print("Nonce Wellness data submitted successfully")
                        AlertUtility.showAlert(message: "Data submitted successfully")
 
                    } else {
@@ -849,4 +935,213 @@ extension WellnessProgView {
            AlertUtility.showAlert(message: "\(AlertMessages.NoInternetAlertMsg)")
        }
    }
+}
+
+// MARK: - WKWebView Representable
+struct WebView: UIViewRepresentable {
+    let url: URL
+    @Binding var isLoading: Bool
+
+    func makeUIView(context: Context) -> WKWebView {
+        let webView = WKWebView()
+        webView.navigationDelegate = context.coordinator
+        // ✅ Load ONCE here in makeUIView, not in updateUIView
+        let request = URLRequest(url: url)
+        webView.load(request)
+        return webView
+    }
+
+    func updateUIView(_ webView: WKWebView, context: Context) {
+        // ✅ Do NOT load here — this causes the flicker on every re-render
+    }
+
+    func makeCoordinator() -> Coordinator {
+        Coordinator(self)
+    }
+
+    class Coordinator: NSObject, WKNavigationDelegate {
+        var parent: WebView
+
+        init(_ parent: WebView) {
+            self.parent = parent
+        }
+
+        func webView(_ webView: WKWebView, didStartProvisionalNavigation navigation: WKNavigation!) {
+            DispatchQueue.main.async {
+                self.parent.isLoading = true
+            }
+        }
+
+        func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
+            DispatchQueue.main.async {
+                self.parent.isLoading = false
+            }
+        }
+
+        func webView(_ webView: WKWebView, didFail navigation: WKNavigation!, withError error: Error) {
+            DispatchQueue.main.async {
+                self.parent.isLoading = false
+            }
+        }
+
+        func webView(_ webView: WKWebView, didFailProvisionalNavigation navigation: WKNavigation!, withError error: Error) {
+            DispatchQueue.main.async {
+                self.parent.isLoading = false
+            }
+        }
+    }
+}
+// MARK: - TermsConditionWellnessView
+struct TermsConditionCoachingWellnessView: View {
+    @Environment(\.dismiss) var dismiss
+    @State private var isLoading = true
+
+    private let termsURL = URL(string: "https://thesistersshow.com/coaching-agreement-liability-waiver/")!
+
+    var body: some View {
+        VStack(spacing: 0) {
+            customNavigationBar
+
+            ZStack {
+                // ✅ WebView always present underneath — no flickering
+                WebView(url: termsURL, isLoading: $isLoading)
+
+                // ✅ Spinner sits on top, fades out when done
+                if isLoading {
+                    VStack(spacing: 12) {
+                        ProgressView()
+                            .progressViewStyle(CircularProgressViewStyle(tint: Color("ThemePinkColor")))
+                            .scaleEffect(1.5)
+                        Text("Loading...")
+                            .font(.custom(AppFontName.Poppins_Regular.rawValue, size: 14.0))
+                            .foregroundColor(Color("ThemePinkColor"))
+                    }
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    .background(Color.white)
+                }
+            }
+        }
+        .navigationBarHidden(true)
+        .ignoresSafeArea(edges: .bottom)
+    }
+
+    var customNavigationBar: some View {
+        VStack(spacing: 0) {
+            GeometryReader { geo in
+                Color(.systemBackground)
+                    .frame(height: geo.safeAreaInsets.top)
+                    .edgesIgnoringSafeArea(.top)
+            }
+            .frame(height: 0)
+
+            HStack {
+                Button(action: { dismiss() }) {
+                    HStack(spacing: 4) {
+                        Image(systemName: "chevron.left")
+                            .font(.system(size: 16, weight: .semibold))
+                            .foregroundColor(Color("ThemePinkColor"))
+                        Text("Coaching Agreement")
+                            .font(.custom(AppFontName.Poppins_SemiBold.rawValue, size: 16.0))
+                            .foregroundColor(Color("ThemePinkColor"))
+                    }
+                }
+
+                Spacer()
+
+                Button(action: {}) {
+                    Image(systemName: "bell")
+                        .font(.system(size: 18))
+                        .foregroundColor(.primary)
+                }
+
+                Button(action: {}) {
+                    Image(systemName: "magnifyingglass")
+                        .font(.system(size: 18))
+                        .foregroundColor(.primary)
+                }
+                .padding(.leading, 12)
+            }
+            .padding(.horizontal, 16)
+            .frame(height: 44)
+            .background(Color(.systemBackground))
+            .shadow(color: Color.black.opacity(0.05), radius: 2, x: 0, y: 1)
+        }
+    }
+}
+// MARK: - TermsConditionWellnessView
+struct TermsConditionWellnessView: View {
+    @Environment(\.dismiss) var dismiss
+    @State private var isLoading = true
+
+    private let termsURL = URL(string: "https://thesistersshow.com/term-condition/")!
+
+    var body: some View {
+        VStack(spacing: 0) {
+            customNavigationBar
+
+            ZStack {
+                // ✅ WebView always present underneath — no flickering
+                WebView(url: termsURL, isLoading: $isLoading)
+
+                // ✅ Spinner sits on top, fades out when done
+                if isLoading {
+                    VStack(spacing: 12) {
+                        ProgressView()
+                            .progressViewStyle(CircularProgressViewStyle(tint: Color("ThemePinkColor")))
+                            .scaleEffect(1.5)
+                        Text("Loading...")
+                            .font(.custom(AppFontName.Poppins_Regular.rawValue, size: 14.0))
+                            .foregroundColor(Color("ThemePinkColor"))
+                    }
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    .background(Color.white)
+                }
+            }
+        }
+        .navigationBarHidden(true)
+        .ignoresSafeArea(edges: .bottom)
+    }
+
+    var customNavigationBar: some View {
+        VStack(spacing: 0) {
+            GeometryReader { geo in
+                Color(.systemBackground)
+                    .frame(height: geo.safeAreaInsets.top)
+                    .edgesIgnoringSafeArea(.top)
+            }
+            .frame(height: 0)
+
+            HStack {
+                Button(action: { dismiss() }) {
+                    HStack(spacing: 4) {
+                        Image(systemName: "chevron.left")
+                            .font(.system(size: 16, weight: .semibold))
+                            .foregroundColor(Color("ThemePinkColor"))
+                        Text("Term & Condition")
+                            .font(.custom(AppFontName.Poppins_SemiBold.rawValue, size: 16.0))
+                            .foregroundColor(Color("ThemePinkColor"))
+                    }
+                }
+
+                Spacer()
+
+                Button(action: {}) {
+                    Image(systemName: "bell")
+                        .font(.system(size: 18))
+                        .foregroundColor(.primary)
+                }
+
+                Button(action: {}) {
+                    Image(systemName: "magnifyingglass")
+                        .font(.system(size: 18))
+                        .foregroundColor(.primary)
+                }
+                .padding(.leading, 12)
+            }
+            .padding(.horizontal, 16)
+            .frame(height: 44)
+            .background(Color(.systemBackground))
+            .shadow(color: Color.black.opacity(0.05), radius: 2, x: 0, y: 1)
+        }
+    }
 }

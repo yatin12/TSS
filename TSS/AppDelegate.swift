@@ -408,7 +408,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     
     func verifyReceipt(completion: @escaping (VerifyReceiptResult) -> Void) {
         
-        let appleValidator = AppleReceiptValidator(service: .production, sharedSecret: inappSharedSecretKey) //Khushbu Change
+        let appleValidator = AppleReceiptValidator(service: .sandbox, sharedSecret: inappSharedSecretKey) //Khushbu Change
         SwiftyStoreKit.verifyReceipt(using: appleValidator, completion: completion)
     }
     func apiCallPostCancelSubscriptionInfo()

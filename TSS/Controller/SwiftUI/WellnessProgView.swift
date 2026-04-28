@@ -223,7 +223,7 @@ struct WellnessProgView: View {
                     .keyboardType(.phonePad)
             }
             
-           
+           /*
             // Country Dropdown
             VStack(alignment: .leading) {
                 Text("Country")
@@ -317,10 +317,10 @@ struct WellnessProgView: View {
                     apiCallGetCountryList()
                 }
             }
+            */
             
             
-            
-            /*
+           
              //KHUSHBU Country
             // Country Sheet Picker
             VStack(alignment: .leading) {
@@ -352,7 +352,7 @@ struct WellnessProgView: View {
                     )
                 }
             }
-            */
+            
         }
         .onAppear {
             if objCountryList.isEmpty {
@@ -1375,7 +1375,7 @@ struct TermsConditionWellnessView: View {
         }
     }
 }
-/*
+
  //KHUSHBU Country
 struct CountryPickerSheet: View {
     let countryList: [String: String]
@@ -1429,4 +1429,4 @@ struct CountryPickerSheet: View {
         }
     }
 }
-*/
+

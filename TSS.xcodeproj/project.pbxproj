@@ -213,7 +213,6 @@
 		B4880C832CA1BB6F0097C48B /* subscriptionPurchaseViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4880C822CA1BB6F0097C48B /* subscriptionPurchaseViewModel.swift */; };
 		B4880C852CA1BBCD0097C48B /* subscriptionPurchaseModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4880C842CA1BBCD0097C48B /* subscriptionPurchaseModel.swift */; };
 		B4880C872CA1BD450097C48B /* NetworkActivityIndicatorManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4880C862CA1BD450097C48B /* NetworkActivityIndicatorManager.swift */; };
-		B48B1E582DA6978C009211DE /* WellnessProgView1.swift in Sources */ = {isa = PBXBuildFile; fileRef = B48B1E572DA6978C009211DE /* WellnessProgView1.swift */; };
 		B48B1E5A2DA698AA009211DE /* RelationshipCoachingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B48B1E592DA698AA009211DE /* RelationshipCoachingView.swift */; };
 		B4924C012C9EB17F003B8756 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = B4924C002C9EB17F003B8756 /* GoogleService-Info.plist */; };
 		B4924C082C9EC7F9003B8756 /* SubsciberNewTBC.xib in Resources */ = {isa = PBXBuildFile; fileRef = B4924C072C9EC7F9003B8756 /* SubsciberNewTBC.xib */; };
@@ -407,7 +406,6 @@
 		B4880C822CA1BB6F0097C48B /* subscriptionPurchaseViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = subscriptionPurchaseViewModel.swift; sourceTree = "<group>"; };
 		B4880C842CA1BBCD0097C48B /* subscriptionPurchaseModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = subscriptionPurchaseModel.swift; sourceTree = "<group>"; };
 		B4880C862CA1BD450097C48B /* NetworkActivityIndicatorManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NetworkActivityIndicatorManager.swift; sourceTree = "<group>"; };
-		B48B1E572DA6978C009211DE /* WellnessProgView1.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WellnessProgView1.swift; sourceTree = "<group>"; };
 		B48B1E592DA698AA009211DE /* RelationshipCoachingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RelationshipCoachingView.swift; sourceTree = "<group>"; };
 		B4924C002C9EB17F003B8756 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		B4924C062C9EC7F9003B8756 /* SubsciberNewTBC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubsciberNewTBC.swift; sourceTree = "<group>"; };
@@ -1192,7 +1190,6 @@
 		B48B1E562DA69764009211DE /* SwiftUI */ = {
 			isa = PBXGroup;
 			children = (
-				B48B1E572DA6978C009211DE /* WellnessProgView1.swift */,
 				B476388C2F9F871F00485DB7 /* WellnessProgView.swift */,
 				B48B1E592DA698AA009211DE /* RelationshipCoachingView.swift */,
 				B447309C2DCF2FF300F11C71 /* ApplePayHandler.swift */,
@@ -1548,7 +1545,6 @@
 				18950C572C3818C3003BC3B8 /* blogDetailsModel.swift in Sources */,
 				B406DDF72CC015A100E06AA7 /* AddFCMTokenModel.swift in Sources */,
 				B45FC0EE2DE1AC3300A715F3 /* RelationshipDataSubmitViewModel.swift in Sources */,
-				B48B1E582DA6978C009211DE /* WellnessProgView1.swift in Sources */,
 				B4E621082DFED393008B26F6 /* paypalNonceSubmitViewModel.swift in Sources */,
 				188B11A42C482601000CB4AE /* LikeVideoModel.swift in Sources */,
 				18950C5D2C3820A1003BC3B8 /* watchListModel.swift in Sources */,

@@ -8,7 +8,19 @@ import BraintreeApplePay
 struct WellnessProgView: View {
     @State private var showTermsConditionView = false
     @State private var showTermsConditionViewCoach = false
+    private let objCountryListViewModel = countryListViewModel()
+    @State var objCountryList: [String: String] = [:]
+    @State private var apiErrorMessage: String = ""
+    @State private var showApiErrorAlert: Bool = false
+    @State private var selectedCountryCode: String = ""
 
+    //Country Picker
+    @State private var showCountryPicker: Bool = false
+    
+    //Country Drop down
+    @State private var showCountryDropdown: Bool = false
+    @State private var countrySearchText: String = ""
+    
     
     @Environment(\.dismiss) var dismiss
     @State private var userId = ""
@@ -112,12 +124,18 @@ struct WellnessProgView: View {
         .onAppear {
             getUserId()
             apiCallToFetchPackage()
+            apiCallGetCountryList()
         }
         .alert("Payment Success", isPresented: $showSuccessAlert) {
             Button("OK", role: .cancel) { }
         }
         .alert(isPresented: $showErrorAlert) {
             Alert(title: Text("Payment Failed"), message: Text(paymentErrorMessage), dismissButton: .default(Text("OK")))
+        }
+        .alert("Error", isPresented: $showApiErrorAlert) {
+            Button("OK", role: .cancel) { }
+        } message: {
+            Text(apiErrorMessage)
         }
     }
     
@@ -159,14 +177,14 @@ struct WellnessProgView: View {
     }
     
     var headerView: some View {
-        Text("Wellness program package")
+        Text("wellness coaching package")
             .font(.custom("\(AppFontName.Poppins_SemiBold.rawValue)", size: 18.0))
             .foregroundColor(Color("Wellness_FontDark"))
     }
     
     var wellnessProgramSection: some View {
         VStack(alignment: .leading) {
-            SectionHeaderView(title: "Do you want to sign up for a wellness program?")
+            SectionHeaderView(title: "Do you want to sign up for a wellness coaching?")
             
             HStack {
                 RadioButton(
@@ -190,7 +208,160 @@ struct WellnessProgView: View {
             .padding(.leading)
         }
     }
+    var contactDetailsSection: some View {
+        VStack(alignment: .leading, spacing: 15) {
+            // Phone number
+            VStack(alignment: .leading) {
+                Text("Phone number")
+                    .foregroundColor(Color("ThemePinkColor"))
+                    .font(.custom(AppFontName.Poppins_SemiBold.rawValue, size: 14.0))
+                
+                TextField("", text: $phoneNumber)
+                    .font(.custom(AppFontName.Poppins_Regular.rawValue, size: 14.0))
+                    .padding()
+                    .background(RoundedRectangle(cornerRadius: 5).stroke(Color("ThemeDefaultBorderColor")))
+                    .keyboardType(.phonePad)
+            }
+            
+           
+            // Country Dropdown
+            VStack(alignment: .leading) {
+                Text("Country")
+                    .foregroundColor(Color("ThemePinkColor"))
+                    .font(.custom(AppFontName.Poppins_SemiBold.rawValue, size: 14.0))
+
+                // Trigger button
+                Button(action: {
+                    withAnimation(.easeInOut(duration: 0.2)) {
+                        showCountryDropdown.toggle()
+                    }
+                }) {
+                    HStack {
+                        Text(selectedCountryCode.isEmpty ? "Select Country" :
+                                (objCountryList[selectedCountryCode] ?? selectedCountryCode))
+                            .font(.custom(AppFontName.Poppins_Regular.rawValue, size: 14.0))
+                            .foregroundColor(selectedCountryCode.isEmpty ? .gray : .primary)
+                        Spacer()
+                        Image(systemName: showCountryDropdown ? "chevron.up" : "chevron.down")
+                            .foregroundColor(Color("ThemePinkColor"))
+                            .font(.system(size: 14))
+                    }
+                    .padding()
+                    .background(RoundedRectangle(cornerRadius: 5).stroke(Color("ThemeDefaultBorderColor")))
+                }
+                .buttonStyle(PlainButtonStyle())
+
+                // Dropdown list
+                if showCountryDropdown {
+                    VStack(spacing: 0) {
+                        // Search field
+                        HStack {
+                            Image(systemName: "magnifyingglass")
+                                .foregroundColor(.gray)
+                                .font(.system(size: 14))
+                            TextField("Search country...", text: $countrySearchText)
+                                .font(.custom(AppFontName.Poppins_Regular.rawValue, size: 13.0))
+                        }
+                        .padding(8)
+                        .background(Color(.systemGray6))
+
+                        Divider()
+
+                        // Country list
+                        ScrollView {
+                            LazyVStack(spacing: 0) {
+                                ForEach(filteredCountries, id: \.code) { country in
+                                    HStack {
+                                        Text(country.name)
+                                            .font(.custom(AppFontName.Poppins_Regular.rawValue, size: 14.0))
+                                            .foregroundColor(.primary)
+                                        Spacer()
+                                        if selectedCountryCode == country.code {
+                                            Image(systemName: "checkmark")
+                                                .foregroundColor(Color("ThemePinkColor"))
+                                                .font(.system(size: 13))
+                                        }
+                                    }
+                                    .padding(.horizontal, 12)
+                                    .padding(.vertical, 10)
+                                    .background(
+                                        selectedCountryCode == country.code ?
+                                        Color("ThemePinkColor").opacity(0.08) : Color.white
+                                    )
+                                    .contentShape(Rectangle())
+                                    .onTapGesture {
+                                        selectedCountryCode = country.code
+                                        address = country.name
+                                        countrySearchText = ""
+                                        withAnimation(.easeInOut(duration: 0.2)) {
+                                            showCountryDropdown = false
+                                        }
+                                    }
+
+                                    Divider().padding(.leading, 12)
+                                }
+                            }
+                        }
+                        .frame(maxHeight: 220)
+                        .scrollIndicators(.hidden)
+                       
+                    }
+                    .background(Color.white)
+                    .overlay(RoundedRectangle(cornerRadius: 5).stroke(Color("ThemeDefaultBorderColor")))
+                    .shadow(color: Color.black.opacity(0.08), radius: 6, x: 0, y: 4)
+                    .transition(.opacity.combined(with: .move(edge: .top)))
+                }
+            }
+            .onAppear {
+                if objCountryList.isEmpty {
+                    apiCallGetCountryList()
+                }
+            }
+            
+            
+            
+            /*
+             //KHUSHBU Country
+            // Country Sheet Picker
+            VStack(alignment: .leading) {
+                Text("Country")
+                    .foregroundColor(Color("ThemePinkColor"))
+                    .font(.custom(AppFontName.Poppins_SemiBold.rawValue, size: 14.0))
+                
+                // Dropdown trigger button
+                Button(action: { showCountryPicker = true }) {
+                    HStack {
+                        Text(selectedCountryCode.isEmpty ? "Select Country" :
+                                (objCountryList[selectedCountryCode] ?? selectedCountryCode))
+                            .font(.custom(AppFontName.Poppins_Regular.rawValue, size: 14.0))
+                            .foregroundColor(selectedCountryCode.isEmpty ? .gray : Color.primary)
+                        Spacer()
+                        Image(systemName: "chevron.down")
+                            .foregroundColor(Color("ThemePinkColor"))
+                            .font(.system(size: 14))
+                    }
+                    .padding()
+                    .background(RoundedRectangle(cornerRadius: 5).stroke(Color("ThemeDefaultBorderColor")))
+                }
+                .sheet(isPresented: $showCountryPicker) {
+                    CountryPickerSheet(
+                        countryList: objCountryList,
+                        selectedCode: $selectedCountryCode,
+                        selectedName: $address,
+                        isPresented: $showCountryPicker
+                    )
+                }
+            }
+            */
+        }
+        .onAppear {
+            if objCountryList.isEmpty {
+                apiCallGetCountryList()
+            }
+        }
+    }
     
+    /*
     var contactDetailsSection: some View {
         VStack(alignment: .leading, spacing: 15) {
             // Phone number
@@ -227,7 +398,7 @@ struct WellnessProgView: View {
                 */
             }
         }
-    }
+    }*/
     
     var medicalInformationSection: some View {
         VStack(alignment: .leading) {
@@ -310,7 +481,15 @@ struct WellnessProgView: View {
             }
         }
     }
-    
+    var filteredCountries: [(code: String, name: String)] {
+        let all = objCountryList.map { (code: $0.key, name: $0.value) }
+            .sorted { $0.name < $1.name }
+        guard !countrySearchText.isEmpty else { return all }
+        return all.filter {
+            $0.name.localizedCaseInsensitiveContains(countrySearchText) ||
+            $0.code.localizedCaseInsensitiveContains(countrySearchText)
+        }
+    }
     var otherSurgicalConditionInput: some View {
         ZStack(alignment: .topLeading) {
             TextEditor(text: $otherSurgicalCondition)
@@ -718,6 +897,57 @@ enum Meal: String, CaseIterable {
 
 // MARK: - API Functions
 extension WellnessProgView {
+    func apiCallGetCountryList()
+    {
+        KVSpinnerView.show()
+        if Reachability.isConnectedToNetwork()
+        {
+            objCountryListViewModel.getCountryList { result in
+                KVSpinnerView.dismiss()
+                switch result {
+                case .success(let loginResponse):
+                    // Handle successful
+                    print(loginResponse)
+                    let countryList = loginResponse.countrylist
+                       self.objCountryList = countryList
+                  //  self.sortedCountryList = self.objCountryList.sorted { $0.value < $1.value }
+
+                    print(self.objCountryList)
+//                    self.tblCountry.delegate = self
+//                    self.tblCountry.dataSource = self
+//                    self.tblCountry.reloadData()
+                  break
+                
+                case .failure(let error):
+                    if let apiError = error as? APIError {
+                        // Instead of: ErrorHandlingUtility.handleAPIError(apiError, in: self)
+                        apiErrorMessage = apiError.localizedDescription
+                        showApiErrorAlert = true
+                    } else {
+                        apiErrorMessage = error.localizedDescription
+                        showApiErrorAlert = true
+                    }
+                    
+                        /*
+                case .failure(let error):
+                    // Handle failure
+                    
+                    if let apiError = error as? APIError {
+                        ErrorHandlingUtility.handleAPIError(apiError, in: self)
+                    } else {
+                        // Handle other types of errors
+                       // print("Unexpected error: \(error)")
+                        AlertUtility.presentSimpleAlert(in: self, title: "", message: "\(error.localizedDescription)")
+                    }*/
+                }
+            }
+        }
+        else
+        {
+            KVSpinnerView.dismiss()
+            AlertUtility.showAlert(message: "\(AlertMessages.NoInternetAlertMsg)")
+        }
+    }
     func calculateTotalPrice() {
         var total = 0
         
@@ -1145,3 +1375,58 @@ struct TermsConditionWellnessView: View {
         }
     }
 }
+/*
+ //KHUSHBU Country
+struct CountryPickerSheet: View {
+    let countryList: [String: String]
+    @Binding var selectedCode: String
+    @Binding var selectedName: String
+    @Binding var isPresented: Bool
+    
+    @State private var searchText: String = ""
+    
+    // Sorted list of (code, name) pairs
+    var sortedCountries: [(code: String, name: String)] {
+        let filtered = countryList.map { (code: $0.key, name: $0.value) }
+            .filter {
+                searchText.isEmpty ||
+                $0.name.localizedCaseInsensitiveContains(searchText) ||
+                $0.code.localizedCaseInsensitiveContains(searchText)
+            }
+        return filtered.sorted { $0.name < $1.name }
+    }
+    
+    var body: some View {
+        NavigationStack {
+            List(sortedCountries, id: \.code) { country in
+                Button(action: {
+                    selectedCode = country.code
+                    selectedName = country.name  // sets `address` used in the API call
+                    isPresented = false
+                }) {
+                    HStack {
+                        Text(country.name)
+                            .font(.custom(AppFontName.Poppins_Regular.rawValue, size: 14.0))
+                            .foregroundColor(.primary)
+                        Spacer()
+                        if selectedCode == country.code {
+                            Image(systemName: "checkmark")
+                                .foregroundColor(Color("ThemePinkColor"))
+                        }
+                    }
+                }
+                .buttonStyle(PlainButtonStyle())
+            }
+            .searchable(text: $searchText, prompt: "Search country")
+            .navigationTitle("Select Country")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .cancellationAction) {
+                    Button("Cancel") { isPresented = false }
+                        .foregroundColor(Color("ThemePinkColor"))
+                }
+            }
+        }
+    }
+}
+*/

@@ -662,12 +662,12 @@
 			path = NewsDeatilsVC;
 			sourceTree = "<group>";
 		};
-		187237232C3013DA00F8416F /* Tabbar Controller */ = {
+		187237232C3013DA00F8416F /* TabbarController */ = {
 			isa = PBXGroup;
 			children = (
 				187237242C3013DA00F8416F /* CustomeTabbarVC.swift */,
 			);
-			path = "Tabbar Controller";
+			path = TabbarController;
 			sourceTree = "<group>";
 		};
 		187237262C30165400F8416F /* HomeVC */ = {
@@ -1039,7 +1039,7 @@
 				1872372C2C30169100F8416F /* TalkShowVC */,
 				187237292C30167500F8416F /* NewsVC */,
 				187237262C30165400F8416F /* HomeVC */,
-				187237232C3013DA00F8416F /* Tabbar Controller */,
+				187237232C3013DA00F8416F /* TabbarController */,
 				18F3C7E42C2FD0CC008944E7 /* RegistrationVC */,
 				18F3C7E32C2FD0C5008944E7 /* LoginVC */,
 				18F3C7E22C2FD0B7008944E7 /* SplashScreenVC */,

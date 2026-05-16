@@ -1,9 +1,3 @@
-//
-//  PanelHeaderView.swift
-//  Uveaa Solar
-//
-//  Created by apple on 03/05/24.
-//
 
 import UIKit
 

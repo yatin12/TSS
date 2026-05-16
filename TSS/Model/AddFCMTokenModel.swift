@@ -1,9 +1,3 @@
-//
-//  AddFCMTokenModel.swift
-//  Uveaa Solar
-//
-//  Created by apple on 05/03/24.
-//
 
 import Foundation
 

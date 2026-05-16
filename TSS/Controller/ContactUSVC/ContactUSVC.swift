@@ -64,11 +64,44 @@ extension ContactUSVC
     {
         DeviceUtility.setHeaderViewHeight(constHeightHeader)
     }
+    /*
     func setTextfileds()
     {
         txtName.iq.toolbar.doneBarButton.setTarget(self, action: #selector(doneButtonClicked))
         txtEmail.iq.toolbar.doneBarButton.setTarget(self, action: #selector(doneButtonClicked))
 
+    }*/
+    func setTextfileds() {
+        if #available(iOS 26.0, *) {
+            let toolbar = createDoneToolbar()
+            txtName.inputAccessoryView = toolbar
+            txtEmail.inputAccessoryView = toolbar
+            txtvwMsg.inputAccessoryView = createDoneToolbar()
+        } else {
+            txtName.iq.toolbar.doneBarButton.setTarget(self, action: #selector(doneButtonClicked))
+            txtEmail.iq.toolbar.doneBarButton.setTarget(self, action: #selector(doneButtonClicked))
+        }
+    }
+    private func createDoneToolbar() -> UIToolbar {
+        let toolbar = UIToolbar()
+        toolbar.sizeToFit()
+        toolbar.tintColor = AppColors.ThemePinkColor
+        
+        let flexSpace = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
+        let doneButton = UIBarButtonItem(title: "Done", style: .done, target: self, action: #selector(toolbarDoneTapped))
+        doneButton.setTitleTextAttributes([
+            .font: UIFont(name: AppFontName.Poppins_Medium.rawValue, size: 16) ?? UIFont.systemFont(ofSize: 16),
+            .foregroundColor: UIColor.white
+        ], for: .normal)
+        
+        toolbar.items = [flexSpace, doneButton]
+        return toolbar
+    }
+
+    @objc func toolbarDoneTapped() {
+        txtvwMsg.resignFirstResponder()
+        txtName.resignFirstResponder()
+        txtEmail.resignFirstResponder()
     }
     @objc func doneButtonClicked(_ sender: UIButton)
     {

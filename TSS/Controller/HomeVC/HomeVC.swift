@@ -417,6 +417,15 @@ extension HomeVC
         
         self.apiCallgetHomeData()
         
+        // iOS 26 fix for sticky header background
+        tblHome.sectionHeaderTopPadding = 0
+
+        // This removes the automatic background iOS adds to sticky headers
+        if #available(iOS 26.0, *) {
+            tblHome.allowsSelectionDuringEditing = false
+        }
+        
+        
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -887,8 +896,34 @@ extension HomeVC: UITableViewDataSource, UITableViewDelegate, HomeTBCDelegate
         
         return 1
     }
+    func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
+        view.backgroundColor = .clear
+        view.tintColor = .clear
+        view.layer.backgroundColor = UIColor.clear.cgColor
+        
+        if let header = view as? UITableViewHeaderFooterView {
+            header.backgroundView?.backgroundColor = .clear
+            header.contentView.backgroundColor = .clear
+            header.layer.backgroundColor = UIColor.clear.cgColor
+            
+            if #available(iOS 14.0, *) {
+                var config = UIBackgroundConfiguration.clear()
+                config.backgroundColor = .clear
+                header.backgroundConfiguration = config
+            }
+        }
+        
+        // Force clear all subviews backgrounds
+        view.subviews.forEach { subview in
+            subview.backgroundColor = .clear
+            subview.layer.backgroundColor = UIColor.clear.cgColor
+        }
+    }
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let headerView = HomeHeaderView()
+        
+        headerView.backgroundColor = .clear
+        headerView.layer.backgroundColor = UIColor.clear.cgColor
         
         headerView.lblCategoryName.text = "\(arrSection[section])"
         
@@ -912,6 +947,7 @@ extension HomeVC: UITableViewDataSource, UITableViewDelegate, HomeTBCDelegate
         }
         return headerView
     }
+    
     @objc func headerTapped(_ sender: UITapGestureRecognizer) {        NotificationCenter.default.post(name: Notification.Name("APIcallforVideoStop"), object: nil, userInfo: nil)
         
         if userRole == USERROLE.SignInUser
@@ -1217,14 +1253,18 @@ extension HomeVC: UIScrollViewDelegate {
         }
     }
 }
-/*
-extension HomeVC {
-    func stopAllVideos() {
-        for cell in self.objCollNewSeaction1.visibleCells {
-            if let videoCell = cell as? videoCollectionCell {
-                videoCell.stop()
+// Add this class in HomeVC.swift or a separate file
+class FixedColorLabel: UILabel {
+    var fixedColor: UIColor = AppColors.ThemeFontColor {
+        didSet { textColor = fixedColor }
+    }
+    
+    override var textColor: UIColor! {
+        didSet {
+            // Prevent iOS from changing our color
+            if textColor != fixedColor {
+                super.textColor = fixedColor
             }
         }
     }
 }
-*/

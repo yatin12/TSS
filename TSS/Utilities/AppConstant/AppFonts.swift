@@ -1,9 +1,3 @@
-//
-//  AppFonts.swift
-//  Uveaa Solar
-//
-//  Created by apple on 12/01/24.
-//
 
 import Foundation
 

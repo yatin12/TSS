@@ -1,9 +1,4 @@
-//
-//  OpenDatePickerVC.swift
-//  Uveaa Solar
-//
-//  Created by apple on 19/02/24.
-//
+
 
 import UIKit
 protocol dataPassProtocol

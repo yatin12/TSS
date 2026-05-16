@@ -1,9 +1,4 @@
-//
-//  ValidationFile.swift
-//  Uveaa Solar
-//
-//  Created by apple on 02/02/24.
-//
+
 
 import Foundation
 import UIKit

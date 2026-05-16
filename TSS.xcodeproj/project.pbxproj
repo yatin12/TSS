@@ -1384,9 +1384,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-TSS/Pods-TSS-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-TSS/Pods-TSS-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -1707,10 +1711,9 @@
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CODE_SIGN_ENTITLEMENTS = TSS/TSS.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 7;
+				CURRENT_PROJECT_VERSION = 11;
 				DEVELOPMENT_TEAM = PA239L6TG4;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
-				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = TSS/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "The Sisters Show";
@@ -1732,7 +1735,7 @@
 				MARKETING_VERSION = 1.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.thesistersshowllc.thesistershow;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
@@ -1751,7 +1754,7 @@
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CODE_SIGN_ENTITLEMENTS = TSS/TSS.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 7;
+				CURRENT_PROJECT_VERSION = 11;
 				DEVELOPMENT_TEAM = PA239L6TG4;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
@@ -1776,7 +1779,7 @@
 				MARKETING_VERSION = 1.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.thesistersshowllc.thesistershow;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;

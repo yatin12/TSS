@@ -155,6 +155,7 @@ extension RegistrationVC
         isFromPrivacyViewSetting = false
         NavigationHelper.push(storyboardKey.InnerScreen, viewControllerIdentifier: "PrivacyPolicyVC", from: navigationController!, animated: true)
     }
+    /*
     func setTextfileds()
     {
         txtFristNm.iq.toolbar.doneBarButton.setTarget(self, action: #selector(doneButtonClicked))
@@ -165,8 +166,57 @@ extension RegistrationVC
         txtConfPassword.iq.toolbar.doneBarButton.setTarget(self, action: #selector(doneButtonClicked))
         txtBirthday.iq.toolbar.doneBarButton.setTarget(self, action: #selector(doneButtonClicked))
         txtGendar.iq.toolbar.doneBarButton.setTarget(self, action: #selector(doneButtonClicked))
+    }
+    */
+    func setTextfileds() {
+        if #available(iOS 26.0, *) {
+            let toolbar = createDoneToolbar()
+            txtFristNm.inputAccessoryView = toolbar
+            txtLastNm.inputAccessoryView = toolbar
+            txtUserNm.inputAccessoryView = toolbar
+            txtEmail.inputAccessoryView = toolbar
+            txtPassword.inputAccessoryView = toolbar
+            txtConfPassword.inputAccessoryView = toolbar
+            txtBirthday.inputAccessoryView = toolbar
+            txtGendar.inputAccessoryView = toolbar
 
+            
+        } else {
+            txtFristNm.iq.toolbar.doneBarButton.setTarget(self, action: #selector(doneButtonClicked))
+            txtLastNm.iq.toolbar.doneBarButton.setTarget(self, action: #selector(doneButtonClicked))
+            txtUserNm.iq.toolbar.doneBarButton.setTarget(self, action: #selector(doneButtonClicked))
+            txtEmail.iq.toolbar.doneBarButton.setTarget(self, action: #selector(doneButtonClicked))
+            txtPassword.iq.toolbar.doneBarButton.setTarget(self, action: #selector(doneButtonClicked))
+            txtConfPassword.iq.toolbar.doneBarButton.setTarget(self, action: #selector(doneButtonClicked))
+            txtBirthday.iq.toolbar.doneBarButton.setTarget(self, action: #selector(doneButtonClicked))
+            txtGendar.iq.toolbar.doneBarButton.setTarget(self, action: #selector(doneButtonClicked))
+        }
+    }
+    private func createDoneToolbar() -> UIToolbar {
+        let toolbar = UIToolbar()
+        toolbar.sizeToFit()
+        toolbar.tintColor = AppColors.ThemePinkColor
         
+        let flexSpace = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
+        let doneButton = UIBarButtonItem(title: "Done", style: .done, target: self, action: #selector(toolbarDoneTapped))
+        doneButton.setTitleTextAttributes([
+            .font: UIFont(name: AppFontName.Poppins_Medium.rawValue, size: 16) ?? UIFont.systemFont(ofSize: 16),
+            .foregroundColor: UIColor.white
+        ], for: .normal)
+        
+        toolbar.items = [flexSpace, doneButton]
+        return toolbar
+    }
+
+    @objc func toolbarDoneTapped() {
+        txtFristNm.resignFirstResponder()
+        txtLastNm.resignFirstResponder()
+        txtUserNm.resignFirstResponder()
+        txtEmail.resignFirstResponder()
+        txtPassword.resignFirstResponder()
+        txtConfPassword.resignFirstResponder()
+        txtBirthday.resignFirstResponder()
+        txtGendar.resignFirstResponder()
     }
     @objc func doneButtonClicked(_ sender: UIButton)
     {

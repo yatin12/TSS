@@ -1,9 +1,3 @@
-//
-//  APIConfig.swift
-//  Uveaa Solar
-//
-//  Created by apple on 07/02/24.
-//
 
 import Foundation
 

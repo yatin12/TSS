@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="32700.99.1234" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="24765" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_12" orientation="portrait" appearance="light"/>
     <dependencies>
-        <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22685"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="24743"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -20,7 +19,7 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="HomeHeaderView" customModule="TSS" customModuleProvider="target">
             <connections>
                 <outlet property="contentView" destination="iN0-l3-epB" id="EpQ-of-1eb"/>
-                <outlet property="lblCategoryName" destination="heR-en-PAR" id="Ljh-Oh-C6A"/>
+                <outlet property="lblCategoryName" destination="heR-en-PAR" id="83V-Op-Bmh"/>
                 <outlet property="lblViewAll" destination="uhC-T5-o7K" id="o8a-PJ-m4m"/>
             </connections>
         </placeholder>
@@ -32,7 +31,7 @@
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="slw-yy-RhH">
                     <rect key="frame" x="10" y="0.0" width="355" height="50"/>
                     <subviews>
-                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Tops News" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="heR-en-PAR">
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Tops News" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="heR-en-PAR" customClass="FixedColorLabel" customModule="TSS" customModuleProvider="target">
                             <rect key="frame" x="0.0" y="10.333333333333334" width="114" height="29.666666666666664"/>
                             <fontDescription key="fontDescription" name="Poppins-SemiBold" family="Poppins" pointSize="21"/>
                             <color key="textColor" name="ThemeFontColor"/>

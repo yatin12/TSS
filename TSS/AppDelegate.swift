@@ -113,18 +113,91 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         KVSpinnerView.settings.backgroundRectColor = AppColors.ThemePinkColor
         KVSpinnerView.settings.tintColor = .white
     }
-    func setUpUITabBar()
-    {
-        UITabBar.appearance().unselectedItemTintColor = .white
+    func setUpUITabBar() {
+
+        let appearance = UITabBarAppearance()
+        appearance.configureWithOpaqueBackground()
+
+        // Solid background like reference
+        appearance.backgroundColor = AppColors.ThemePinkColor
+        appearance.backgroundEffect = nil
+
+        // Remove top shadow line
+        appearance.shadowColor = .clear
+        appearance.shadowImage = UIImage()
+
+        // Remove iOS 26 liquid/floating selection effect
+        appearance.selectionIndicatorTintColor = .clear
+        appearance.selectionIndicatorImage = UIImage()
+
+        // MARK: - Normal State
+        appearance.stackedLayoutAppearance.normal.iconColor = .white
+        appearance.stackedLayoutAppearance.normal.titleTextAttributes = [
+            .foregroundColor: UIColor.white,
+            .font: UIFont(name: AppFontName.Poppins_Medium.rawValue, size: 11)!
+        ]
+
+        // MARK: - Selected State
+        appearance.stackedLayoutAppearance.selected.iconColor = .white
+        appearance.stackedLayoutAppearance.selected.titleTextAttributes = [
+            .foregroundColor: UIColor.white,
+            .font: UIFont(name: AppFontName.Poppins_Bold.rawValue, size: 11)!
+        ]
+
+        UITabBar.appearance().standardAppearance = appearance
+
+        if #available(iOS 15.0, *) {
+            UITabBar.appearance().scrollEdgeAppearance = appearance
+        }
+
         UITabBar.appearance().tintColor = .white
+        UITabBar.appearance().unselectedItemTintColor = .white
+        UITabBar.appearance().isTranslucent = false
         
-//        UITabBar.appearance().unselectedItemTintColor = UIColor(named: "ThemePinkColor")
-//        UITabBar.appearance().tintColor = UIColor(named: "ThemePinkColor")
-        
-        UITabBarItem.appearance().setTitleTextAttributes([NSAttributedString.Key.font: UIFont(name: AppFontName.Poppins_SemiBold.rawValue, size: 11)!], for: .normal)
-        UITabBarItem.appearance().setTitleTextAttributes([NSAttributedString.Key.font: UIFont(name: AppFontName.Poppins_SemiBold.rawValue, size: 11)!], for: .selected)
-        
+        // ✅ iOS 26 Liquid Glass override
+        if #available(iOS 26.0, *) {
+            UITabBar.appearance().isTranslucent = false
+            UITabBar.appearance().backgroundImage = UIImage.from(color: AppColors.ThemePinkColor)
+            UITabBar.appearance().shadowImage = UIImage()
+        }
     }
+    func setUpUITabBar1() {
+        let appearance = UITabBarAppearance()
+        appearance.configureWithOpaqueBackground()
+        appearance.backgroundColor = AppColors.ThemePinkColor
+
+        // ✅ Correct way to remove selection indicator
+        appearance.selectionIndicatorTintColor = .clear
+        appearance.selectionIndicatorImage = UIImage.from(color: .clear)
+
+        // Item appearance
+        let itemAppearance = UITabBarItemAppearance(style: .stacked)
+
+        // Normal state
+        itemAppearance.normal.iconColor = .white
+        itemAppearance.normal.titleTextAttributes = [
+            .font: UIFont(name: AppFontName.Poppins_Medium.rawValue, size: 11)!,
+            .foregroundColor: UIColor.white
+        ]
+
+        // Selected state
+        itemAppearance.selected.iconColor = .white
+        itemAppearance.selected.titleTextAttributes = [
+            .font: UIFont(name: AppFontName.Poppins_Bold.rawValue, size: 13)!,
+            .foregroundColor: UIColor.white
+        ]
+
+        appearance.stackedLayoutAppearance = itemAppearance
+        appearance.inlineLayoutAppearance = itemAppearance
+        appearance.compactInlineLayoutAppearance = itemAppearance
+
+        UITabBar.appearance().standardAppearance = appearance
+        UITabBar.appearance().scrollEdgeAppearance = appearance
+        UITabBar.appearance().tintColor = .white
+        UITabBar.appearance().unselectedItemTintColor = .white
+    }
+    
+    
     func fetchURLsFromPlist()
     {
         
@@ -438,43 +511,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         }
 
     }
-    /*
-    func apiCallPostCancelSubscriptionInfo()
-    {
-        KVSpinnerView.show()
-        if Reachability.isConnectedToNetwork()
-        {
-            objSubscriptionPurchaseViewModel.postCancelSubscriptionInfo(isCancelled: strCancelled) { result in
-                KVSpinnerView.dismiss()
-                
-                switch result {
-                case .success(let response):
-                    // Handle successful
-                    print(response)
-                    
-                case .failure(let error):
-                    // Handle failure
-                    print("error->\(error)")
-                    break
-                    /*
-                    if let apiError = error as? APIError {
-                        ErrorHandlingUtility.handleAPIError(apiError, in: self)
-                    } else {
-                        // Handle other types of errors
-                        // print("Unexpected error: \(error)")
-                        AlertUtility.presentSimpleAlert(in: self, title: "", message: "\(error.localizedDescription)")
-                    }
-                    */
-                }
-            }
-        }
-        else
-        {
-           // AlertUtility.presentSimpleAlert(in: self, title: "", message: "\(AlertMessages.NoInternetAlertMsg)")
-        }
-        
-    }
-    */
+    
 }
 extension UIViewController {
     func topMostViewController() -> UIViewController {
@@ -490,3 +527,4 @@ extension UIViewController {
         return self
     }
 }
+

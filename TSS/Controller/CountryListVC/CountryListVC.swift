@@ -1,9 +1,4 @@
-//
 //  CountryListVC.swift
-//  TSS
-//
-//  Created by apple on 09/07/24.
-//
 
 import UIKit
 import KVSpinnerView
@@ -30,6 +25,7 @@ extension CountryListVC
 {
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.setTextfileds()
         self.setUpHeaderView()
         self.registerNib()
         self.apiCallGetCountryList()
@@ -37,6 +33,37 @@ extension CountryListVC
 }
 extension CountryListVC
 {
+    func setTextfileds() {
+        if #available(iOS 26.0, *) {
+            let toolbar = createDoneToolbar()
+            txtSearch.inputAccessoryView = toolbar
+        } else {
+            txtSearch.iq.toolbar.doneBarButton.setTarget(self, action: #selector(doneButtonClicked))
+        }
+    }
+    @objc func doneButtonClicked(_ sender: UIButton)
+    {
+        txtSearch.resignFirstResponder()
+    }
+    private func createDoneToolbar() -> UIToolbar {
+        let toolbar = UIToolbar()
+        toolbar.sizeToFit()
+        toolbar.tintColor = AppColors.ThemePinkColor
+        
+        let flexSpace = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
+        let doneButton = UIBarButtonItem(title: "Done", style: .done, target: self, action: #selector(toolbarDoneTapped))
+        doneButton.setTitleTextAttributes([
+            .font: UIFont(name: AppFontName.Poppins_Medium.rawValue, size: 16) ?? UIFont.systemFont(ofSize: 16),
+            .foregroundColor: UIColor.white
+        ], for: .normal)
+        
+        toolbar.items = [flexSpace, doneButton]
+        return toolbar
+    }
+
+    @objc func toolbarDoneTapped() {
+        txtSearch.resignFirstResponder()
+    }
     func setUpHeaderView()
     {
         DeviceUtility.setHeaderViewHeight(constHeightHeader)

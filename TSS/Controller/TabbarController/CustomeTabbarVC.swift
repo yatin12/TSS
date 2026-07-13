@@ -34,7 +34,7 @@ class CustomeTabbarVC: UITabBarController {
         super.viewDidLoad()
         appdel = AppDelegate().sharedInstance()
         self.navigationController?.isNavigationBarHidden = true
-        selectedIndex = 0
+        selectedIndex = 4
         
         // Hide the native tab bar completely
         tabBar.isHidden = true
@@ -53,7 +53,6 @@ class CustomeTabbarVC: UITabBarController {
         ("News_UnSelect", "News_Select", "News"),
         ("Explore_Select", "Explore_Select", "Explore")
     ]
-
     func setupCustomTabBar() {
         let tabBarHeight: CGFloat = 83
         let bottomInset = view.safeAreaInsets.bottom == 0 ? 0 : view.safeAreaInsets.bottom
@@ -90,9 +89,11 @@ class CustomeTabbarVC: UITabBarController {
             button.tag = index
             button.addTarget(self, action: #selector(customTabTapped(_:)), for: .touchUpInside)
 
+            let isSelected = index == selectedIndex   // ✅ use selectedIndex, not hardcoded 0
+
             let imageView = UIImageView()
             imageView.contentMode = .scaleAspectFit
-            imageView.image = UIImage(named: index == 0 ? item.selectedIcon : item.icon)
+            imageView.image = UIImage(named: isSelected ? item.selectedIcon : item.icon)
             imageView.tintColor = .white
             imageView.translatesAutoresizingMaskIntoConstraints = false
 
@@ -100,9 +101,10 @@ class CustomeTabbarVC: UITabBarController {
             label.text = item.title
             label.textColor = .white
             label.textAlignment = .center
-            
-            label.font = UIFont(name: index == 0 ? AppFontName.Poppins_Bold.rawValue : AppFontName.Poppins_Medium.rawValue, size: index == 0 ? 13 : 10) ?? UIFont.systemFont(ofSize: 10)
-            
+
+            label.font = UIFont(name: isSelected ? AppFontName.Poppins_Bold.rawValue : AppFontName.Poppins_Medium.rawValue,
+                                 size: isSelected ? 13 : 10) ?? UIFont.systemFont(ofSize: 10)
+
             label.translatesAutoresizingMaskIntoConstraints = false
 
             let container = UIStackView(arrangedSubviews: [imageView, label])
@@ -124,6 +126,7 @@ class CustomeTabbarVC: UITabBarController {
             tabButtons.append(button)
         }
     }
+    
 
     @objc func customTabTapped(_ sender: UIButton) {
         let index = sender.tag

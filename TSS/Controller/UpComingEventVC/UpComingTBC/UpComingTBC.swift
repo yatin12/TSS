@@ -20,6 +20,7 @@ class UpComingTBC: UITableViewCell {
     @IBOutlet weak var btnPriceOutlt: GenericButton!
     @IBOutlet weak var lblEventDate: UILabel!
     @IBOutlet weak var lblEventNm: UILabel!
+    @IBOutlet weak var lblEventDesc: UILabel!
     @IBOutlet weak var lblEventTitle: UILabel!
     @IBOutlet weak var imgEvent: UIImageView!
     override func awakeFromNib() {
@@ -39,8 +40,8 @@ class UpComingTBC: UITableViewCell {
         let strTitle = "\(response?.data?[index].title ?? "")"
 //        lblEventTitle.text = strTitle.htmlToString()
         lblEventTitle.text = strTitle.decodingHTMLEntities()
-        
-        let strDate = "\(response?.data?[index].eventStartDate ?? "")"
+        lblEventDesc.text = "\(response?.data?[index].description ?? "")"
+        let strDate = "\(response?.data?[index].eventEndDate ?? "")"
         
         if let date = inputFormatter.date(from: strDate) {
             let formattedDate = outputFormatter.string(from: date)

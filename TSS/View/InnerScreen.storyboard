@@ -28,9 +28,6 @@
         <array key="Poppins-SemiBold.ttf">
             <string>Poppins-SemiBold</string>
         </array>
-        <array key="Urbanist-Regular.ttf">
-            <string>Urbanist-Regular</string>
-        </array>
     </customFonts>
     <scenes>
         <!--Custome TabbarVC-->
@@ -5330,6 +5327,7 @@ addressing real issues &amp; promoting Africa.</string>
                     <size key="freeformSize" width="375" height="667"/>
                     <connections>
                         <outlet property="constHeaderHeight" destination="WT2-Mc-FE4" id="vcL-2V-Udf"/>
+                        <outlet property="lblHeaderTitle" destination="dCT-vj-0oV" id="dPr-5z-dwT"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Pzt-Ab-pn2" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -7510,8 +7508,8 @@ appointments.</string>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     </tableView>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Cancel any time! No penalties  or fees" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vZg-tl-RnI">
-                                        <rect key="frame" x="0.0" y="464" width="375" height="18"/>
-                                        <fontDescription key="fontDescription" name="Urbanist-Regular" family="Urbanist" pointSize="15"/>
+                                        <rect key="frame" x="0.0" y="461" width="375" height="21"/>
+                                        <fontDescription key="fontDescription" name="Poppins-Regular" family="Poppins" pointSize="15"/>
                                         <color key="textColor" name="ThemeFontColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>

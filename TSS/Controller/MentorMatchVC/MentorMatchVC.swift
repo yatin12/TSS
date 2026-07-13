@@ -9,15 +9,21 @@ import UIKit
 
 class MentorMatchVC: UIViewController {
 
-    
+    @IBOutlet weak var lblHeaderTitle: UILabel!
     @IBOutlet weak var constHeaderHeight: NSLayoutConstraint!
     override func viewDidLoad() {
         super.viewDidLoad()
         self.setUpHeaderView()
+        self.setHeaderTitle()
     }
     func setUpHeaderView()
     {
         DeviceUtility.setHeaderViewHeight(constHeaderHeight)
+    }
+    func setHeaderTitle()
+    {
+        let title = UserDefaults.standard.string(forKey: "MentorMatchHeaderTitle") ?? "Mentor Match"
+        lblHeaderTitle.text = title
     }
 }
 //MARK: IBAction

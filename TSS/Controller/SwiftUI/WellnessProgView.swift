@@ -5,6 +5,60 @@ import PassKit
 import BraintreeCore
 import BraintreeApplePay
 
+// MARK: - Phone field with a native UIKit "Done" toolbar
+// SwiftUI's `ToolbarItemGroup(placement: .keyboard)` is unreliable on numeric
+// keypads (.phonePad / .numberPad) across iOS versions. Setting a UIToolbar
+// as the UITextField's inputAccessoryView directly works the same on every
+// iOS version since it bypasses SwiftUI's toolbar placement logic entirely.
+struct PhoneNumberField: UIViewRepresentable {
+    @Binding var text: String
+    var fontName: String = AppFontName.Poppins_Regular.rawValue
+    var fontSize: CGFloat = 14.0
+
+    func makeUIView(context: Context) -> UITextField {
+        let textField = UITextField()
+        textField.keyboardType = .phonePad
+        textField.font = UIFont(name: fontName, size: fontSize) ?? UIFont.systemFont(ofSize: fontSize)
+        textField.delegate = context.coordinator
+        textField.addTarget(context.coordinator, action: #selector(Coordinator.textChanged(_:)), for: .editingChanged)
+
+        let toolbar = UIToolbar(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 44))
+        let flexSpace = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
+        let doneButton = UIBarButtonItem(title: "Done", style: .done, target: context.coordinator, action: #selector(Coordinator.didTapDone))
+        toolbar.items = [flexSpace, doneButton]
+        toolbar.sizeToFit()
+        textField.inputAccessoryView = toolbar
+
+        return textField
+    }
+
+    func updateUIView(_ uiView: UITextField, context: Context) {
+        if uiView.text != text {
+            uiView.text = text
+        }
+    }
+
+    func makeCoordinator() -> Coordinator {
+        Coordinator(text: $text)
+    }
+
+    class Coordinator: NSObject, UITextFieldDelegate {
+        @Binding var text: String
+
+        init(text: Binding<String>) {
+            self._text = text
+        }
+
+        @objc func textChanged(_ textField: UITextField) {
+            text = textField.text ?? ""
+        }
+
+        @objc func didTapDone() {
+            UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+        }
+    }
+}
+
 struct WellnessProgView: View {
     @State private var showTermsConditionView = false
     @State private var showTermsConditionViewCoach = false
@@ -13,6 +67,7 @@ struct WellnessProgView: View {
     @State private var apiErrorMessage: String = ""
     @State private var showApiErrorAlert: Bool = false
     @State private var selectedCountryCode: String = ""
+    @State private var strAmount: String = ""
 
     //Country Picker
     @State private var showCountryPicker: Bool = false
@@ -27,7 +82,9 @@ struct WellnessProgView: View {
     @State private var userRole = ""
     @StateObject private var objPackageViewModel = PackageViewModel()
     @State private var selectedPlan: PackageData?
-    @State private var hasCheckedForDefaultPlan = false
+    //@State private var hasCheckedForDefaultPlan = false
+    @State private var showNoPackageAlert = false
+
     @State private var totalPrice: Int = 0
     @State private var emergencyConsultationPrice: Int = 100
     @State private var maternalCarePrice: Int = 100
@@ -83,7 +140,7 @@ struct WellnessProgView: View {
         let plans = objPackageViewModel.objPackageModelResponse?.data ?? []
         
         // Check if we need to set a default plan
-        if !hasCheckedForDefaultPlan && !plans.isEmpty && selectedPlan == nil {
+            /* if !hasCheckedForDefaultPlan && !plans.isEmpty && selectedPlan == nil {
             DispatchQueue.main.async {
                 selectedPlan = plans.first
                 if let firstPlan = plans.first {
@@ -91,7 +148,7 @@ struct WellnessProgView: View {
                 }
                 hasCheckedForDefaultPlan = true
             }
-        }
+        }*/
         
         return plans
     }
@@ -127,7 +184,11 @@ struct WellnessProgView: View {
             apiCallGetCountryList()
         }
         .alert("Payment Success", isPresented: $showSuccessAlert) {
-            Button("OK", role: .cancel) { }
+            Button("OK", role: .cancel) {
+                dismiss()
+            }
+        } message: {
+            Text("Your payment was completed successfully.")
         }
         .alert(isPresented: $showErrorAlert) {
             Alert(title: Text("Payment Failed"), message: Text(paymentErrorMessage), dismissButton: .default(Text("OK")))
@@ -216,111 +277,11 @@ struct WellnessProgView: View {
                     .foregroundColor(Color("ThemePinkColor"))
                     .font(.custom(AppFontName.Poppins_SemiBold.rawValue, size: 14.0))
                 
-                TextField("", text: $phoneNumber)
-                    .font(.custom(AppFontName.Poppins_Regular.rawValue, size: 14.0))
+                PhoneNumberField(text: $phoneNumber)
                     .padding()
+                    .frame(height: 44)
                     .background(RoundedRectangle(cornerRadius: 5).stroke(Color("ThemeDefaultBorderColor")))
-                    .keyboardType(.phonePad)
             }
-            
-           /*
-            // Country Dropdown
-            VStack(alignment: .leading) {
-                Text("Country")
-                    .foregroundColor(Color("ThemePinkColor"))
-                    .font(.custom(AppFontName.Poppins_SemiBold.rawValue, size: 14.0))
-
-                // Trigger button
-                Button(action: {
-                    withAnimation(.easeInOut(duration: 0.2)) {
-                        showCountryDropdown.toggle()
-                    }
-                }) {
-                    HStack {
-                        Text(selectedCountryCode.isEmpty ? "Select Country" :
-                                (objCountryList[selectedCountryCode] ?? selectedCountryCode))
-                            .font(.custom(AppFontName.Poppins_Regular.rawValue, size: 14.0))
-                            .foregroundColor(selectedCountryCode.isEmpty ? .gray : .primary)
-                        Spacer()
-                        Image(systemName: showCountryDropdown ? "chevron.up" : "chevron.down")
-                            .foregroundColor(Color("ThemePinkColor"))
-                            .font(.system(size: 14))
-                    }
-                    .padding()
-                    .background(RoundedRectangle(cornerRadius: 5).stroke(Color("ThemeDefaultBorderColor")))
-                }
-                .buttonStyle(PlainButtonStyle())
-
-                // Dropdown list
-                if showCountryDropdown {
-                    VStack(spacing: 0) {
-                        // Search field
-                        HStack {
-                            Image(systemName: "magnifyingglass")
-                                .foregroundColor(.gray)
-                                .font(.system(size: 14))
-                            TextField("Search country...", text: $countrySearchText)
-                                .font(.custom(AppFontName.Poppins_Regular.rawValue, size: 13.0))
-                        }
-                        .padding(8)
-                        .background(Color(.systemGray6))
-
-                        Divider()
-
-                        // Country list
-                        ScrollView {
-                            LazyVStack(spacing: 0) {
-                                ForEach(filteredCountries, id: \.code) { country in
-                                    HStack {
-                                        Text(country.name)
-                                            .font(.custom(AppFontName.Poppins_Regular.rawValue, size: 14.0))
-                                            .foregroundColor(.primary)
-                                        Spacer()
-                                        if selectedCountryCode == country.code {
-                                            Image(systemName: "checkmark")
-                                                .foregroundColor(Color("ThemePinkColor"))
-                                                .font(.system(size: 13))
-                                        }
-                                    }
-                                    .padding(.horizontal, 12)
-                                    .padding(.vertical, 10)
-                                    .background(
-                                        selectedCountryCode == country.code ?
-                                        Color("ThemePinkColor").opacity(0.08) : Color.white
-                                    )
-                                    .contentShape(Rectangle())
-                                    .onTapGesture {
-                                        selectedCountryCode = country.code
-                                        address = country.name
-                                        countrySearchText = ""
-                                        withAnimation(.easeInOut(duration: 0.2)) {
-                                            showCountryDropdown = false
-                                        }
-                                    }
-
-                                    Divider().padding(.leading, 12)
-                                }
-                            }
-                        }
-                        .frame(maxHeight: 220)
-                        .scrollIndicators(.hidden)
-                       
-                    }
-                    .background(Color.white)
-                    .overlay(RoundedRectangle(cornerRadius: 5).stroke(Color("ThemeDefaultBorderColor")))
-                    .shadow(color: Color.black.opacity(0.08), radius: 6, x: 0, y: 4)
-                    .transition(.opacity.combined(with: .move(edge: .top)))
-                }
-            }
-            .onAppear {
-                if objCountryList.isEmpty {
-                    apiCallGetCountryList()
-                }
-            }
-            */
-            
-            
-           
              //KHUSHBU Country
             // Country Sheet Picker
             VStack(alignment: .leading) {
@@ -779,6 +740,8 @@ struct WellnessProgView: View {
                     showTermsAlert = true
                 } else   if !agreeToTermsCoach {
                     showTermsAlertCoach = true
+                } else if selectedPackage.isEmpty {
+                    showNoPackageAlert = true
                 }
                 else {
                     if phoneNumber.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
@@ -786,6 +749,7 @@ struct WellnessProgView: View {
                     } else if address.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
                         showBlankAddressAlert = true
                     } else {
+                        strAmount = "\(totalPrice)"
                         apiCallToSubmitWellnessData()
                         // startApplePay()
                     }
@@ -808,6 +772,11 @@ struct WellnessProgView: View {
                 Button("OK", role: .cancel) { }
             } message: {
                 Text("Please check the Coaching agreement to proceed with payment.")
+            }
+            .alert("Package Required", isPresented: $showNoPackageAlert) {
+                Button("OK", role: .cancel) { }
+            } message: {
+                Text("Please select a package to proceed with payment.")
             }
             
         }
@@ -987,16 +956,16 @@ extension WellnessProgView {
                     pagination_number: "1"
                 )
                 KVSpinnerView.dismiss()
-                DispatchQueue.main.async {
-                    if selectedPlan == nil, let firstPlan = objPackageViewModel.objPackageModelResponse?.data.first {
-                        selectedPlan = firstPlan
-                        selectedPackage = firstPlan.postID
-                        hasCheckedForDefaultPlan = true
-                        
-                        // Calculate initial price after data is loaded
-                        calculateTotalPrice()
-                    }
-                }
+//                DispatchQueue.main.async {
+//                    if selectedPlan == nil, let firstPlan = objPackageViewModel.objPackageModelResponse?.data.first {
+//                        selectedPlan = firstPlan
+//                        selectedPackage = firstPlan.postID
+//                        hasCheckedForDefaultPlan = true
+//
+//                        // Calculate initial price after data is loaded
+//                        calculateTotalPrice()
+//                    }
+//                }
             }
         } else {
             AlertUtility.showAlert(message: "\(AlertMessages.NoInternetAlertMsg)")
@@ -1077,9 +1046,17 @@ extension WellnessProgView {
         }
     }
     func startApplePay() {
-        guard PKPaymentAuthorizationViewController.canMakePayments(usingNetworks: [.visa, .masterCard, .amex]) else {
+        guard PKPaymentAuthorizationViewController.canMakePayments() else {
+            // Device/region doesn't support Apple Pay at all
             showErrorAlert = true
-            paymentErrorMessage = "Apple Pay is not available."
+            paymentErrorMessage = "Apple Pay is not available on this device."
+            return
+        }
+
+        guard PKPaymentAuthorizationViewController.canMakePayments(usingNetworks: [.visa, .masterCard, .amex]) else {
+            // Apple Pay is supported, but no card is set up yet
+            showErrorAlert = true
+            paymentErrorMessage = "Please add a card to Apple Wallet to use Apple Pay."
             return
         }
         
@@ -1111,13 +1088,11 @@ extension WellnessProgView {
                 },
                 completion: { success in
                     DispatchQueue.main.async {
-                        if success {
-                            self.showSuccessAlert = true
-                        } else {
-                            self.paymentErrorMessage = "Unable to complete payment."
-                            self.showErrorAlert = true
-                        }
-                    }
+                           if !success {
+                               self.paymentErrorMessage = "Unable to complete payment."
+                               self.showErrorAlert = true
+                           }
+                       }
                 }
             )
             
@@ -1134,37 +1109,38 @@ extension WellnessProgView {
         }
     }
     func apiCallToSubmitPaypalNonceData() {
-       
-       if Reachability.isConnectedToNetwork() {
-           KVSpinnerView.show()
-           
-           Task {
-               let response = await
-              
-               objpaypalNonceSubmitViewModel.submitPaypalNonceDetails(userId: userId, Nonce: strPaypalNonce)
-               
-               KVSpinnerView.dismiss()
-               
-               if let response = response {
-                   print(response.settings?.success ?? "No success flag")
-                   
-                   if response.settings?.success == true {
-                       print("Nonce Wellness data submitted successfully")
-                       AlertUtility.showAlert(message: "Data submitted successfully")
 
-                   } else {
-                       print("API error: \(response.settings?.message ?? "Unknown server message")")
-                       AlertUtility.showAlert(message: response.settings?.message ?? "Something went wrong")
-                   }
-               } else {
-                   print("ViewModel error: \(objpaypalNonceSubmitViewModel.errorMessage ?? "Unknown error")")
-                   AlertUtility.showAlert(message: objpaypalNonceSubmitViewModel.errorMessage ?? "Something went wrong")
-               }
-           }
-       } else {
-           AlertUtility.showAlert(message: "\(AlertMessages.NoInternetAlertMsg)")
-       }
-   }
+        if Reachability.isConnectedToNetwork() {
+            KVSpinnerView.show()
+
+            Task {
+                let response = await
+                objpaypalNonceSubmitViewModel.submitPaypalNonceDetails(userId: userId, Nonce: strPaypalNonce, strAmount: strAmount)
+
+                KVSpinnerView.dismiss()
+
+                if let response = response {
+                    print(response.settings?.success ?? "No success flag")
+
+                    if response.settings?.success == true {
+                        print("Nonce Wellness data submitted successfully")
+                        showSuccessAlert = true          // ✅ no more AlertUtility.showAlert here
+                    } else {
+                        print("API error: \(response.settings?.message ?? "Unknown server message")")
+                        paymentErrorMessage = response.settings?.message ?? "Something went wrong"
+                        showErrorAlert = true             // ✅ real failure → real error alert
+                    }
+                } else {
+                    print("ViewModel error: \(objpaypalNonceSubmitViewModel.errorMessage ?? "Unknown error")")
+                    paymentErrorMessage = objpaypalNonceSubmitViewModel.errorMessage ?? "Something went wrong"
+                    showErrorAlert = true
+                }
+            }
+        } else {
+            paymentErrorMessage = AlertMessages.NoInternetAlertMsg
+            showErrorAlert = true
+        }
+    }
 }
 
 // MARK: - WKWebView Representable
@@ -1429,4 +1405,3 @@ struct CountryPickerSheet: View {
         }
     }
 }
-

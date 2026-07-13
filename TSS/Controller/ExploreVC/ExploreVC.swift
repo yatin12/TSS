@@ -106,6 +106,9 @@ extension ExploreVC
         }
     }
     @IBAction func btnMentorMatchTapped(_ sender: Any) {
+        UserDefaults.standard.set("Mentor Match", forKey: "MentorMatchHeaderTitle")
+        UserDefaults.standard.synchronize()
+        
         NavigationHelper.push(storyboardKey.InnerScreen, viewControllerIdentifier: "MentorMatchVC", from: navigationController!, animated: true)
 
     }
@@ -114,7 +117,14 @@ extension ExploreVC
         {
             isFromViewAll = true
             strSelectedPostName = "evideos"
-            NavigationHelper.push(storyboardKey.InnerScreen, viewControllerIdentifier: "EVideoVC", from: navigationController!, animated: true)
+            
+            UserDefaults.standard.set("E-video", forKey: "MentorMatchHeaderTitle")
+            UserDefaults.standard.synchronize()
+            
+            /*NavigationHelper.push(storyboardKey.InnerScreen, viewControllerIdentifier: "EVideoVC", from: navigationController!, animated: true)*/
+            
+            NavigationHelper.push(storyboardKey.InnerScreen, viewControllerIdentifier: "MentorMatchVC", from: navigationController!, animated: true)
+            
         }
         else
         {

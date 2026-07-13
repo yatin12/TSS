@@ -4,6 +4,7 @@ import Foundation
 struct paypalNonceSubmitRequest: Encodable {
     let userId: String
     let Nonce: String
+    let amount: String
 }
 
 @MainActor
@@ -12,13 +13,14 @@ class paypalNonceSubmitViewModel: ObservableObject {
     var errorMessage: String?
     var showAlert = false
 
-    func submitPaypalNonceDetails(userId: String, Nonce: String) async -> paypalNonceSubmitResponse? {
+    func submitPaypalNonceDetails(userId: String, Nonce: String, strAmount: String) async -> paypalNonceSubmitResponse? {
       
       //  isLoading = true
 
         let submitData = paypalNonceSubmitRequest(
             userId: userId,
-            Nonce: Nonce
+            Nonce: Nonce,
+            amount: strAmount
         )
         
         guard let parameters = submitData.parseHandler() else {

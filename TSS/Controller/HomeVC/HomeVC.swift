@@ -974,7 +974,13 @@ extension HomeVC: UITableViewDataSource, UITableViewDelegate, HomeTBCDelegate
                 case 3:
                     isFromViewAll = true
                     strSelectedPostName = "evideos"
-                    NavigationHelper.push(storyboardKey.InnerScreen, viewControllerIdentifier: "EVideoVC", from: navigationController!, animated: true)
+                    
+                    UserDefaults.standard.set("E-video", forKey: "MentorMatchHeaderTitle")
+                    UserDefaults.standard.synchronize()
+                    
+                    NavigationHelper.push(storyboardKey.InnerScreen, viewControllerIdentifier: "MentorMatchVC", from: navigationController!, animated: true)
+                    
+                    /*NavigationHelper.push(storyboardKey.InnerScreen, viewControllerIdentifier: "EVideoVC", from: navigationController!, animated: true)*/
                     break
                 case 4:
                     isFromViewAll = true
@@ -1002,11 +1008,6 @@ extension HomeVC: UITableViewDataSource, UITableViewDelegate, HomeTBCDelegate
                     
                     NavigationHelper.push(storyboardKey.InnerScreen, viewControllerIdentifier: "TalkShowVC", from: navigationController!, animated: true)
                     break
-                    
-//                    isFromViewAll = true
-//                    strSelectedPostName = "evideos"
-//                    
-//                    NavigationHelper.push(storyboardKey.InnerScreen, viewControllerIdentifier: "EVideoVC", from: navigationController!, animated: true)
                    
                 case 2:
                     

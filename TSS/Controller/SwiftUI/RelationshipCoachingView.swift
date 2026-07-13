@@ -13,7 +13,8 @@ struct RelationshipCoachingView: View {
     @State private var showErrorAlert = false
     @State private var applePayHandler: ApplePayHandler?
     @State private var paymentErrorMessage: String = ""
-    
+    @State private var strAmount: String = ""
+
     private let merchantID = "merchant.com.thesistersshowllc.thesistershow"
     @State private var clientToken = "" // Replace with actual token
 
@@ -31,7 +32,7 @@ struct RelationshipCoachingView: View {
     @State private var selectedPlan: PackageData?
     @State private var agreedToTerms = false
     @State private var showTermsAlert = false
-    @State private var hasCheckedForDefaultPlan = false
+    @State private var showNoPlanAlert = false
     @State var strSelectedRelationshipStatus: String = "Are you single"
     @State var strSelectedCoachingStatus: String = "1"
     @State private var showDescCoachingSessionAlert = false
@@ -60,7 +61,11 @@ struct RelationshipCoachingView: View {
             apiCallToFetchPackage()
         }
         .alert("Payment Success", isPresented: $showSuccessAlert) {
-            Button("OK", role: .cancel) { }
+            Button("OK", role: .cancel) {
+                dismiss()
+            }
+        } message: {
+            Text("Your payment was completed successfully.")
         }
         .alert(isPresented: $showErrorAlert) {
             Alert(title: Text("Payment Failed"), message: Text(paymentErrorMessage), dismissButton: .default(Text("OK")))
@@ -74,22 +79,20 @@ struct RelationshipCoachingView: View {
     }
     
     var coachingPlans: [PackageData] {
-        let plans = objPackageViewModel.objPackageModelResponse?.data ?? []
-        
-        if !hasCheckedForDefaultPlan && !plans.isEmpty && selectedPlan == nil {
-            DispatchQueue.main.async {
-                selectedPlan = plans.first
-                hasCheckedForDefaultPlan = true
-            }
-        }
-        
-        return plans
+        return objPackageViewModel.objPackageModelResponse?.data ?? []
     }
     
     func startApplePay() {
+        guard PKPaymentAuthorizationViewController.canMakePayments() else {
+                // Device/region doesn't support Apple Pay at all
+                showErrorAlert = true
+                paymentErrorMessage = "Apple Pay is not available on this device."
+                return
+            }
+        
         guard PKPaymentAuthorizationViewController.canMakePayments(usingNetworks: [.visa, .masterCard, .amex]) else {
             showErrorAlert = true
-            paymentErrorMessage = "Apple Pay is not available."
+            paymentErrorMessage = "Please add a card to Apple Wallet to use Apple Pay."
             return
         }
         
@@ -116,9 +119,7 @@ struct RelationshipCoachingView: View {
                 },
                 completion: { success in
                     DispatchQueue.main.async {
-                        if success {
-                            self.showSuccessAlert = true
-                        } else {
+                        if !success {
                             self.paymentErrorMessage = "Unable to complete payment."
                             self.showErrorAlert = true
                         }
@@ -271,13 +272,9 @@ extension RelationshipCoachingView {
                     isSelected: selectedPlan?.postID == plan.postID,
                     action: {
                         selectedPlan = plan
+                        strAmount = plan.packagePrice
                     }
                 )
-                .onAppear {
-                    if selectedPlan == nil, coachingPlans.first?.postID == plan.postID {
-                        selectedPlan = plan
-                    }
-                }
             }
         }
     }
@@ -346,6 +343,8 @@ extension RelationshipCoachingView {
             Button(action: {
                 if !agreedToTerms {
                     showTermsAlert = true
+                } else if selectedPlan == nil {
+                    showNoPlanAlert = true
                 } else {
                     if coachingGoal.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty || coachingGoal == "Please specify" {
                         showDescCoachingSessionAlert = true
@@ -368,6 +367,11 @@ extension RelationshipCoachingView {
                 Button("OK", role: .cancel) { }
             } message: {
                 Text("Please check the Terms and Conditions to proceed with payment.")
+            }
+            .alert("Plan Required", isPresented: $showNoPlanAlert) {
+                Button("OK", role: .cancel) { }
+            } message: {
+                Text("Please select a coaching plan to proceed with payment.")
             }
             .alert("", isPresented: $showDescCoachingSessionAlert) {
                 Button("OK", role: .cancel) { }
@@ -465,12 +469,6 @@ extension RelationshipCoachingView {
                     pagination_number: "1"
                 )
                 KVSpinnerView.dismiss()
-                DispatchQueue.main.async {
-                    if selectedPlan == nil, let firstPlan = objPackageViewModel.objPackageModelResponse?.data.first {
-                        selectedPlan = firstPlan
-                        hasCheckedForDefaultPlan = true
-                    }
-                }
             }
         } else {
             AlertUtility.showAlert(message: "\(AlertMessages.NoInternetAlertMsg)")
@@ -544,35 +542,36 @@ extension RelationshipCoachingView {
         }
     }
     func apiCallToSubmitPaypalNonceData() {
-       
-       if Reachability.isConnectedToNetwork() {
-           KVSpinnerView.show()
-           
-           Task {
-               let response = await
-              
-               objpaypalNonceSubmitViewModel.submitPaypalNonceDetails(userId: userId, Nonce: strPaypalNonce)
-               
-               KVSpinnerView.dismiss()
-               
-               if let response = response {
-                   print(response.settings?.success ?? "No success flag")
-                   
-                   if response.settings?.success == true {
-                       print("Nonce data submitted successfully")
-                       AlertUtility.showAlert(message: "Data submitted successfully")
 
-                   } else {
-                       print("API error: \(response.settings?.message ?? "Unknown server message")")
-                       AlertUtility.showAlert(message: response.settings?.message ?? "Something went wrong")
-                   }
-               } else {
-                   print("ViewModel error: \(objpaypalNonceSubmitViewModel.errorMessage ?? "Unknown error")")
-                   AlertUtility.showAlert(message: objpaypalNonceSubmitViewModel.errorMessage ?? "Something went wrong")
-               }
-           }
-       } else {
-           AlertUtility.showAlert(message: "\(AlertMessages.NoInternetAlertMsg)")
-       }
-   }
+        if Reachability.isConnectedToNetwork() {
+            KVSpinnerView.show()
+
+            Task {
+                let response = await
+                objpaypalNonceSubmitViewModel.submitPaypalNonceDetails(userId: userId, Nonce: strPaypalNonce, strAmount: strAmount)
+
+                KVSpinnerView.dismiss()
+
+                if let response = response {
+                    print(response.settings?.success ?? "No success flag")
+
+                    if response.settings?.success == true {
+                        print("Nonce data submitted successfully")
+                        showSuccessAlert = true
+                    } else {
+                        print("API error: \(response.settings?.message ?? "Unknown server message")")
+                        paymentErrorMessage = response.settings?.message ?? "Something went wrong"
+                        showErrorAlert = true
+                    }
+                } else {
+                    print("ViewModel error: \(objpaypalNonceSubmitViewModel.errorMessage ?? "Unknown error")")
+                    paymentErrorMessage = objpaypalNonceSubmitViewModel.errorMessage ?? "Something went wrong"
+                    showErrorAlert = true
+                }
+            }
+        } else {
+            paymentErrorMessage = AlertMessages.NoInternetAlertMsg
+            showErrorAlert = true
+        }
+    }
 }

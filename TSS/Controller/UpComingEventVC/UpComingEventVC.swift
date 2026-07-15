@@ -121,7 +121,7 @@ extension UpComingEventVC: UITableViewDelegate, UITableViewDataSource
                     guard let self = self else { return }
                     
                     if let price = price, let currencySymbol = currencySymbol {
-                        let formattedPrice = "\(currencySymbol)\(price)"
+                        let formattedPrice = "\(currencySymbol)\(String(format: "%.2f", price))"
                         
                         // Update UI on main thread
                         DispatchQueue.main.async {

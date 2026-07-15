@@ -82,6 +82,10 @@ struct RelationshipCoachingView: View {
         return objPackageViewModel.objPackageModelResponse?.data ?? []
     }
     
+    private func dismissKeyboard() {
+        UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+    }
+
     func startApplePay() {
         guard PKPaymentAuthorizationViewController.canMakePayments() else {
                 // Device/region doesn't support Apple Pay at all
@@ -195,11 +199,13 @@ extension RelationshipCoachingView {
             HStack(spacing: 30) {
                 RadioButtonRelationship(selected: wantCoaching, label: "Yes")
                 {
+                    dismissKeyboard()
                     strSelectedCoachingStatus = "1"
                     wantCoaching = true
                 }
                 RadioButtonRelationship(selected: !wantCoaching, label: "No")
                 {
+                    dismissKeyboard()
                     strSelectedCoachingStatus = "0"
                     wantCoaching = false
                 }
@@ -216,14 +222,17 @@ extension RelationshipCoachingView {
             
             HStack(spacing: 20) {
                 RadioButtonRelationship(selected: relationshipStatus == .single, label: "Are you single") {
+                    dismissKeyboard()
                     strSelectedRelationshipStatus = "Are you single"
                     relationshipStatus = .single
                 }
                 RadioButtonRelationship(selected: relationshipStatus == .married, label: "married") {
+                    dismissKeyboard()
                     strSelectedRelationshipStatus = "married"
                     relationshipStatus = .married
                 }
                 RadioButtonRelationship(selected: relationshipStatus == .dating, label: "dating?") {
+                    dismissKeyboard()
                     strSelectedRelationshipStatus = "dating"
                     relationshipStatus = .dating
                 }
@@ -285,7 +294,9 @@ extension RelationshipCoachingView {
                 .padding(.horizontal)
 
             HStack {
-                Button(action: { agreedToTerms.toggle() }) {
+                Button(action: {
+                    dismissKeyboard()
+                    agreedToTerms.toggle() }) {
                     HStack(alignment: .center, spacing: 10) {
                         Image(systemName: agreedToTerms ? "checkmark.square.fill" : "square")
                             .font(.system(size: 22))
@@ -341,6 +352,7 @@ extension RelationshipCoachingView {
             }
             
             Button(action: {
+                dismissKeyboard()
                 if !agreedToTerms {
                     showTermsAlert = true
                 } else if selectedPlan == nil {

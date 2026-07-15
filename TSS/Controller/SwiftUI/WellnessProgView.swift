@@ -5,11 +5,6 @@ import PassKit
 import BraintreeCore
 import BraintreeApplePay
 
-// MARK: - Phone field with a native UIKit "Done" toolbar
-// SwiftUI's `ToolbarItemGroup(placement: .keyboard)` is unreliable on numeric
-// keypads (.phonePad / .numberPad) across iOS versions. Setting a UIToolbar
-// as the UITextField's inputAccessoryView directly works the same on every
-// iOS version since it bypasses SwiftUI's toolbar placement logic entirely.
 struct PhoneNumberField: UIViewRepresentable {
     @Binding var text: String
     var fontName: String = AppFontName.Poppins_Regular.rawValue
@@ -111,8 +106,8 @@ struct WellnessProgView: View {
     @State private var selectedPackage: String = ""
     
     // Additional options
-    @State private var includeEmergencyConsultation: Bool = true
-    @State private var includeMaternalCare: Bool = true
+    @State private var includeEmergencyConsultation: Bool = false
+    @State private var includeMaternalCare: Bool = false
     
     @State private var wantWellnessProgramer: Bool = true
     
@@ -182,6 +177,7 @@ struct WellnessProgView: View {
             getUserId()
             apiCallToFetchPackage()
             apiCallGetCountryList()
+            calculateTotalPrice()
         }
         .alert("Payment Success", isPresented: $showSuccessAlert) {
             Button("OK", role: .cancel) {
@@ -290,7 +286,9 @@ struct WellnessProgView: View {
                     .font(.custom(AppFontName.Poppins_SemiBold.rawValue, size: 14.0))
                 
                 // Dropdown trigger button
-                Button(action: { showCountryPicker = true }) {
+                Button(action: {
+                    UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+                    showCountryPicker = true }) {
                     HStack {
                         Text(selectedCountryCode.isEmpty ? "Select Country" :
                                 (objCountryList[selectedCountryCode] ?? selectedCountryCode))
@@ -518,11 +516,17 @@ struct WellnessProgView: View {
     }
     
     func packageItem(_ package: PackageData) -> some View {
-        Button(action: { selectedPackage = package.postID }) {
+        Button(action: {
+            selectedPackage = package.postID
+            calculateTotalPrice()
+        }) {
             HStack(alignment: .top, spacing: 10) {
                 RadioButton(
                     checked: selectedPackage == package.postID,
-                    action: { selectedPackage = package.postID }
+                    action: {
+                        selectedPackage = package.postID
+                        calculateTotalPrice()
+                    }
                 )
                 
                 VStack(alignment: .leading, spacing: 2) {
@@ -576,7 +580,10 @@ struct WellnessProgView: View {
                 HStack {
                     RadioButton(
                         checked: includeEmergencyConsultation,
-                        action: { includeEmergencyConsultation = true }
+                        action: {
+                            includeEmergencyConsultation = true
+                            calculateTotalPrice()
+                        }
                     )
                     Text("Yes")
                         .font(.custom(AppFontName.Poppins_Medium.rawValue, size: 15.0))
@@ -586,7 +593,10 @@ struct WellnessProgView: View {
                     
                     RadioButton(
                         checked: !includeEmergencyConsultation,
-                        action: { includeEmergencyConsultation = false }
+                        action: {
+                            includeEmergencyConsultation = false
+                            calculateTotalPrice()
+                        }
                     )
                     Text("No")
                         .font(.custom(AppFontName.Poppins_Medium.rawValue, size: 15.0))
@@ -614,7 +624,10 @@ struct WellnessProgView: View {
                 HStack {
                     RadioButton(
                         checked: includeMaternalCare,
-                        action: { includeMaternalCare = true }
+                        action: {
+                            includeMaternalCare = true
+                            calculateTotalPrice()
+                        }
                     )
                     Text("Yes")
                         .font(.custom(AppFontName.Poppins_Medium.rawValue, size: 15.0))
@@ -624,7 +637,10 @@ struct WellnessProgView: View {
                     
                     RadioButton(
                         checked: !includeMaternalCare,
-                        action: { includeMaternalCare = false }
+                        action: {
+                            includeMaternalCare = false
+                            calculateTotalPrice()
+                        }
                     )
                     Text("No")
                         .font(.custom(AppFontName.Poppins_Medium.rawValue, size: 15.0))
@@ -736,6 +752,8 @@ struct WellnessProgView: View {
             }
             
             Button(action: {
+                UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+                
                 if !agreeToTerms {
                     showTermsAlert = true
                 } else   if !agreeToTermsCoach {

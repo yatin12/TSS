@@ -53,35 +53,22 @@ class UpComingTBC: UITableViewCell {
         
         let strBlogUrl = "\(response?.data?[index].thumbnail ?? "")"
         imgEvent.sd_setImage(with: URL(string: strBlogUrl), placeholderImage: UIImage(named: "icn_Placehoder"), options: [.progressiveLoad], context: nil)
-        
-        /*
-         let eventId = "\(response?.data?[index].id ?? "")"
-         if purchasedEventIds.contains(eventId) {
-         btnPriceOutlt.setTitle("Purchased", for: .normal)
-         } else {
-         btnPriceOutlt.setTitle("Price - \(strPrice)", for: .normal)
-         }
-         */
+       
         let strIspurchased = "\(response?.data?[index].ispurchased ?? "NO")"
+        let strEventPrice = "\(response?.data?[index].eventPrice ?? "")"
+
+        
         if strIspurchased == "YES"
         {
             btnPriceOutlt.setTitle("Purchased", for: .normal)
         }
         else
         {
-            let eventId = "\(response?.data?[index].id ?? "")"
-            if purchasedEventIds.contains(eventId) {
-                btnPriceOutlt.setTitle("Purchased", for: .normal)
-            } else {
-                // If price is already set, use it. Otherwise, show a default label
-                btnPriceOutlt.setTitle(strPrice.isEmpty ? "Get Price" : "Price - \(strPrice)", for: .normal)
-            }
+            btnPriceOutlt.setTitle("Price - $ \(strEventPrice)", for: .normal)
         }
-        
-        
     }
     @IBAction func btnPriceTapped(_ sender: Any) {
-        delegate?.cell(self, price: "", idx: index!)
+        delegate?.cell(self, price: strPrice, idx: index!)
     }
     
 }

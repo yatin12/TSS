@@ -115,6 +115,7 @@ let relationshipDataSubmitEndpoint = "relationship_coaching"
 let wellnessDataSubmitEndpoint = "wellness_submit"
 let paypalTokenEndpoint = "paypal_token"
 let paypalNonceEndpoint = "paypalNonce_submit"
+let eventPaypalNonceEndpoint = "event_nonce"
 
 var strSlectedBlogCatNews: String = ""
 

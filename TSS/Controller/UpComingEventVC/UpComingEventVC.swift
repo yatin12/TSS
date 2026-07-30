@@ -1,13 +1,9 @@
-//
-//  UpComingEventVC.swift
-//  TSS
-//
-//  Created by apple on 13/07/24.
-//
-
 import UIKit
 import KVSpinnerView
 import SwiftyStoreKit
+import PassKit
+import BraintreeCore
+import BraintreeApplePay
 
 class UpComingEventVC: UIViewController {
     private let objUpcomingEventViewModel = upcomingEventViewModel()
@@ -25,10 +21,20 @@ class UpComingEventVC: UIViewController {
     var productPrice: String = ""
     var productPriceLocal: String = ""
     var purchasedEventIds: Set<String> = []
-    
+    let merchantID = "merchant.com.thesistersshowllc.thesistershow"
+    var clientToken = ""
     let objUpcomingEventPurchaseViewModel = UpcomingEventPurchaseViewModel()
+    let objGetPaypalTokenViewModel = GetPaypalTokenViewModel()
+    var showErrorAlert = false
+    var applePayHandler: ApplePayHandler?
+    var paymentErrorMessage: String = ""
+    var strPaypalNonce: String = ""
+    var objpaypalNonceSubmitViewModel = eventPaypalNonceSubmitViewModel()
     
-    
+    var showSuccessAlert = false
+    var strAmount: String = ""
+    var strSelectedProductId: String = ""
+    var selectedEventTitle: String = ""
     var userId: String = ""
     @IBOutlet weak var lblNoData: UILabel!
     @IBOutlet weak var tblUpComingEvent: UITableView!
@@ -107,35 +113,18 @@ extension UpComingEventVC: UITableViewDelegate, UITableViewDataSource
         
         
         let strIspurchased = "\(objUpcomingEventResponse?.data?[indexPath.row].ispurchased ?? "NO")"
+        
+        let strEventPrice = "\(objUpcomingEventResponse?.data?[indexPath.row].eventPrice ?? "0")"
+
+        
         if strIspurchased == "YES"
         {
             cell.btnPriceOutlt.setTitle("Purchased", for: .normal)
         }
         else
         {
-            if purchasedEventIds.contains(currentEventId) {
-                cell.btnPriceOutlt.setTitle("Purchased", for: .normal)
-            } else {
-                // Retrieve price only if not purchased
-                getPurchaseInfo(inappPurchaseId: strProductId) { [weak self] (price, currencySymbol, currencyCode) in
-                    guard let self = self else { return }
-                    
-                    if let price = price, let currencySymbol = currencySymbol {
-                        let formattedPrice = "\(currencySymbol)\(String(format: "%.2f", price))"
-                        
-                        // Update UI on main thread
-                        DispatchQueue.main.async {
-                            cell.strPrice = formattedPrice
-                            cell.btnPriceOutlt.setTitle("Price - \(formattedPrice)", for: .normal)
-                        }
-                    } else {
-                        // Handle case where price retrieval fails
-                        DispatchQueue.main.async {
-                            cell.btnPriceOutlt.setTitle("Price Unavailable", for: .normal)
-                        }
-                    }
-                }
-            }
+            cell.strPrice = strEventPrice
+            cell.btnPriceOutlt.setTitle("Price - $ \(strEventPrice)", for: .normal)
         }
         
         
@@ -166,12 +155,146 @@ extension UpComingEventVC: UpComingTBCDelegate
 {
     func cell(_ cell: UpComingTBC, price: String, idx: Int) {
         print("price==\(price)")
-        let strProductId = "\(objUpcomingEventResponse?.data?[idx].productId ?? "")"
-        
+
         self.postid = "\(objUpcomingEventResponse?.data?[idx].id ?? "")"
-        self.purchase("\(strProductId)", atomically: true, cell: cell)
+        self.selectedEventTitle = cell.lblEventTitle.text ?? ""
+        self.strAmount = price
+        self.strSelectedProductId = "\(objUpcomingEventResponse?.data?[idx].productId ?? "")"
+
+        self.apiCallToGetPaypalToken()
     }
 }
+//MARK: Apple Pay and Paypal API Calls
+extension UpComingEventVC
+{
+    func apiCallToGetPaypalToken() {
+
+        if Reachability.isConnectedToNetwork() {
+            KVSpinnerView.show()
+
+            Task {
+                let response = await objGetPaypalTokenViewModel.getPaypalToken(userId: userId)
+                KVSpinnerView.dismiss()
+
+                if let response = response {
+                    print(response.settings?.success ?? "No success flag")
+
+                    if response.settings?.success == true {
+                        print("Get Virtual Token successfully")
+                        clientToken = response.data ?? ""
+                         startApplePay()
+                    } else {
+                        print("API error: \(response.settings?.message ?? "Unknown server message")")
+                        AlertUtility.showAlert(message: response.settings?.message ?? "Something went wrong")
+                    }
+                } else {
+                    print("ViewModel error: \(objGetPaypalTokenViewModel.errorMessage ?? "Unknown error")")
+                    AlertUtility.showAlert(message: objGetPaypalTokenViewModel.errorMessage ?? "Something went wrong")
+                }
+                    
+            }
+        } else {
+            AlertUtility.showAlert(message: AlertMessages.NoInternetAlertMsg)
+        }
+    }
+    func sanitizedAmount(from priceString: String) -> String {
+        let filtered = priceString.filter { "0123456789.".contains($0) }
+        return filtered.isEmpty ? "0" : filtered
+    }
+    func startApplePay() {
+        guard PKPaymentAuthorizationViewController.canMakePayments() else {
+            // Device/region doesn't support Apple Pay at all
+            showErrorAlert = true
+            paymentErrorMessage = "Apple Pay is not available on this device."
+            return
+        }
+
+        guard PKPaymentAuthorizationViewController.canMakePayments(usingNetworks: [.visa, .masterCard, .amex]) else {
+            // Apple Pay is supported, but no card is set up yet
+            showErrorAlert = true
+            paymentErrorMessage = "Please add a card to Apple Wallet to use Apple Pay."
+            return
+        }
+        
+        let paymentRequest = PKPaymentRequest()
+        paymentRequest.merchantIdentifier = merchantID
+        paymentRequest.supportedNetworks = [.visa, .masterCard, .amex]
+        paymentRequest.merchantCapabilities = .capability3DS
+        paymentRequest.countryCode = "US"
+        paymentRequest.currencyCode = "USD"
+        paymentRequest.paymentSummaryItems = [
+            PKPaymentSummaryItem(label: selectedEventTitle.isEmpty ? "Event" : selectedEventTitle, amount: NSDecimalNumber(string: sanitizedAmount(from: strAmount)))
+        ]
+
+        
+        if let controller = PKPaymentAuthorizationViewController(paymentRequest: paymentRequest),
+           let braintreeClient = BTAPIClient(authorization: clientToken) {
+            
+            let handler = ApplePayHandler(
+                braintreeClient: braintreeClient,
+                nonceHandler: { nonce in
+                    DispatchQueue.main.async {
+                        self.strPaypalNonce = nonce
+                        self.apiCallToSubmitPaypalNonceData()
+                    }
+                },
+                completion: { success in
+                    DispatchQueue.main.async {
+                           if !success {
+                               self.paymentErrorMessage = "Unable to complete payment."
+                               self.showErrorAlert = true
+                           }
+                       }
+                }
+            )
+            
+            self.applePayHandler = handler
+            controller.delegate = handler
+            
+            if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+               let rootVC = windowScene.windows.first?.rootViewController {
+                rootVC.present(controller, animated: true)
+            }
+        } else {
+            showErrorAlert = true
+            paymentErrorMessage = "Failed to initiate Apple Pay."
+        }
+    }
+    func apiCallToSubmitPaypalNonceData() {
+
+        if Reachability.isConnectedToNetwork() {
+            KVSpinnerView.show()
+
+            Task {
+                let response = await
+                objpaypalNonceSubmitViewModel.submitEventPaypalNonceDetails(userId: userId, Nonce: strPaypalNonce, strAmount: strAmount, strProductID: strSelectedProductId)
+
+                KVSpinnerView.dismiss()
+
+                if let response = response {
+                    print(response.settings?.success ?? "No success flag")
+
+                    if response.settings?.success == true {
+                        print("Nonce Wellness data submitted successfully")
+                        showSuccessAlert = true          // ✅ no more AlertUtility.showAlert here
+                    } else {
+                        print("API error: \(response.settings?.message ?? "Unknown server message")")
+                        paymentErrorMessage = response.settings?.message ?? "Something went wrong"
+                        showErrorAlert = true             // ✅ real failure → real error alert
+                    }
+                } else {
+                    print("ViewModel error: \(objpaypalNonceSubmitViewModel.errorMessage ?? "Unknown error")")
+                    paymentErrorMessage = objpaypalNonceSubmitViewModel.errorMessage ?? "Something went wrong"
+                    showErrorAlert = true
+                }
+            }
+        } else {
+            paymentErrorMessage = AlertMessages.NoInternetAlertMsg
+            showErrorAlert = true
+        }
+    }
+}
+/*
 //MARK: IN App Purchase
 extension UpComingEventVC
 {
@@ -321,6 +444,7 @@ extension UpComingEventVC
         
     }
 }
+*/
 extension UpComingEventVC
 {
     func apiCallGetUpcomingEventsList() {

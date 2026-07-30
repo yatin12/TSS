@@ -133,18 +133,6 @@ struct WellnessProgView: View {
     
     var packages: [PackageData] {
         let plans = objPackageViewModel.objPackageModelResponse?.data ?? []
-        
-        // Check if we need to set a default plan
-            /* if !hasCheckedForDefaultPlan && !plans.isEmpty && selectedPlan == nil {
-            DispatchQueue.main.async {
-                selectedPlan = plans.first
-                if let firstPlan = plans.first {
-                    selectedPackage = firstPlan.postID
-                }
-                hasCheckedForDefaultPlan = true
-            }
-        }*/
-        
         return plans
     }
     

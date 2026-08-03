@@ -27,7 +27,6 @@ class UpComingTBC: UITableViewCell {
         super.awakeFromNib()
         inputFormatter.dateFormat = "yyyy-MM-dd"
         outputFormatter.dateFormat = "dd MMMM, yyyy"
-        
     }
     
     override func setSelected(_ selected: Bool, animated: Bool) {
@@ -61,10 +60,14 @@ class UpComingTBC: UITableViewCell {
         if strIspurchased == "YES"
         {
             btnPriceOutlt.setTitle("Purchased", for: .normal)
+            btnPriceOutlt.isEnabled = false
+            btnPriceOutlt.alpha = 0.4
         }
         else
         {
             btnPriceOutlt.setTitle("Price - $ \(strEventPrice)", for: .normal)
+            btnPriceOutlt.isEnabled = true
+            btnPriceOutlt.alpha = 1.0
         }
     }
     @IBAction func btnPriceTapped(_ sender: Any) {

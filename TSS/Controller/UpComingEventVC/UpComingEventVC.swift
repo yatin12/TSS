@@ -109,7 +109,7 @@ extension UpComingEventVC: UITableViewDelegate, UITableViewDataSource
         cell.index = indexPath.row
         
         let currentEventId = "\(objUpcomingEventResponse?.data?[indexPath.row].id ?? "")"
-        let strProductId = "\(objUpcomingEventResponse?.data?[indexPath.row].productId ?? "")"
+        let strProductId = "\(objUpcomingEventResponse?.data?[indexPath.row].id ?? "")"
         
         
         let strIspurchased = "\(objUpcomingEventResponse?.data?[indexPath.row].ispurchased ?? "NO")"
@@ -120,11 +120,13 @@ extension UpComingEventVC: UITableViewDelegate, UITableViewDataSource
         if strIspurchased == "YES"
         {
             cell.btnPriceOutlt.setTitle("Purchased", for: .normal)
+            cell.btnPriceOutlt.isEnabled = false
         }
         else
         {
             cell.strPrice = strEventPrice
             cell.btnPriceOutlt.setTitle("Price - $ \(strEventPrice)", for: .normal)
+            cell.btnPriceOutlt.isEnabled = true
         }
         
         
@@ -159,7 +161,7 @@ extension UpComingEventVC: UpComingTBCDelegate
         self.postid = "\(objUpcomingEventResponse?.data?[idx].id ?? "")"
         self.selectedEventTitle = cell.lblEventTitle.text ?? ""
         self.strAmount = price
-        self.strSelectedProductId = "\(objUpcomingEventResponse?.data?[idx].productId ?? "")"
+        self.strSelectedProductId = "\(objUpcomingEventResponse?.data?[idx].id ?? "")"
 
         self.apiCallToGetPaypalToken()
     }
@@ -276,175 +278,30 @@ extension UpComingEventVC
 
                     if response.settings?.success == true {
                         print("Nonce Wellness data submitted successfully")
-                        showSuccessAlert = true          // ✅ no more AlertUtility.showAlert here
+                        let purchasedEventName = response.data?.eventName ?? self.selectedEventTitle
+                        AlertUtility.presentAlert(in: self, title: purchasedEventName, message: "Event Purchased Successfully!!!", options: "Ok") { option in
+                            switch option {
+                            case 0:
+                                self.navigationController?.popViewController(animated: true)
+                            default:
+                                break
+                            }
+                        }
                     } else {
+                        // success == false: this is where "Invalid product ID" comes back.
                         print("API error: \(response.settings?.message ?? "Unknown server message")")
-                        paymentErrorMessage = response.settings?.message ?? "Something went wrong"
-                        showErrorAlert = true             // ✅ real failure → real error alert
+                        AlertUtility.showAlert(message: response.settings?.message ?? "Something went wrong")
                     }
                 } else {
                     print("ViewModel error: \(objpaypalNonceSubmitViewModel.errorMessage ?? "Unknown error")")
-                    paymentErrorMessage = objpaypalNonceSubmitViewModel.errorMessage ?? "Something went wrong"
-                    showErrorAlert = true
+                    AlertUtility.showAlert(message: objpaypalNonceSubmitViewModel.errorMessage ?? "Something went wrong")
                 }
             }
         } else {
-            paymentErrorMessage = AlertMessages.NoInternetAlertMsg
-            showErrorAlert = true
+            AlertUtility.showAlert(message: AlertMessages.NoInternetAlertMsg)
         }
     }
 }
-/*
-//MARK: IN App Purchase
-extension UpComingEventVC
-{
-    func purchase(_ inappPurchaseId: String, atomically: Bool, cell: UpComingTBC) {
-        KVSpinnerView.show()
-        NetworkActivityIndicatorManager.networkOperationStarted()
-        SwiftyStoreKit.purchaseProduct(inappPurchaseId, atomically: atomically) { result in
-            NetworkActivityIndicatorManager.networkOperationFinished()
-            
-            if case .success(let purchase) = result {
-                let downloads = purchase.transaction.downloads
-                if !downloads.isEmpty {
-                    SwiftyStoreKit.start(downloads)
-                }
-                
-                
-                // Deliver content from server, then:
-                if purchase.needsFinishTransaction {
-                    SwiftyStoreKit.finishTransaction(purchase.transaction)
-                }
-            }
-            
-            
-            if let alert = self.alertForPurchaseResult(result, cell: cell) {
-                self.showAlert(alert)
-            }
-            
-        }
-    }
-    func alertForPurchaseResult(_ result: PurchaseResult, cell: UpComingTBC) -> UIAlertController? {
-        // KVSpinnerView.dismiss()
-        switch result {
-        case .success(let purchase):
-            print("Purchase Success: \(purchase.productId)")
-            self.productId = "\(purchase.productId)"
-            self.transactionIdentifier = "\(purchase.transaction.transactionIdentifier ?? "")"
-            self.transactionDate = "\(purchase.transaction.transactionDate ?? Date())"
-            self.transactionState = "\(purchase.transaction.transactionState)"
-            self.productPrice = "\(purchase.product.price)"
-            self.productPriceLocal = "\(purchase.product.priceLocale)"
-            
-            purchaseUtility.setProductPurchased(true)
-            isProductPurchased = true
-            // UserDefaultUtility.saveValueToUserDefaults(value: strPlanType, forKey: "whichPlanPurchased")
-            
-            self.apiCallPostUpcomingPurchaseInfo(cell: cell)
-            
-            return nil
-        case .error(let error):
-            
-            print("Purchase Failed: \(error)")
-            purchaseUtility.setProductPurchased(false)
-            UserDefaultUtility.saveValueToUserDefaults(value: "", forKey: "whichPlanPurchased")
-            
-            isProductPurchased = false
-            KVSpinnerView.dismiss()
-            switch error.code {
-            case .unknown: return alertWithTitle("Purchase failed", message: error.localizedDescription)
-            case .clientInvalid: // client is not allowed to issue the request, etc.
-                return alertWithTitle("Purchase failed", message: "Not allowed to make the payment")
-            case .paymentCancelled: // user cancelled the request, etc.
-                return nil
-            case .paymentInvalid: // purchase identifier was invalid, etc.
-                return alertWithTitle("Purchase failed", message: "The purchase identifier was invalid")
-            case .paymentNotAllowed: // this device is not allowed to make the payment
-                return alertWithTitle("Purchase failed", message: "The device is not allowed to make the payment")
-            case .storeProductNotAvailable: // Product is not available in the current storefront
-                return alertWithTitle("Purchase failed", message: "The product is not available in the current storefront")
-            case .cloudServicePermissionDenied: // user has not allowed access to cloud service information
-                return alertWithTitle("Purchase failed", message: "Access to cloud service information is not allowed")
-            case .cloudServiceNetworkConnectionFailed: // the device could not connect to the nework
-                return alertWithTitle("Purchase failed", message: "Could not connect to the network")
-            case .cloudServiceRevoked: // user has revoked permission to use this cloud service
-                return alertWithTitle("Purchase failed", message: "Cloud service was revoked")
-            default:
-                return alertWithTitle("Purchase failed", message: (error as NSError).localizedDescription)
-            }
-        case .deferred(purchase: let purchase):
-            purchaseUtility.setProductPurchased(false)
-            UserDefaultUtility.saveValueToUserDefaults(value: "", forKey: "whichPlanPurchased")
-            isProductPurchased = false
-            
-            return alertWithTitle("deferred", message: "deferred")
-        }
-    }
-    func showAlert(_ alert: UIAlertController) {
-        guard self.presentedViewController != nil else {
-            self.present(alert, animated: true, completion: nil)
-            return
-        }
-    }
-    func alertWithTitle(_ title: String, message: String) -> UIAlertController {
-        
-        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
-        return alert
-    }
-    func apiCallPostUpcomingPurchaseInfo(cell: UpComingTBC)
-    {
-        KVSpinnerView.show()
-        if Reachability.isConnectedToNetwork()
-        {
-            
-            objUpcomingEventPurchaseViewModel.postUpcomingEventPurchaseInfo(postid: postid, productId: productId, transactionIdentifier: transactionIdentifier, transactionDate: transactionDate, transactionState: transactionState, productPrice: productPrice, productPriceLocal: productPriceLocal, productPurchaseCurrencyCode: productPurchaseCurrencyCode) { result in
-                
-                KVSpinnerView.dismiss()
-                
-                switch result {
-                case .success(let response):
-                    // Handle successful
-                    print(response)
-                    
-                    self.purchasedEventIds.insert(self.postid)
-                    cell.btnPriceOutlt.setTitle("Purchased", for: .normal)
-                    
-                    
-                    AlertUtility.presentAlert(in: self, title: "Congratulations", message: "Upcoming Event Purchased Successfully!!!", options: "Ok") { option in
-                        switch(option) {
-                        case 0:
-                            self.tblUpComingEvent.reloadData()
-                            
-                            
-                            break
-                            
-                        default:
-                            break
-                        }
-                    }
-                    
-                case .failure(let error):
-                    // Handle failure
-                    
-                    if let apiError = error as? APIError {
-                        ErrorHandlingUtility.handleAPIError(apiError, in: self)
-                    } else {
-                        // Handle other types of errors
-                        // print("Unexpected error: \(error)")
-                        AlertUtility.presentSimpleAlert(in: self, title: "", message: "\(error.localizedDescription)")
-                    }
-                }
-            }
-        }
-        else
-        {
-            AlertUtility.presentSimpleAlert(in: self, title: "", message: "\(AlertMessages.NoInternetAlertMsg)")
-        }
-        
-    }
-}
-*/
 extension UpComingEventVC
 {
     func apiCallGetUpcomingEventsList() {

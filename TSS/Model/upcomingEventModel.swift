@@ -21,7 +21,7 @@ struct DataUpcoming: Codable {
     let id, title: String?
     let thumbnail: String?
     let description, eventStartDate, eventStartTime, eventEndDate: String?
-    let eventEndTime, author, regularPrice, salePrice: String?
+    let eventEndTime, author: String?
     let eventPrice, eventDiscountText: String?
 
     enum CodingKeys: String, CodingKey {
@@ -33,8 +33,6 @@ struct DataUpcoming: Codable {
         case eventEndDate = "event_end_date"
         case eventEndTime = "event_end_time"
         case author
-        case regularPrice = "regular_price"
-        case salePrice = "sale_price"
         case eventPrice = "event_price"
         case eventDiscountText = "event_discount_text"
     }

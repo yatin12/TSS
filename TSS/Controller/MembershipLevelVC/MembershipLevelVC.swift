@@ -408,7 +408,7 @@ extension MembershipLevelVC
                         UserDefaultUtility.saveValueToUserDefaults(value: "\(SubscibeUserType.premium)", forKey: "SubscribedUserType")
                     }
                     
-                    /*
+                    
                      AlertUtility.presentAlert(in: self, title: "Congratulations", message: "Product Purchased Successfully!!!", options: "Ok") { option in
                      switch(option) {
                      case 0:
@@ -420,9 +420,9 @@ extension MembershipLevelVC
                      break
                      }
                      }
-                     */
+                     
                     
-                    AlertUtility.presentSimpleAlert(in: self, title: "Congratulations", message: "Product Purchased Successfully!!!")
+//                    AlertUtility.presentSimpleAlert(in: self, title: "Congratulations", message: "Product Purchased Successfully!!!")
                     
                 case .failure(let error):
                     // Handle failure

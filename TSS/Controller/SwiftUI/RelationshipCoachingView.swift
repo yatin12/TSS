@@ -23,6 +23,23 @@ struct RelationshipCoachingView: View {
     @StateObject private var objRelationshipDataSubmitViewModel = RelationshipDataSubmitViewModel()
     @StateObject private var objGetPaypalTokenViewModel = GetPaypalTokenViewModel()
     @StateObject private var objpaypalNonceSubmitViewModel = paypalNonceSubmitViewModel()
+    private let objCountryListViewModel = countryListViewModel()
+
+    // Contact fields
+    @State private var name: String = ""
+    @State private var email: String = ""
+    @State private var phoneNumber: String = ""
+    @State private var country: String = ""
+    @State private var selectedCountryCode: String = ""
+    @State private var objCountryList: [String: String] = [:]
+    @State private var showCountryPicker = false
+    @State private var showBlankNameAlert = false
+    @State private var showBlankEmailAlert = false
+    @State private var showInvalidEmailAlert = false
+    @State private var showBlankPhoneAlert = false
+    @State private var showBlankCountryAlert = false
+    @State private var apiErrorMessage: String = ""
+    @State private var showApiErrorAlert = false
 
     @State private var userId = ""
     @State private var userRole = ""
@@ -46,6 +63,7 @@ struct RelationshipCoachingView: View {
                     VStack(alignment: .leading, spacing: 20) {
                         headerSection
                         coachingSignupSection
+                        contactDetailsSection
                         relationshipStatusSection
                         feminineEnergySection
                         coachingPlansSection
@@ -59,6 +77,12 @@ struct RelationshipCoachingView: View {
         .onAppear {
             getUserId()
             apiCallToFetchPackage()
+            apiCallGetCountryList()
+        }
+        .alert("Error", isPresented: $showApiErrorAlert) {
+            Button("OK", role: .cancel) { }
+        } message: {
+            Text(apiErrorMessage)
         }
         .alert("Payment Success", isPresented: $showSuccessAlert) {
             Button("OK", role: .cancel) {
@@ -214,6 +238,93 @@ extension RelationshipCoachingView {
         }
     }
     
+    private var contactDetailsSection: some View {
+        VStack(alignment: .leading, spacing: 15) {
+            // Name
+            VStack(alignment: .leading) {
+                Text("Name")
+                    .foregroundColor(Color("ThemePinkColor"))
+                    .font(.custom(AppFontName.Poppins_SemiBold.rawValue, size: 14.0))
+                
+                TextField("", text: $name)
+                    .font(.custom(AppFontName.Poppins_Regular.rawValue, size: 14.0))
+                    .keyboardType(.default)
+                    .textContentType(.name)
+                    .autocapitalization(.words)
+                    .padding()
+                    .frame(height: 44)
+                    .background(RoundedRectangle(cornerRadius: 5).stroke(Color("ThemeDefaultBorderColor")))
+            }
+            
+            // Email
+            VStack(alignment: .leading) {
+                Text("Email")
+                    .foregroundColor(Color("ThemePinkColor"))
+                    .font(.custom(AppFontName.Poppins_SemiBold.rawValue, size: 14.0))
+                
+                TextField("", text: $email)
+                    .font(.custom(AppFontName.Poppins_Regular.rawValue, size: 14.0))
+                    .keyboardType(.emailAddress)
+                    .textContentType(.emailAddress)
+                    .autocapitalization(.none)
+                    .disableAutocorrection(true)
+                    .padding()
+                    .frame(height: 44)
+                    .background(RoundedRectangle(cornerRadius: 5).stroke(Color("ThemeDefaultBorderColor")))
+            }
+            
+            // Phone number
+            VStack(alignment: .leading) {
+                Text("Phone number")
+                    .foregroundColor(Color("ThemePinkColor"))
+                    .font(.custom(AppFontName.Poppins_SemiBold.rawValue, size: 14.0))
+                
+                PhoneNumberField(text: $phoneNumber)
+                    .padding()
+                    .frame(height: 44)
+                    .background(RoundedRectangle(cornerRadius: 5).stroke(Color("ThemeDefaultBorderColor")))
+            }
+            
+            // Country
+            VStack(alignment: .leading) {
+                Text("Country")
+                    .foregroundColor(Color("ThemePinkColor"))
+                    .font(.custom(AppFontName.Poppins_SemiBold.rawValue, size: 14.0))
+                
+                Button(action: {
+                    dismissKeyboard()
+                    showCountryPicker = true
+                }) {
+                    HStack {
+                        Text(selectedCountryCode.isEmpty ? "Select Country" :
+                                (objCountryList[selectedCountryCode] ?? selectedCountryCode))
+                            .font(.custom(AppFontName.Poppins_Regular.rawValue, size: 14.0))
+                            .foregroundColor(selectedCountryCode.isEmpty ? .gray : Color.primary)
+                        Spacer()
+                        Image(systemName: "chevron.down")
+                            .foregroundColor(Color("ThemePinkColor"))
+                            .font(.system(size: 14))
+                    }
+                    .padding()
+                    .background(RoundedRectangle(cornerRadius: 5).stroke(Color("ThemeDefaultBorderColor")))
+                }
+                .sheet(isPresented: $showCountryPicker) {
+                    CountryPickerSheet(
+                        countryList: objCountryList,
+                        selectedCode: $selectedCountryCode,
+                        selectedName: $country,
+                        isPresented: $showCountryPicker
+                    )
+                }
+            }
+        }
+        .onAppear {
+            if objCountryList.isEmpty {
+                apiCallGetCountryList()
+            }
+        }
+    }
+    
     private var relationshipStatusSection: some View {
         VStack(alignment: .leading, spacing: 15) {
             Text("Relationship status")
@@ -357,6 +468,16 @@ extension RelationshipCoachingView {
                     showTermsAlert = true
                 } else if selectedPlan == nil {
                     showNoPlanAlert = true
+                } else if name.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+                    showBlankNameAlert = true
+                } else if email.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+                    showBlankEmailAlert = true
+                } else if !isValidEmail(email) {
+                    showInvalidEmailAlert = true
+                } else if phoneNumber.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+                    showBlankPhoneAlert = true
+                } else if country.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+                    showBlankCountryAlert = true
                 } else {
                     if coachingGoal.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty || coachingGoal == "Please specify" {
                         showDescCoachingSessionAlert = true
@@ -384,6 +505,31 @@ extension RelationshipCoachingView {
                 Button("OK", role: .cancel) { }
             } message: {
                 Text("Please select a coaching plan to proceed with payment.")
+            }
+            .alert("", isPresented: $showBlankNameAlert) {
+                Button("OK", role: .cancel) { }
+            } message: {
+                Text("Please enter Name")
+            }
+            .alert("", isPresented: $showBlankEmailAlert) {
+                Button("OK", role: .cancel) { }
+            } message: {
+                Text("Please enter Email")
+            }
+            .alert("", isPresented: $showInvalidEmailAlert) {
+                Button("OK", role: .cancel) { }
+            } message: {
+                Text("Please enter a valid Email")
+            }
+            .alert("", isPresented: $showBlankPhoneAlert) {
+                Button("OK", role: .cancel) { }
+            } message: {
+                Text("Please enter Phone Number")
+            }
+            .alert("", isPresented: $showBlankCountryAlert) {
+                Button("OK", role: .cancel) { }
+            } message: {
+                Text("Please select Country")
             }
             .alert("", isPresented: $showDescCoachingSessionAlert) {
                 Button("OK", role: .cancel) { }
@@ -486,6 +632,30 @@ extension RelationshipCoachingView {
             AlertUtility.showAlert(message: "\(AlertMessages.NoInternetAlertMsg)")
         }
     }
+    func isValidEmail(_ value: String) -> Bool {
+        let trimmed = value.trimmingCharacters(in: .whitespacesAndNewlines)
+        let pattern = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}"
+        return NSPredicate(format: "SELF MATCHES %@", pattern).evaluate(with: trimmed)
+    }
+    
+    func apiCallGetCountryList() {
+        guard Reachability.isConnectedToNetwork() else {
+            AlertUtility.showAlert(message: "\(AlertMessages.NoInternetAlertMsg)")
+            return
+        }
+        KVSpinnerView.show()
+        objCountryListViewModel.getCountryList { result in
+            KVSpinnerView.dismiss()
+            switch result {
+            case .success(let response):
+                self.objCountryList = response.countrylist
+            case .failure(let error):
+                self.apiErrorMessage = error.localizedDescription
+                self.showApiErrorAlert = true
+            }
+        }
+    }
+    
      func apiCallToSubmitRelationshipData() {
         let strAgree = agreedToTerms ? "1" : "0"
         
@@ -495,6 +665,10 @@ extension RelationshipCoachingView {
             Task {
                 let response = await objRelationshipDataSubmitViewModel.submitRelationshipDetails(
                     userId: userId,
+                    name: name.trimmingCharacters(in: .whitespacesAndNewlines),
+                    email: email.trimmingCharacters(in: .whitespacesAndNewlines),
+                    phone_number: phoneNumber,
+                    country: country,
                     feminine_energy: strSelectedCoachingStatus,
                     relationship_status: strSelectedRelationshipStatus,
                     coaching_session: coachingGoal,

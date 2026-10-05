@@ -3,6 +3,8 @@ import Foundation
 
 struct wellnessDataSubmitRequest: Encodable {
     let userId: String
+    let name: String
+    let email: String
     let phone_number: String
     let address: String
     let medical_information: String
@@ -23,12 +25,14 @@ class WellnessDataSubmitViewModel: ObservableObject {
   //  var isLoading = false
     var showAlert = false
 
-    func submitWellnessDetails(userId: String, phone_number: String, address: String, medical_information: String, medical_information_other: String, surgery_information: String, surgery_information_other: String, food_take: String, select_package: String, emergency_consultation: String, mc_package: String, IAgree_RelationShip: String) async -> WellnessDataSubmitResponse? {
+    func submitWellnessDetails(userId: String, name: String, email: String, phone_number: String, address: String, medical_information: String, medical_information_other: String, surgery_information: String, surgery_information_other: String, food_take: String, select_package: String, emergency_consultation: String, mc_package: String, IAgree_RelationShip: String) async -> WellnessDataSubmitResponse? {
       
       //  isLoading = true
 
         let submitData = wellnessDataSubmitRequest(
             userId: userId,
+            name: name,
+            email: email,
             phone_number: phone_number,
             address: address,
             medical_information: medical_information,

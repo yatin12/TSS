@@ -87,6 +87,8 @@ struct WellnessProgView: View {
     @StateObject private var objpaypalNonceSubmitViewModel = paypalNonceSubmitViewModel()
 
     // Form fields
+    @State private var name: String = ""
+    @State private var email: String = ""
     @State private var phoneNumber: String = ""
     @State private var address: String = ""
     
@@ -99,8 +101,15 @@ struct WellnessProgView: View {
     @State private var otherSurgicalCondition: String = ""
     
     // Food
-    @State private var selectedMeal: Meal = .breakfast
-    @State private var regularFood: String = "Breakfast"
+    @State private var selectedMeals: Set<Meal> = [.breakfast]
+    
+    // Comma-separated string sent to the API, e.g. "Breakfast, Launch, Dinner"
+    private var regularFood: String {
+        Meal.allCases
+            .filter { selectedMeals.contains($0) }
+            .map { $0.rawValue }
+            .joined(separator: ", ")
+    }
     
     // Package selection
     @State private var selectedPackage: String = ""
@@ -121,6 +130,10 @@ struct WellnessProgView: View {
     //  var totalPrice: Int = 300
     @StateObject private var objWellnessDataSubmitViewModel = WellnessDataSubmitViewModel()
     @StateObject private var objGetPaypalTokenViewModel = GetPaypalTokenViewModel()
+    @State private var showBlankNameAlert = false
+    @State private var showBlankEmailAlert = false
+    @State private var showInvalidEmailAlert = false
+    @State private var showNoFoodAlert = false
     @State private var showBlankPhoneNumAlert = false
     @State private var showBlankAddressAlert = false
     @State private var clientToken = "" // Replace with actual token
@@ -255,6 +268,39 @@ struct WellnessProgView: View {
     }
     var contactDetailsSection: some View {
         VStack(alignment: .leading, spacing: 15) {
+            // Name
+            VStack(alignment: .leading) {
+                Text("Name")
+                    .foregroundColor(Color("ThemePinkColor"))
+                    .font(.custom(AppFontName.Poppins_SemiBold.rawValue, size: 14.0))
+                
+                TextField("", text: $name)
+                    .font(.custom(AppFontName.Poppins_Regular.rawValue, size: 14.0))
+                    .keyboardType(.default)
+                    .textContentType(.name)
+                    .autocapitalization(.words)
+                    .padding()
+                    .frame(height: 44)
+                    .background(RoundedRectangle(cornerRadius: 5).stroke(Color("ThemeDefaultBorderColor")))
+            }
+            
+            // Email
+            VStack(alignment: .leading) {
+                Text("Email")
+                    .foregroundColor(Color("ThemePinkColor"))
+                    .font(.custom(AppFontName.Poppins_SemiBold.rawValue, size: 14.0))
+                
+                TextField("", text: $email)
+                    .font(.custom(AppFontName.Poppins_Regular.rawValue, size: 14.0))
+                    .keyboardType(.emailAddress)
+                    .textContentType(.emailAddress)
+                    .autocapitalization(.none)
+                    .disableAutocorrection(true)
+                    .padding()
+                    .frame(height: 44)
+                    .background(RoundedRectangle(cornerRadius: 5).stroke(Color("ThemeDefaultBorderColor")))
+            }
+            
             // Phone number
             VStack(alignment: .leading) {
                 Text("Phone number")
@@ -467,11 +513,14 @@ struct WellnessProgView: View {
                 HStack {
                     ForEach(Meal.allCases, id: \.self) { meal in
                         HStack {
-                            RadioButton(
-                                checked: selectedMeal == meal,
+                            CheckBox(
+                                checked: selectedMeals.contains(meal),
                                 action: {
-                                    selectedMeal = meal
-                                    regularFood = selectedMeal.rawValue
+                                    if selectedMeals.contains(meal) {
+                                        selectedMeals.remove(meal)
+                                    } else {
+                                        selectedMeals.insert(meal)
+                                    }
                                 }
                             )
                             
@@ -750,10 +799,18 @@ struct WellnessProgView: View {
                     showNoPackageAlert = true
                 }
                 else {
-                    if phoneNumber.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+                    if name.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+                        showBlankNameAlert = true
+                    } else if email.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+                        showBlankEmailAlert = true
+                    } else if !isValidEmail(email) {
+                        showInvalidEmailAlert = true
+                    } else if phoneNumber.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
                         showBlankPhoneNumAlert = true
                     } else if address.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
                         showBlankAddressAlert = true
+                    } else if selectedMeals.isEmpty {
+                        showNoFoodAlert = true
                     } else {
                         strAmount = "\(totalPrice)"
                         apiCallToSubmitWellnessData()
@@ -796,10 +853,30 @@ struct WellnessProgView: View {
         .onChange(of: includeMaternalCare) { _ in
             calculateTotalPrice()
         }
+        .alert("", isPresented: $showBlankNameAlert) {
+            Button("OK", role: .cancel) { }
+        } message: {
+            Text("Please enter Name")
+        }
+        .alert("", isPresented: $showBlankEmailAlert) {
+            Button("OK", role: .cancel) { }
+        } message: {
+            Text("Please enter Email")
+        }
+        .alert("", isPresented: $showInvalidEmailAlert) {
+            Button("OK", role: .cancel) { }
+        } message: {
+            Text("Please enter a valid Email")
+        }
         .alert("", isPresented: $showBlankPhoneNumAlert) {
             Button("OK", role: .cancel) { }
         } message: {
             Text("Please enter Phone Number")
+        }
+        .alert("", isPresented: $showNoFoodAlert) {
+            Button("OK", role: .cancel) { }
+        } message: {
+            Text("Please select at least one food type")
         }
         .alert("", isPresented: $showBlankAddressAlert) {
             Button("OK", role: .cancel) { }
@@ -844,6 +921,20 @@ struct RadioButton: View {
                         .frame(width: 12, height: 12)
                 }
             }
+        }
+        .buttonStyle(PlainButtonStyle())
+    }
+}
+
+struct CheckBox: View {
+    var checked: Bool
+    var action: () -> Void
+    
+    var body: some View {
+        Button(action: action) {
+            Image(systemName: checked ? "checkmark.square.fill" : "square")
+                .font(.system(size: 20))
+                .foregroundColor(Color("ThemePinkColor"))
         }
         .buttonStyle(PlainButtonStyle())
     }
@@ -977,6 +1068,12 @@ extension WellnessProgView {
             AlertUtility.showAlert(message: "\(AlertMessages.NoInternetAlertMsg)")
         }
     }
+    func isValidEmail(_ value: String) -> Bool {
+        let trimmed = value.trimmingCharacters(in: .whitespacesAndNewlines)
+        let pattern = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}"
+        return NSPredicate(format: "SELF MATCHES %@", pattern).evaluate(with: trimmed)
+    }
+    
     func apiCallToSubmitWellnessData() {
         let strAgree = agreeToTerms ? "1" : "0"
 
@@ -986,6 +1083,8 @@ extension WellnessProgView {
             Task {
                 let response = await objWellnessDataSubmitViewModel.submitWellnessDetails(
                     userId: userId,
+                    name: name,
+                    email: email,
                     phone_number: phoneNumber,
                     address: address,
                     medical_information: selectedMedicalCondition.rawValue,

@@ -881,7 +881,7 @@ struct WellnessProgView: View {
         .alert("", isPresented: $showBlankAddressAlert) {
             Button("OK", role: .cancel) { }
         } message: {
-            Text("Please enter Address")
+            Text("Please select Country")
         }
     }
 }
@@ -1087,9 +1087,9 @@ extension WellnessProgView {
                     email: email,
                     phone_number: phoneNumber,
                     address: address,
-                    medical_information: selectedMedicalCondition.rawValue,
+                    medical_information: "",
                     medical_information_other: otherMedicalCondition,
-                    surgery_information: selectedSurgicalCondition.rawValue,
+                    surgery_information: "",
                     surgery_information_other: otherSurgicalCondition,
                     food_take: regularFood,
                     select_package: selectedPackage,
